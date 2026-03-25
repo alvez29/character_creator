@@ -20,8 +20,12 @@ extends CharacterBody3D
 @export var sprint_max_speed: float = 10.0
 @export var acceleration: float = 12.0
 @export var friction: float = 10.0
-@export var air_control: float = 3.0
+@export var air_acceleration: float = 50.0
+@export var air_speed_limit: float = 1.0
 @export var jump_velocity: float = 5.0
+
+@export_category("Physics")
+@export var mass: float = 1.0
 
 @onready var _head: Node3D = %Head
 @warning_ignore("unused_private_class_variable")
@@ -30,6 +34,7 @@ extends CharacterBody3D
 
 var _is_crouched := false
 var _crouch_tween: Tween
+var _accumulated_force: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -70,20 +75,30 @@ func _process_movement(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
+	# Aplicar fuerzas continuas acumuladas
+	velocity += (_accumulated_force / mass) * delta
+	_accumulated_force = Vector3.ZERO
+
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = jump_velocity
 
 	var speed := _get_desired_max_speed()
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	var accel := acceleration if is_on_floor() else air_control
 
-	if wish_dir != Vector3.ZERO:
-		velocity.x = move_toward(velocity.x, wish_dir.x * speed, accel * delta)
-		velocity.z = move_toward(velocity.z, wish_dir.z * speed, accel * delta)
-	else:
-		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
-		velocity.z = move_toward(velocity.z, 0.0, friction * delta)
+	if is_on_floor():
+		var vel_xz := Vector3(velocity.x, 0.0, velocity.z)
+		vel_xz = vel_xz.move_toward(Vector3.ZERO, friction * delta)
+		velocity.x = vel_xz.x
+		velocity.z = vel_xz.z
+
+	var accel := acceleration if is_on_floor() else air_acceleration
+	var speed_limit := speed if is_on_floor() else air_speed_limit
+
+	var current_proj_speed := wish_dir.dot(velocity)
+	var add_speed := clampf(speed_limit - current_proj_speed, 0.0, accel * delta)
+	
+	velocity += wish_dir * add_speed
 
 	move_and_slide()
 #endregion
@@ -130,4 +145,12 @@ func _tween_eyes_height(target_height: float) -> void:
 	_crouch_tween.set_ease(Tween.EASE_OUT)
 	_crouch_tween.set_trans(Tween.TRANS_CUBIC)
 	_crouch_tween.tween_property(_head, "position:y", target_height, crouch_tween_speed)
+#endregion
+
+#region External Physics
+func add_impulse(impulse: Vector3) -> void:
+	velocity += impulse / mass
+
+func add_force(force: Vector3) -> void:
+	_accumulated_force += force
 #endregion

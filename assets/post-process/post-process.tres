@@ -4,6 +4,6 @@
 
 [resource]
 shader = ExtResource("1_pvwxs")
-shader_parameter/colors = 16.0
+shader_parameter/colors = 8.0000003325
 shader_parameter/noise = 0.010000000475
 shader_parameter/dither_strength = 0.450000021375

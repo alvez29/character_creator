@@ -6,6 +6,8 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_gmlin"]
+
 [node name="PlayerBody" type="CharacterBody3D" unique_id=228149766]
 collision_mask = 3
 script = ExtResource("1_3vyb7")
@@ -15,12 +17,6 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_dkjbp")
 
-[node name="GrabbingPoint" type="Node3D" parent="." unique_id=304646137]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
-script = ExtResource("2_gmlin")
-
-[node name="GrabSpring" type="SpringArm3D" parent="GrabbingPoint" unique_id=549503037]
-
 [node name="Head" type="Node3D" parent="." unique_id=462373781]
 unique_name_in_owner = true
 
@@ -28,5 +24,53 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
-[node name="HUD" parent="." unique_id=305026626 instance=ExtResource("2_dovo2")]
+[node name="GrabbingPoint" type="Node3D" parent="Head/PlayerCamera" unique_id=304646137 node_paths=PackedStringArray("_camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, -4)
+script = ExtResource("2_gmlin")
+_camera = NodePath("..")
+
+[node name="GrabAnchor" type="StaticBody3D" parent="Head/PlayerCamera/GrabbingPoint" unique_id=775651863]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/PlayerCamera/GrabbingPoint/GrabAnchor" unique_id=383992790]
+shape = SubResource("SphereShape3D_gmlin")
+
+[node name="GrabbingJoint" type="Generic6DOFJoint3D" parent="Head/PlayerCamera/GrabbingPoint" unique_id=222008212]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+node_a = NodePath("../GrabAnchor")
+exclude_nodes_from_collision = false
+linear_limit_x/enabled = false
+linear_limit_x/softness = 2.0
+linear_limit_x/restitution = 0.1
+linear_limit_x/damping = 0.2
+linear_limit_y/enabled = false
+linear_limit_y/softness = 2.0
+linear_limit_y/restitution = 0.1
+linear_limit_y/damping = 0.2
+linear_limit_z/enabled = false
+linear_limit_z/softness = 2.0
+linear_limit_z/restitution = 0.1
+linear_limit_z/damping = 0.2
+linear_spring_x/enabled = true
+linear_spring_x/stiffness = 200.0
+linear_spring_x/damping = 9.0
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 200.0
+linear_spring_y/damping = 9.0
+linear_spring_z/enabled = true
+linear_spring_z/stiffness = 200.0
+linear_spring_z/damping = 9.0
+angular_spring_x/enabled = true
+angular_spring_x/stiffness = 50.0
+angular_spring_y/enabled = true
+angular_spring_y/stiffness = 50.0
+angular_spring_z/enabled = true
+angular_spring_z/stiffness = 50.0
+
+[node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("grabbing_behavior_component") instance=ExtResource("2_dovo2")]
 accessibility_name = "Root node for HUD"
+grabbing_behavior_component = NodePath("../Head/PlayerCamera/GrabbingPoint")

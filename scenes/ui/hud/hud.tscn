@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bs0465sn6sty3"]
+
+[ext_resource type="Script" uid="uid://d040tmdcukaak" path="res://scenes/ui/hud/fps_counter.gd" id="1_bngdn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_goqdx"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 122
+corner_radius_top_right = 122
+corner_radius_bottom_right = 122
+corner_radius_bottom_left = 122
+
+[node name="HUD" type="Control" unique_id=305026626]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Aimer" type="Panel" parent="." unique_id=2041302476]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.5
+offset_top = -2.5
+offset_right = -0.5
+offset_bottom = -0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_goqdx")
+
+[node name="FPSCounter" type="Label" parent="." unique_id=1578624692]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 8
+script = ExtResource("1_bngdn")

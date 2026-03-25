@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dyw1jrukswskr"]
+
+[ext_resource type="Material" uid="uid://cbdcxxgt756at" path="res://assets/post-process/post-process.tres" id="1_aum10"]
+[ext_resource type="Texture2D" uid="uid://bsvhastl6iqjf" path="res://assets/sky/CC302031.JPG" id="2_aum10"]
+[ext_resource type="PackedScene" uid="uid://b4jewvrecxx44" path="res://scenes/game.tscn" id="2_kusfh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lnu2h"]
+sky_cover = ExtResource("2_aum10")
+ground_bottom_color = Color(1, 1, 1, 1)
+ground_horizon_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Sky" id="Sky_lbhrr"]
+sky_material = SubResource("ProceduralSkyMaterial_lnu2h")
+
+[sub_resource type="Environment" id="Environment_p57ef"]
+background_mode = 2
+sky = SubResource("Sky_lbhrr")
+
+[sub_resource type="World3D" id="World3D_lnu2h"]
+environment = SubResource("Environment_p57ef")
+
+[node name="GameSubviewportContainer" type="SubViewportContainer" unique_id=2091243423]
+material = ExtResource("1_aum10")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+accessibility_name = "Main subviewport"
+accessibility_description = "This is where post-processing applies"
+stretch = true
+
+[node name="GameSubviewport" type="SubViewport" parent="." unique_id=28765651]
+world_3d = SubResource("World3D_lnu2h")
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Game" parent="GameSubviewport" unique_id=1001126890 instance=ExtResource("2_kusfh")]

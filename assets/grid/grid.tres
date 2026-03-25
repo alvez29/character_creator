@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c3x61pnysh166"]
+
+[ext_resource type="Shader" uid="uid://crjo1yofparpw" path="res://assets/grid/shader_grid.gdshader" id="1_ocim3"]
+[ext_resource type="Texture2D" uid="uid://c147nj102hcio" path="res://assets/grid/prototype_grid_main.png" id="2_pj40p"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ocim3")
+shader_parameter/texture_albedo = ExtResource("2_pj40p")
+shader_parameter/texture_world_size = Vector2(2, 2)

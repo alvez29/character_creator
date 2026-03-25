@@ -1,17 +1,28 @@
-class_name GrabbingBehavior
+class_name GrabbingBehaviorComponent
 extends Node3D
 
 signal has_grabbed_something
 signal has_released_something
 
-@export var _camera: Camera3D
+@export var grabbing_pivot: Marker3D
 @export var interact_distance: float = 7
 
-@onready var grabbing_joint: Generic6DOFJoint3D = %GrabbingJoint
-@onready var grab_anchor: StaticBody3D = %GrabAnchor
+
+@onready var _grabbing_joint: Generic6DOFJoint3D = %GrabbingJoint
+
 
 var _grabbed_object: Grabbable
 var _is_grabbing = false
+
+
+func _ready() -> void:
+	var remote_transform = RemoteTransform3D.new()
+	grabbing_pivot.add_child(remote_transform)
+	remote_transform.update_position = true
+	remote_transform.update_rotation = true
+	remote_transform.update_scale = false
+	remote_transform.remote_path = get_path()
+	
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -33,13 +44,14 @@ func _try_grab():
 		_is_grabbing = true
 		has_grabbed_something.emit()
 
+
 func _attach_spring():
-	grabbing_joint.node_b = _grabbed_object.get_path()
+	_grabbing_joint.node_b = _grabbed_object.get_path()
 
 
 func _stop_grabbing():
 	if _grabbed_object:
-		grabbing_joint.node_b = NodePath("")
+		_grabbing_joint.node_b = NodePath("")
 		_grabbed_object.release()
 		_grabbed_object = null
 		_is_grabbing = false
@@ -47,8 +59,8 @@ func _stop_grabbing():
 
 
 func _cast_ray(distance: float = interact_distance) -> Dictionary:
-	var origin := _camera.global_position
-	var target := origin + (-_camera.global_transform.basis.z * distance)
+	var origin := get_viewport().get_camera_3d().global_position
+	var target := origin + (-get_viewport().get_camera_3d().global_transform.basis.z * distance)
 
 	var query := PhysicsRayQueryParameters3D.create(origin, target)
 	query.exclude = [self]

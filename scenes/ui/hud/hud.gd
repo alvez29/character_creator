@@ -1,7 +1,7 @@
 extends Control
 
 @export
-var grabbing_behavior_component: GrabbingBehavior
+var grabbing_behavior_component: GrabbingBehaviorComponent
 
 @onready
 var aimer: Aimer = %Aimer

@@ -5,15 +5,13 @@ signal has_grabbed_something
 signal has_released_something
 
 @export var grabbing_pivot: Marker3D
-@export var interact_distance: float = 7
-
+@export var in_sight_checker_component: InSightCheckerComponent
 
 @onready var _grabbing_joint: Generic6DOFJoint3D = %GrabbingJoint
 
-
-var _grabbed_object: Grabbable
+var _grabbing_object: Grabbable
+var _grabbable_in_sight: Grabbable
 var _is_grabbing = false
-
 
 func _ready() -> void:
 	var remote_transform = RemoteTransform3D.new()
@@ -23,7 +21,7 @@ func _ready() -> void:
 	remote_transform.update_scale = false
 	remote_transform.remote_path = get_path()
 	
-
+	in_sight_checker_component.on_grababble_in_sight.connect(_on_grabbable_in_sight)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("grab"):
@@ -33,36 +31,21 @@ func _unhandled_input(event: InputEvent) -> void:
 			_try_grab()
 
 
-func _try_grab():
-	var hit = _cast_ray()
+func _on_grabbable_in_sight(object: Grabbable):
+	_grabbable_in_sight = object
 
-	if hit and hit.collider is Grabbable and hit.collider is RigidBody3D:
-		_grabbed_object = hit.collider
-		
-		_grabbed_object.grab()
-		_attach_spring()
+func _try_grab():
+	if _grabbable_in_sight:
+		_grabbing_object = _grabbable_in_sight
+		_grabbing_object.grab()
+		_grabbing_joint.node_b = _grabbing_object.get_path()
 		_is_grabbing = true
 		has_grabbed_something.emit()
 
 
-func _attach_spring():
-	_grabbing_joint.node_b = _grabbed_object.get_path()
-
-
 func _stop_grabbing():
-	if _grabbed_object:
+	if _grabbing_object:
 		_grabbing_joint.node_b = NodePath("")
-		_grabbed_object.release()
-		_grabbed_object = null
+		_grabbing_object.release()
 		_is_grabbing = false
 		has_released_something.emit()
-
-
-func _cast_ray(distance: float = interact_distance) -> Dictionary:
-	var origin := get_viewport().get_camera_3d().global_position
-	var target := origin + (-get_viewport().get_camera_3d().global_transform.basis.z * distance)
-
-	var query := PhysicsRayQueryParameters3D.create(origin, target)
-	query.exclude = [self]
-
-	return get_world_3d().direct_space_state.intersect_ray(query)

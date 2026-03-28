@@ -1,6 +1,8 @@
 class_name Player
 extends CharacterBody3D
 
+signal on_grababble_on_distance
+
 @export_category("Settings")
 @export var eyes_height: float = 2.0
 @export var mouse_sensitivity: float = 0.003
@@ -27,10 +29,14 @@ extends CharacterBody3D
 @export_category("Physics")
 @export var mass: float = 1.0
 
+@export_category("References")
+@export var grabbing_behavior_component: GrabbingBehaviorComponent
+
 @onready var _head: Node3D = %Head
 @warning_ignore("unused_private_class_variable")
 @onready var _camera: Camera3D = %PlayerCamera
 @onready var _collision_shape: CollisionShape3D = %PlayerCollision
+
 
 var _is_crouched := false
 var _crouch_tween: Tween
@@ -56,7 +62,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	_process_camera_tilting(delta)
-
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
@@ -153,4 +158,14 @@ func add_impulse(impulse: Vector3) -> void:
 
 func add_force(force: Vector3) -> void:
 	_accumulated_force += force
+#endregion
+
+#region Interactibility
+func _check_close_interactable():
+	var origin := get_viewport().get_camera_3d().global_position
+	var target = origin + (-get_viewport().get_camera_3d().global_transform.basis.z * grabbing_behavior_component.interact_distance)
+	var hit = Utils._cast_ray(get_world_3d(), origin, target)
+	
+	if hit and hit.collider is Grabbable and hit.collider is RigidBody3D:
+		on_grababble_on_distance.emit()
 #endregion

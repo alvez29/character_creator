@@ -27,10 +27,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 [node name="GrabbingPoint" type="Marker3D" parent="Head/PlayerCamera" unique_id=1410982591]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("in_sight_checker_component", "grabbing_behavior_component") instance=ExtResource("2_dovo2")]
+[node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("in_sight_checker_component") instance=ExtResource("2_dovo2")]
 accessibility_name = "Root node for HUD"
 in_sight_checker_component = NodePath("../InSightCheckerComponent")
-grabbing_behavior_component = NodePath("../GrabbingBehaviorComponent")
 
 [node name="GrabbingBehaviorComponent" parent="." unique_id=466324627 node_paths=PackedStringArray("grabbing_pivot", "in_sight_checker_component") instance=ExtResource("2_gmlin")]
 unique_name_in_owner = true

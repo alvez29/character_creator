@@ -27,8 +27,9 @@ signal on_grababble_on_distance
 @export var jump_velocity: float = 5.0
 
 @export_category("Sliding")
-@export var slide_min_speed: float = 8.0
+@export var slide_min_speed: float = 5.0
 @export var slide_friction: float = 5.0
+@export var slide_max_speed: float = 100.0
 @export var slide_boost: float = 2.0
 @export var can_steer_while_sliding: bool = true
 @export var slide_steering: float = 10.0
@@ -47,7 +48,6 @@ signal on_grababble_on_distance
 
 var _is_crouched := false
 var _is_sliding := false
-var _crouch_on_queue := false
 var _crouch_tween: Tween
 var _accumulated_force: Vector3 = Vector3.ZERO
 
@@ -56,13 +56,20 @@ func _ready() -> void:
 	_camera.current = true
 	
 	_head.position = Vector3(_head.position.x, eyes_height, _head.position.z)
+	
+	# Evitar que el personaje salga despedido de las rampas por la inercia (micro-saltos)
+	floor_snap_length = 0.5
+	# Desactivar el autobloqueo estático de Godot en pendientes para permitir deslizamientos puros
+	floor_stop_on_slope = false
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if event.is_action_pressed("crouch"):
-		_process_crouching()
+		crouch(false)
+	elif event.is_action_released("crouch"):
+		uncrouch()
 	if event is InputEventMouseButton and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -81,6 +88,8 @@ func _get_desired_max_speed() -> float:
 		return sprint_max_speed
 	elif _is_crouched:
 		return crouch_max_speed
+	elif _is_sliding:
+		return slide_max_speed
 	else:
 		return max_speed
 
@@ -88,16 +97,16 @@ func _get_desired_max_speed() -> float:
 func _process_movement(delta: float) -> void:
 	if not is_on_floor():
 		add_force(get_gravity() * mass)
+		if _is_crouched:
+			uncrouch()
+	elif _is_sliding:
+		var slope_force := get_gravity().slide(get_floor_normal())
+		add_force(slope_force * mass)
 
 	velocity += (_accumulated_force / mass) * delta
 	_accumulated_force = Vector3.ZERO
 
 	if is_on_floor():
-		if _crouch_on_queue:
-			_crouch_on_queue = false
-			if not _is_crouched:
-				crouch(true)
-
 		if Input.is_action_pressed("jump"):
 			velocity.y = jump_velocity
 			_is_sliding = false
@@ -137,7 +146,12 @@ func _process_movement(delta: float) -> void:
 	
 	velocity += wish_dir * add_speed
 
+	var was_on_floor := is_on_floor()
 	move_and_slide()
+
+	if is_on_floor() and not was_on_floor:
+		if Input.is_action_pressed("crouch") and not _is_crouched:
+			crouch(true)
 #endregion
 
 #region Camera
@@ -155,18 +169,10 @@ func _process_camera_tilting(delta):
 #endregion
 
 #region Crouching
-func _process_crouching() -> void:
-	if is_on_floor():
-		if _is_crouched:
-			uncrouch()
-		else:
-			crouch()
-	else:
-		# Si estamos en el aire, alternamos la cola de agacharse
-		_crouch_on_queue = not _crouch_on_queue
-
-
 func crouch(from_queue := false) -> void:
+	if not is_on_floor():
+		return
+		
 	_collision_shape.shape.height = max(_collision_shape.shape.height - crouch_distance, 0.8)
 	_tween_eyes_height(eyes_height - crouch_distance)
 	_is_crouched = true

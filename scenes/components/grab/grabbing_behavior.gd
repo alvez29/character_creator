@@ -5,12 +5,12 @@ signal has_grabbed_something
 signal has_released_something
 
 @export var grabbing_pivot: Marker3D
-@export var in_sight_checker_component: InSightCheckerComponent
+@export var grabbing_distance: float = 7.0
+@export_flags_3d_physics var grabbing_collision_mask
 
 @onready var _grabbing_joint: Generic6DOFJoint3D = %GrabbingJoint
 
 var _grabbing_object: Grabbable
-var _grabbable_in_sight: Grabbable
 var _is_grabbing = false
 
 func _ready() -> void:
@@ -20,8 +20,6 @@ func _ready() -> void:
 	remote_transform.update_rotation = true
 	remote_transform.update_scale = false
 	remote_transform.remote_path = get_path()
-	
-	in_sight_checker_component.on_grababble_in_sight.connect(_on_grabbable_in_sight)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("grab"):
@@ -30,13 +28,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_try_grab()
 
-
-func _on_grabbable_in_sight(object: Grabbable):
-	_grabbable_in_sight = object
-
 func _try_grab():
-	if _grabbable_in_sight:
-		_grabbing_object = _grabbable_in_sight
+	var origin = get_viewport().get_camera_3d().global_position
+	var target = origin + (-get_viewport().get_camera_3d().global_transform.basis.z * grabbing_distance)
+	var hit = Utils._cast_ray(get_world_3d(), origin, target, grabbing_collision_mask)
+	
+	if hit and hit.collider is Grabbable:
+		_grabbing_object = hit.collider
 		_grabbing_object.grab()
 		_grabbing_joint.node_b = _grabbing_object.get_path()
 		_is_grabbing = true

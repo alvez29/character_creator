@@ -3,10 +3,17 @@
 [ext_resource type="Material" uid="uid://cbdcxxgt756at" path="res://assets/post-process/post-process.tres" id="1_aum10"]
 [ext_resource type="PackedScene" uid="uid://b4jewvrecxx44" path="res://scenes/game.tscn" id="2_kusfh"]
 
-[sub_resource type="Environment" id="Environment_yqjtg"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yqjtg"]
+
+[sub_resource type="Sky" id="Sky_yqjtg"]
+sky_material = SubResource("ProceduralSkyMaterial_yqjtg")
+
+[sub_resource type="Environment" id="Environment_lnu2h"]
+background_mode = 2
+sky = SubResource("Sky_yqjtg")
 
 [sub_resource type="World3D" id="World3D_lnu2h"]
-environment = SubResource("Environment_yqjtg")
+environment = SubResource("Environment_lnu2h")
 
 [node name="GameSubviewportContainer" type="SubViewportContainer" unique_id=2091243423]
 material = ExtResource("1_aum10")

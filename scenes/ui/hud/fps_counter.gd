@@ -1,4 +1,19 @@
 extends Label
 
+var _player_ref: Player
+
+func _ready() -> void:
+	# Since this is a debug thing I don't care about this workaround
+	_player_ref = get_parent().get_parent() as Player
+
 func _process(_delta: float) -> void:
-	text = "FPS " + str(int(Engine.get_frames_per_second()))
+	var building_text = ""
+	
+	building_text += "FPS " + str(int(Engine.get_frames_per_second())) + " \n"
+	
+	if _player_ref:
+		building_text += "Player Speed \n"
+		building_text += "    | " + str(snappedf(_player_ref.velocity.length(), 0.01)) + " m/s \n"
+		building_text += "    | " + str(snappedf(Utils.ms_to_kmh(_player_ref.velocity.length()), 0.01)) + " km/h \n"
+	
+	text = building_text

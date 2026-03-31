@@ -21,7 +21,7 @@ script = ExtResource("1_qao66")
 unique_name_in_owner = true
 layout_mode = 1
 
-[node name="FPSCounter" type="Label" parent="." unique_id=1578624692]
+[node name="DebugCounter" type="Label" parent="." unique_id=1578624692]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

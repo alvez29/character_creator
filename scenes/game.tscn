@@ -41,7 +41,7 @@ sky = SubResource("Sky_yqjtg")
 
 [node name="Player" parent="." unique_id=228149766 instance=ExtResource("1_uwrxv")]
 sprint_max_speed = 10.0
-slide_min_speed = 1.0
+slide_min_speed = 2.0
 
 [node name="Ball" type="RigidBody3D" parent="." unique_id=1048092950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

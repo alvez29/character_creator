@@ -28,9 +28,10 @@ signal on_grababble_on_distance
 
 @export_category("Sliding")
 @export var slide_min_speed: float = 5.0
-@export var slide_friction: float = 5.0
+@export var slide_friction: float = 1.0
 @export var slide_max_speed: float = 100.0
 @export var slide_boost: float = 2.0
+@export var slide_gravity_multiplier: float = 2.5
 @export var can_steer_while_sliding: bool = true
 @export var slide_steering: float = 10.0
 
@@ -50,6 +51,7 @@ var _is_crouched := false
 var _is_sliding := false
 var _crouch_tween: Tween
 var _accumulated_force: Vector3 = Vector3.ZERO
+var _was_on_floor_last_frame := false
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -81,6 +83,7 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
+	_was_on_floor_last_frame = is_on_floor()
 
 #region Movement
 func _get_desired_max_speed() -> float:
@@ -95,12 +98,19 @@ func _get_desired_max_speed() -> float:
 
 
 func _process_movement(delta: float) -> void:
+	# El orden es MUY clave: si acabamos de aterrizar con el botón pulsado, tenemos que entrar 
+	# en modo deslizar ANTES de procesar las fricciones, o la inercia se perderá en un solo frame.
+	var just_landed := is_on_floor() and not _was_on_floor_last_frame
+	if just_landed and Input.is_action_pressed("crouch") and not _is_crouched:
+		crouch(true)
+
 	if not is_on_floor():
 		add_force(get_gravity() * mass)
 		if _is_crouched:
 			uncrouch()
 	elif _is_sliding:
-		var slope_force := get_gravity().slide(get_floor_normal())
+		# Amplificamos un poco la gravedad empujando cuesta abajo (muy típico en shooters) para vencer la fricción
+		var slope_force := get_gravity().slide(get_floor_normal()) * slide_gravity_multiplier
 		add_force(slope_force * mass)
 
 	velocity += (_accumulated_force / mass) * delta
@@ -146,12 +156,7 @@ func _process_movement(delta: float) -> void:
 	
 	velocity += wish_dir * add_speed
 
-	var was_on_floor := is_on_floor()
 	move_and_slide()
-
-	if is_on_floor() and not was_on_floor:
-		if Input.is_action_pressed("crouch") and not _is_crouched:
-			crouch(true)
 #endregion
 
 #region Camera

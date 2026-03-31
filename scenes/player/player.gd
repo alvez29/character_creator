@@ -20,11 +20,18 @@ signal on_grababble_on_distance
 @export var max_speed: float = 6.0
 @export var crouch_max_speed: float = 2.0
 @export var sprint_max_speed: float = 10.0
-@export var acceleration: float = 12.0
-@export var friction: float = 10.0
+@export var ground_acceleration: float = 60.0
+@export var ground_friction: float = 40.0
 @export var air_acceleration: float = 50.0
 @export var air_speed_limit: float = 1.0
 @export var jump_velocity: float = 5.0
+
+@export_category("Sliding")
+@export var slide_min_speed: float = 8.0
+@export var slide_friction: float = 5.0
+@export var slide_boost: float = 2.0
+@export var can_steer_while_sliding: bool = true
+@export var slide_steering: float = 10.0
 
 @export_category("Physics")
 @export var mass: float = 1.0
@@ -39,6 +46,8 @@ signal on_grababble_on_distance
 
 
 var _is_crouched := false
+var _is_sliding := false
+var _crouch_on_queue := false
 var _crouch_tween: Tween
 var _accumulated_force: Vector3 = Vector3.ZERO
 
@@ -78,27 +87,50 @@ func _get_desired_max_speed() -> float:
 
 func _process_movement(delta: float) -> void:
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		add_force(get_gravity() * mass)
 
-	# Aplicar fuerzas continuas acumuladas
 	velocity += (_accumulated_force / mass) * delta
 	_accumulated_force = Vector3.ZERO
 
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = jump_velocity
+	if is_on_floor():
+		if _crouch_on_queue:
+			_crouch_on_queue = false
+			if not _is_crouched:
+				crouch(true)
+
+		if Input.is_action_pressed("jump"):
+			velocity.y = jump_velocity
+			_is_sliding = false
+			if _is_crouched: uncrouch()
+		else:
+			var h_vel := Vector3(velocity.x, 0, velocity.z)
+			if _is_sliding:
+				h_vel = h_vel.move_toward(Vector3.ZERO, slide_friction * delta)
+				velocity.x = h_vel.x
+				velocity.z = h_vel.z
+				
+				# Cancel slide if too slow
+				if h_vel.length() < max_speed:
+					_is_sliding = false
+			else:
+				h_vel = h_vel.move_toward(Vector3.ZERO, ground_friction * delta)
+				velocity.x = h_vel.x
+				velocity.z = h_vel.z
 
 	var speed := _get_desired_max_speed()
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
+	var accel := air_acceleration
+	var speed_limit := air_speed_limit
+	
 	if is_on_floor():
-		var vel_xz := Vector3(velocity.x, 0.0, velocity.z)
-		vel_xz = vel_xz.move_toward(Vector3.ZERO, friction * delta)
-		velocity.x = vel_xz.x
-		velocity.z = vel_xz.z
-
-	var accel := acceleration if is_on_floor() else air_acceleration
-	var speed_limit := speed if is_on_floor() else air_speed_limit
+		if _is_sliding:
+			accel = slide_steering if can_steer_while_sliding else 0.0
+			speed_limit = 0.0
+		else:
+			accel = ground_acceleration
+			speed_limit = speed
 
 	var current_proj_speed := wish_dir.dot(velocity)
 	var add_speed := clampf(speed_limit - current_proj_speed, 0.0, accel * delta)
@@ -124,22 +156,34 @@ func _process_camera_tilting(delta):
 
 #region Crouching
 func _process_crouching() -> void:
-	if _is_crouched:
-		uncrouch()
+	if is_on_floor():
+		if _is_crouched:
+			uncrouch()
+		else:
+			crouch()
 	else:
-		crouch()
+		# Si estamos en el aire, alternamos la cola de agacharse
+		_crouch_on_queue = not _crouch_on_queue
 
 
-func crouch() -> void:
+func crouch(from_queue := false) -> void:
 	_collision_shape.shape.height = max(_collision_shape.shape.height - crouch_distance, 0.8)
 	_tween_eyes_height(eyes_height - crouch_distance)
 	_is_crouched = true
+	
+	if is_on_floor():
+		var h_vel := Vector3(velocity.x, 0, velocity.z)
+		if h_vel.length() >= slide_min_speed:
+			_is_sliding = true
+			if not from_queue and h_vel.length() > 0:
+				add_impulse(h_vel.normalized() * slide_boost * mass)
 
 
 func uncrouch() -> void:
 	_collision_shape.shape.height += crouch_distance
 	_tween_eyes_height(eyes_height)
 	_is_crouched = false
+	_is_sliding = false
 #endregion
 
 #region Eyes

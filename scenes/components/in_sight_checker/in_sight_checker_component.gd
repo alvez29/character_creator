@@ -1,5 +1,3 @@
-@tool
-
 class_name InSightCheckerComponent
 extends Node3D
 

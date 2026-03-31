@@ -8,6 +8,7 @@ signal on_grababble_on_distance
 @export var mouse_sensitivity: float = 0.003
 
 @export_category("Crouching")
+@export var is_crouch_toggle: bool = false
 @export var crouch_distance: float = 0.5
 @export var crouch_tween_speed: float = 0.15
 
@@ -49,9 +50,10 @@ signal on_grababble_on_distance
 
 var _is_crouched := false
 var _is_sliding := false
+var _crouch_on_queue := false
 var _crouch_tween: Tween
 var _accumulated_force: Vector3 = Vector3.ZERO
-var _was_on_floor_last_frame := false
+var _just_landed_flag := false
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -59,9 +61,7 @@ func _ready() -> void:
 	
 	_head.position = Vector3(_head.position.x, eyes_height, _head.position.z)
 	
-	# Evitar que el personaje salga despedido de las rampas por la inercia (micro-saltos)
 	floor_snap_length = 0.5
-	# Desactivar el autobloqueo estático de Godot en pendientes para permitir deslizamientos puros
 	floor_stop_on_slope = false
 
 
@@ -69,9 +69,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if event.is_action_pressed("crouch"):
-		crouch(false)
+		if is_on_floor():
+			if is_crouch_toggle:
+				if _is_crouched:
+					uncrouch()
+				else:
+					crouch(false)
+			else:
+				crouch(false)
+		else:
+			if is_crouch_toggle:
+				_crouch_on_queue = not _crouch_on_queue
+			else:
+				_crouch_on_queue = true
 	elif event.is_action_released("crouch"):
-		uncrouch()
+		if not is_crouch_toggle:
+			if _is_crouched:
+				uncrouch()
+			_crouch_on_queue = false
 	if event is InputEventMouseButton and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -83,7 +98,6 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
-	_was_on_floor_last_frame = is_on_floor()
 
 #region Movement
 func _get_desired_max_speed() -> float:
@@ -98,44 +112,70 @@ func _get_desired_max_speed() -> float:
 
 
 func _process_movement(delta: float) -> void:
-	# El orden es MUY clave: si acabamos de aterrizar con el botón pulsado, tenemos que entrar 
-	# en modo deslizar ANTES de procesar las fricciones, o la inercia se perderá en un solo frame.
-	var just_landed := is_on_floor() and not _was_on_floor_last_frame
-	if just_landed and Input.is_action_pressed("crouch") and not _is_crouched:
-		crouch(true)
-
-	if not is_on_floor():
-		add_force(get_gravity() * mass)
-		if _is_crouched:
-			uncrouch()
-	elif _is_sliding:
-		# Amplificamos un poco la gravedad empujando cuesta abajo (muy típico en shooters) para vencer la fricción
-		var slope_force := get_gravity().slide(get_floor_normal()) * slide_gravity_multiplier
-		add_force(slope_force * mass)
-
-	velocity += (_accumulated_force / mass) * delta
-	_accumulated_force = Vector3.ZERO
+	_handle_landing()
+	_apply_gravity_and_slope_forces()
+	_apply_accumulated_forces(delta)
 
 	if is_on_floor():
 		if Input.is_action_pressed("jump"):
-			velocity.y = jump_velocity
-			_is_sliding = false
-			if _is_crouched: uncrouch()
+			_handle_jump()
 		else:
-			var h_vel := Vector3(velocity.x, 0, velocity.z)
-			if _is_sliding:
-				h_vel = h_vel.move_toward(Vector3.ZERO, slide_friction * delta)
-				velocity.x = h_vel.x
-				velocity.z = h_vel.z
-				
-				# Cancel slide if too slow
-				if h_vel.length() < max_speed:
-					_is_sliding = false
-			else:
-				h_vel = h_vel.move_toward(Vector3.ZERO, ground_friction * delta)
-				velocity.x = h_vel.x
-				velocity.z = h_vel.z
+			_apply_friction(delta)
 
+	_apply_movement_acceleration(delta)
+
+	var was_on_floor_before_move := is_on_floor()
+	move_and_slide()
+	_just_landed_flag = is_on_floor() and not was_on_floor_before_move
+
+
+func _handle_landing() -> void:
+	if _just_landed_flag:
+		var wants_crouch := _crouch_on_queue if is_crouch_toggle else Input.is_action_pressed("crouch")
+		_crouch_on_queue = false
+		if wants_crouch and not _is_crouched:
+			crouch(true)
+
+
+func _apply_gravity_and_slope_forces() -> void:
+	if not is_on_floor():
+		add_force(get_gravity() * mass)
+		if _is_crouched: 
+			uncrouch()
+	elif _is_sliding:
+		var slope_force := get_gravity().slide(get_floor_normal()) * slide_gravity_multiplier
+		add_force(slope_force * mass)
+
+
+func _apply_accumulated_forces(delta: float) -> void:
+	velocity += (_accumulated_force / mass) * delta
+	_accumulated_force = Vector3.ZERO
+
+
+func _handle_jump() -> void:
+	velocity.y = jump_velocity
+	_is_sliding = false
+	_crouch_on_queue = false
+	if _is_crouched: 
+		uncrouch()
+
+
+func _apply_friction(delta: float) -> void:
+	var h_vel := Vector3(velocity.x, 0, velocity.z)
+	var friction := slide_friction * delta if _is_sliding else ground_friction * delta
+	
+	h_vel = h_vel.move_toward(Vector3.ZERO, friction)
+	
+	if _is_sliding:
+		var movement_too_slow_to_slide := h_vel.length() < max_speed
+		if movement_too_slow_to_slide: 
+			_is_sliding = false
+	
+	velocity.x = h_vel.x
+	velocity.z = h_vel.z
+
+
+func _apply_movement_acceleration(delta: float) -> void:
 	var speed := _get_desired_max_speed()
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -155,8 +195,6 @@ func _process_movement(delta: float) -> void:
 	var add_speed := clampf(speed_limit - current_proj_speed, 0.0, accel * delta)
 	
 	velocity += wish_dir * add_speed
-
-	move_and_slide()
 #endregion
 
 #region Camera

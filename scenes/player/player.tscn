@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bs0465sn6sty3" path="res://scenes/ui/hud/hud.tscn" id="2_dovo2"]
 [ext_resource type="PackedScene" uid="uid://dpe67156hqg57" path="res://scenes/components/grab/grabbing_behavior_component.tscn" id="2_gmlin"]
 [ext_resource type="PackedScene" uid="uid://cdi8lkac86ot3" path="res://scenes/components/in_sight_checker/in_sight_checker_component.tscn" id="2_lvxji"]
+[ext_resource type="Script" uid="uid://cqw6kiicmccof" path="res://scenes/components/camera_manager/camera_manager.gd" id="5_p47bc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 
@@ -39,3 +40,13 @@ grabbing_behavior_component = NodePath("../GrabbingBehaviorComponent")
 unique_name_in_owner = true
 grabbing_pivot = NodePath("../Head/PlayerCamera/GrabbingPoint")
 grabbing_collision_mask = 4
+
+[node name="CameraManager" type="Node" parent="." unique_id=1635476278 node_paths=PackedStringArray("camera")]
+script = ExtResource("5_p47bc")
+debug = true
+camera = NodePath("../Head/PlayerCamera")
+
+[node name="ZoomLerpTimer" type="Timer" parent="CameraManager" unique_id=1985620409]
+unique_name_in_owner = true
+
+[connection signal="timeout" from="CameraManager/ZoomLerpTimer" to="CameraManager" method="_on_zoom_lerp_timer_timeout"]

@@ -40,6 +40,7 @@ sky = SubResource("Sky_yqjtg")
 [node name="Game" type="Node3D" unique_id=1001126890]
 
 [node name="Player" parent="." unique_id=228149766 instance=ExtResource("1_uwrxv")]
+is_crouch_toggle = true
 sprint_max_speed = 10.0
 slide_min_speed = 2.0
 

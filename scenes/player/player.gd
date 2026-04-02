@@ -68,7 +68,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	if event.is_action_pressed("crouch"):
+	if event.is_action_pressed("movement_crouch"):
 		if is_on_floor():
 			if is_crouch_toggle:
 				if _is_crouched:
@@ -82,7 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				_crouch_on_queue = not _crouch_on_queue
 			else:
 				_crouch_on_queue = true
-	elif event.is_action_released("crouch"):
+	elif event.is_action_released("movement_crouch"):
 		if not is_crouch_toggle:
 			if _is_crouched:
 				uncrouch()
@@ -101,7 +101,7 @@ func _physics_process(delta: float) -> void:
 
 #region Movement
 func _get_desired_max_speed() -> float:
-	if Input.is_action_pressed("sprint") and not _is_crouched:
+	if Input.is_action_pressed("movement_sprint") and not _is_crouched:
 		return sprint_max_speed
 	elif _is_crouched:
 		return crouch_max_speed
@@ -117,7 +117,7 @@ func _process_movement(delta: float) -> void:
 	_apply_accumulated_forces(delta)
 
 	if is_on_floor():
-		if Input.is_action_pressed("jump"):
+		if Input.is_action_pressed("movement_jump"):
 			_handle_jump()
 		else:
 			_apply_friction(delta)
@@ -177,7 +177,7 @@ func _apply_friction(delta: float) -> void:
 
 func _apply_movement_acceleration(delta: float) -> void:
 	var speed := _get_desired_max_speed()
-	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var input_dir := Input.get_vector("movement_move_left", "movement_move_right", "movement_move_forward", "movement_move_backward")
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	var accel := air_acceleration
@@ -206,9 +206,12 @@ func _process_camera_rotation(mouse_delta: Vector2) -> void:
 
 func _process_camera_tilting(delta):
 	if camera_tilting:
-		var input_x := Input.get_axis("move_left", "move_right")
+		var input_x := Input.get_axis("movement_move_left", "movement_move_right")
 		var target_tilt := deg_to_rad(-tilt_angle) * input_x
 		_camera.rotation.z = lerp(_camera.rotation.z, target_tilt, tilt_speed * delta)
+
+func active_camera():
+	_camera.current = true
 #endregion
 
 #region Crouching

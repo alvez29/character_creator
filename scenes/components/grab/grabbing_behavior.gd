@@ -22,7 +22,7 @@ func _ready() -> void:
 	remote_transform.remote_path = get_path()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("grab"):
+	if event.is_action_pressed("movement_grab"):
 		if _is_grabbing:
 			_stop_grabbing()
 		else:

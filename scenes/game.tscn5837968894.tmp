@@ -5,6 +5,7 @@
 [ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://assets/grid/grid.tres" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://cxh2soij7m05g" path="res://scenes/vehicle/vehicle.tscn" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://djjay7plrrh6j" path="res://scenes/components/game_managers/debug_game_manager.gd" id="5_iywne"]
+[ext_resource type="Script" uid="uid://jyxe0qkbglh" path="res://scenes/vehicle/vehicle_camera.gd" id="5_p57ef"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yqjtg"]
 radius = 1.0
@@ -88,7 +89,12 @@ environment = SubResource("Environment_lnu2h")
 [node name="Vehicle" parent="." unique_id=68410669 instance=ExtResource("4_lbhrr")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, -2, 7, -5)
 
-[node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
+[node name="VehicleCamera" type="Camera3D" parent="." unique_id=1232029621]
+transform = Transform3D(-0.7071068, 0, -0.7071068, 0, 1, 0, 0.7071068, 0, -0.7071068, -2, 7, -5)
+script = ExtResource("5_p57ef")
+target = NodePath("../Vehicle")
+
+[node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle_camera", "player")]
 script = ExtResource("5_iywne")
-vehicle = NodePath("../Vehicle")
+vehicle_camera = NodePath("../VehicleCamera")
 player = NodePath("../Player")

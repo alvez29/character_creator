@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b4jewvrecxx44"]
 
 [ext_resource type="PackedScene" uid="uid://c61pyyvbrubrd" path="res://scenes/player/player.tscn" id="1_uwrxv"]
-[ext_resource type="Script" uid="uid://8lhxqd2xwtln" path="res://scenes/components/grab/grabbable_meta_component.gd" id="2_lnu2h"]
+[ext_resource type="Script" uid="uid://8lhxqd2xwtln" path="res://scenes/components/grab/grabbable.gd" id="2_lnu2h"]
 [ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://assets/grid/grid.tres" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://cxh2soij7m05g" path="res://scenes/vehicle/vehicle.tscn" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://djjay7plrrh6j" path="res://scenes/components/game_managers/debug_game_manager.gd" id="5_iywne"]
@@ -59,9 +59,8 @@ shape = SubResource("SphereShape3D_yqjtg")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ball" unique_id=820284761]
 mesh = SubResource("SphereMesh_yqjtg")
 
-[node name="GrabbableComponent" type="Node" parent="Ball" unique_id=1932556111 node_paths=PackedStringArray("target_body")]
+[node name="GrabbableComponent" type="Node" parent="Ball" unique_id=1932556111]
 script = ExtResource("2_lnu2h")
-target_body = NodePath("..")
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=950999442]
 collision_layer = 2

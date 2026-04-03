@@ -13,9 +13,9 @@ var animation_player: AnimationPlayer = %SlotAnimationPlayer
 var selected_slot_material = load("res://assets/inventory_bar/selected_inventory_bar_slot.tres")
 var unselected_slot_material = load("res://assets/inventory_bar/unselected_inventory_bar_slot.tres")
 
-func initialize_data(data: InventoryBarSlotData):
-	self.data = data
-	self.is_selected = data.index == 0
+func initialize_data(new_data: InventoryBarSlotData):
+	self.data = new_data
+	self.is_selected = new_data.index == 0
 
 
 func _ready() -> void:

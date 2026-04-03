@@ -9,7 +9,7 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 
 [node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("grabbing_behavior_component")]
-collision_mask = 3
+collision_mask = 11
 script = ExtResource("1_3vyb7")
 sprint_max_speed = 30.0
 grabbing_behavior_component = NodePath("GrabbingBehaviorComponent")

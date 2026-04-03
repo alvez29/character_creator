@@ -1,3 +1,5 @@
+## Component that periodically casts a ray forward to detect interactable objects.
+## Emits signals when a GrabbableComponent comes into or leaves the player's line of sight.
 class_name InSightCheckerComponent
 extends Node3D
 
@@ -22,9 +24,14 @@ func check_in_front():
 	var collider_id = raycast.get_collider_rid().get_id()
 	
 	if raycast.is_colliding() and collider:
-		if collider is Grabbable:
+		var is_grabbable = collider.has_meta(GrabbableComponent.grabbable_meta_key)
+		
+		if is_grabbable:
 			last_grababble_id = collider_id
 			on_grababble_in_sight.emit(collider)
+		else:
+			last_grababble_id = -1
+			on_none_interactable_in_sight.emit()
 	else:
 		last_grababble_id = -1
 		on_none_interactable_in_sight.emit()

@@ -1,3 +1,5 @@
+## Component that manages a First Person Camera behaviors.
+## Handles dynamic zooming, FOV interpolation, and procedural camera shake based on trauma.
 class_name FirstPersonCameraManager
 extends Node
 

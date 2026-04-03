@@ -1,3 +1,5 @@
+## Main component to enable grasping physics and dropping objects.
+## Relies on a Generic6DOFJoint3D and MetaComponent discovery to attach objects.
 class_name GrabbingBehaviorComponent
 extends Node3D
 
@@ -10,7 +12,7 @@ signal has_released_something
 
 @onready var _grabbing_joint: Generic6DOFJoint3D = %GrabbingJoint
 
-var _grabbing_object: Grabbable
+var _grabbing_object: GrabbableComponent
 var _is_grabbing = false
 
 func _ready() -> void:
@@ -33,12 +35,16 @@ func _try_grab():
 	var target = origin + (-get_viewport().get_camera_3d().global_transform.basis.z * grabbing_distance)
 	var hit = Utils._cast_ray(get_world_3d(), origin, target, grabbing_collision_mask)
 	
-	if hit and hit.collider is Grabbable:
-		_grabbing_object = hit.collider
-		_grabbing_object.grab()
-		_grabbing_joint.node_b = _grabbing_object.get_path()
-		_is_grabbing = true
-		has_grabbed_something.emit()
+	if hit and hit.collider:
+		var collider = hit.collider
+		var grabbable = GrabbableComponent.get_grabbable_component_or_null(collider)
+		
+		if grabbable and grabbable.target_body:
+			_grabbing_object = grabbable
+			_grabbing_object.grab()
+			_grabbing_joint.node_b = _grabbing_object.target_body.get_path()
+			_is_grabbing = true
+			has_grabbed_something.emit()
 
 
 func _stop_grabbing():

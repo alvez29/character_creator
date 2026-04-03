@@ -1,8 +1,6 @@
 class_name Player
 extends CharacterBody3D
 
-signal on_grababble_on_distance
-
 @export_category("Settings")
 @export var eyes_height: float = 2.0
 @export var mouse_sensitivity: float = 0.003
@@ -254,14 +252,4 @@ func add_impulse(impulse: Vector3) -> void:
 
 func add_force(force: Vector3) -> void:
 	_accumulated_force += force
-#endregion
-
-#region Interactibility
-func _check_close_interactable():
-	var origin := get_viewport().get_camera_3d().global_position
-	var target = origin + (-get_viewport().get_camera_3d().global_transform.basis.z * grabbing_behavior_component.interact_distance)
-	var hit = Utils._cast_ray(get_world_3d(), origin, target)
-	
-	if hit and hit.collider is Grabbable and hit.collider is RigidBody3D:
-		on_grababble_on_distance.emit()
 #endregion

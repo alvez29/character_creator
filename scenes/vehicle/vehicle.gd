@@ -17,13 +17,13 @@ var vehicle_linear_velocity: float = 0.0
 
 @export_group("Steering & Break")
 @export var steering_speed = 1.5
-@export var max_steering_angle = 0.65
+@export var max_steering_angle = 0.5
 @export var handbrake_force = 5.0
 var handbrake: bool = false
 
 @export_group("Suspension Settings")
 @export var wheel_friction: float = 10.5
-@export var suspension_stiff_value: float = 180
+@export var suspension_stiff_value: float = 50.0
 
 @export_group("Stability Control")
 @export var roll_influence: float = 0.5

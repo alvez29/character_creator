@@ -9,6 +9,7 @@ script = ExtResource("1_r1cw2")
 unique_name_in_owner = true
 target_position = Vector3(0, 0, -7)
 collision_mask = 4
+debug_shape_custom_color = Color(1, 0.27058825, 1, 1)
 
 [node name="CheckerTimer" type="Timer" parent="." unique_id=1210964551]
 unique_name_in_owner = true

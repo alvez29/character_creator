@@ -4,6 +4,10 @@ extends VehicleBody3D
 var throttle: float = 0.0
 var steering_input: float = 0.0
 
+@export_category("Components")
+@export var input_handler: InputHandlerComponent
+@export var pawn_component: PawnComponent
+
 @export_group("Wheels")
 @export var front_left_wheel: VehicleWheel3D
 @export var front_right_wheel: VehicleWheel3D
@@ -19,7 +23,6 @@ var vehicle_linear_velocity: float = 0.0
 @export var steering_speed = 1.5
 @export var max_steering_angle = 0.5
 @export var handbrake_force = 5.0
-var handbrake: bool = false
 
 @export_group("Suspension Settings")
 @export var wheel_friction: float = 10.5
@@ -44,28 +47,26 @@ func _process(_delta: float) -> void:
 		wheel.wheel_friction_slip = wheel_friction # Lower for more drifting
 		wheel.suspension_stiffness = suspension_stiff_value
 
+
 func _physics_process(delta: float) -> void:
+	input_handler.process_inputs()
 	handle_vehicle_control(delta)
 	handle_engine_velocity()
 
 
 func handle_engine_velocity():
+	throttle = input_handler.accelerate - input_handler.brake
 	vehicle_linear_velocity = linear_velocity.length()
 	var speed_factor = 1.0 - min(vehicle_linear_velocity / max_speed, 1.0)
-	
 	engine_force = throttle * acceleration * speed_factor
 
 
 func handle_handbrake():
-	brake = handbrake_force if handbrake else 0.0
+	brake = handbrake_force if input_handler.handbrake else 0.0
 
 
 func handle_vehicle_control(delta):
-	throttle = Input.get_action_strength("vehicle_accelerate") - Input.get_action_strength("vehicle_brake")
-	steering_input = Input.get_action_strength("vehicle_steer_right") - Input.get_action_strength("vehicle_steer_left")
-	handbrake = Input.is_action_pressed("vehicle_handbrake")
-	
-	steering = move_toward(steering, -steering_input * max_steering_angle, delta * steering_speed)
+	steering = move_toward(steering, -input_handler.steering * max_steering_angle, delta * steering_speed)
 
 
 func handle_anti_roll():
@@ -77,7 +78,3 @@ func handle_anti_roll():
 	
 	for wheel in [front_left_wheel, front_right_wheel, rear_left_wheel, rear_right_wheel]:
 		wheel.wheel_roll_influence = roll_influence
-
-
-func active_camera():
-	_camera.current = true

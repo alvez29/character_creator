@@ -8,6 +8,9 @@ var player: Player
 
 var is_camera_in_player
 
+func _ready() -> void:
+	player.pawn_component.possess()
+
 func _input(event):
 	if event is InputEventKey:
 		if event.pressed and not event.echo:
@@ -15,6 +18,6 @@ func _input(event):
 				is_camera_in_player = not is_camera_in_player
 		
 			if is_camera_in_player:
-				vehicle.active_camera()
+				PlayerController.possess(vehicle)
 			else:
-				player.camera_manager.active_camera()
+				PlayerController.possess(player)

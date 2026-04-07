@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 	camera.rotation.z = _current_tilt + _shake_tilt
 	
 	if debug and Input.is_key_pressed(KEY_0):
-		add_trauma(0.1)
+		set_continuous_shake(true)
 
 
 func set_camera_zoom(target_zoom, lerp_duration: float):

@@ -18,10 +18,12 @@ func _process(_delta: float) -> void:
 		
 		building_text += "State \n"
 		
-		if _player_ref._is_crouched:
+		if _player_ref.movement_component._is_crouched:
 			building_text += "    | Crouching \n"
 		
-		if _player_ref._is_sliding:
+		if _player_ref.movement_component._is_sliding:
 			building_text += "    | Sliding \n"
+		
+		building_text += "Possesed: " + str(PlayerController.possessed_pawn)
 	
 	text = building_text

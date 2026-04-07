@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b1cg71ddas4y2" path="res://scenes/vehicle/vehicle.gd" id="1_1nnvc"]
 [ext_resource type="Script" uid="uid://mbk05m00otm2" path="res://scenes/vehicle/vehicle_spring_arm.gd" id="2_udt0a"]
+[ext_resource type="Script" uid="uid://bxkr0xolo8p5i" path="res://scenes/components/input_handler/input_handler_component.gd" id="3_cs81w"]
+[ext_resource type="Script" uid="uid://cx852611qp62i" path="res://scenes/components/pawn_component/pawn_component.gd" id="4_015gl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_udt0a"]
 size = Vector3(1.6, 0.7942383, 3.7202148)
@@ -10,12 +12,14 @@ size = Vector3(1.6, 0.7942383, 3.7202148)
 inner_radius = 0.2
 outer_radius = 0.36
 
-[node name="Vehicle" type="VehicleBody3D" unique_id=68410669 node_paths=PackedStringArray("front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel")]
+[node name="Vehicle" type="VehicleBody3D" unique_id=68410669 node_paths=PackedStringArray("input_handler", "pawn_component", "front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel")]
 collision_layer = 8
 collision_mask = 14
 center_of_mass_mode = 1
 angular_damp = 3.0
 script = ExtResource("1_1nnvc")
+input_handler = NodePath("InputHandlerComponent")
+pawn_component = NodePath("PawnComponent")
 front_left_wheel = NodePath("FLWheel")
 front_right_wheel = NodePath("FRWheel")
 rear_left_wheel = NodePath("BLWheel")
@@ -74,3 +78,13 @@ smooth_speed = 8.0
 [node name="VehicleCamera" type="Camera3D" parent="SpringArm3D" unique_id=492338418]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.95178735, -0.30675858, 0, 0.30675858, 0.95178735, 0, 0, 0)
+
+[node name="InputHandlerComponent" type="Node" parent="." unique_id=166088447]
+script = ExtResource("3_cs81w")
+metadata/_custom_type_script = "uid://bxkr0xolo8p5i"
+
+[node name="PawnComponent" type="Node" parent="." unique_id=1262051955 node_paths=PackedStringArray("input_handler_component", "camera")]
+script = ExtResource("4_015gl")
+input_handler_component = NodePath("../InputHandlerComponent")
+camera = NodePath("../SpringArm3D/VehicleCamera")
+metadata/_custom_type_script = "uid://cx852611qp62i"

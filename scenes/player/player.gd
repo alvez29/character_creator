@@ -11,9 +11,7 @@ extends CharacterBody3D
 @export var crouch_tween_speed: float = 0.15
 
 @export_category("Camera")
-@export var tilt_angle: float = 1.5
-@export var tilt_speed: float = 8.0 
-@export var camera_tilting: bool = true
+@export var camera_manager: FirstPersonCameraManager
 
 @export_category("Movement")
 @export var max_speed: float = 6.0
@@ -41,8 +39,6 @@ extends CharacterBody3D
 @export var grabbing_behavior_component: GrabbingBehaviorComponent
 
 @onready var _head: Node3D = %Head
-@warning_ignore("unused_private_class_variable")
-@onready var _camera: Camera3D = %PlayerCamera
 @onready var _collision_shape: CollisionShape3D = %PlayerCollision
 
 
@@ -53,9 +49,10 @@ var _crouch_tween: Tween
 var _accumulated_force: Vector3 = Vector3.ZERO
 var _just_landed_flag := false
 
+
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	_camera.current = true
+	camera_manager.active_camera()
 	
 	_head.position = Vector3(_head.position.x, eyes_height, _head.position.z)
 	
@@ -91,11 +88,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_process_camera_rotation(event.relative)
 
 
-func _process(delta: float) -> void:
-	_process_camera_tilting(delta)
+func _process(_delta: float) -> void:
+	_process_feedback()
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
+
+func _process_feedback():
+	_process_camera_tilting()
+	
 
 #region Movement
 func _get_desired_max_speed() -> float:
@@ -129,7 +130,7 @@ func _process_movement(delta: float) -> void:
 
 func _handle_landing() -> void:
 	if _just_landed_flag:
-		var wants_crouch := _crouch_on_queue if is_crouch_toggle else Input.is_action_pressed("crouch")
+		var wants_crouch := _crouch_on_queue if is_crouch_toggle else Input.is_action_pressed("movement_crouch")
 		_crouch_on_queue = false
 		if wants_crouch and not _is_crouched:
 			crouch(true)
@@ -202,14 +203,13 @@ func _process_camera_rotation(mouse_delta: Vector2) -> void:
 	_head.rotation.x = clamp(_head.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 
 
-func _process_camera_tilting(delta):
-	if camera_tilting:
-		var input_x := Input.get_axis("movement_move_left", "movement_move_right")
-		var target_tilt := deg_to_rad(-tilt_angle) * input_x
-		_camera.rotation.z = lerp(_camera.rotation.z, target_tilt, tilt_speed * delta)
+func _process_camera_tilting():
+	var input_x := Input.get_axis("movement_move_left", "movement_move_right")
+	if camera_manager: camera_manager.tilt(input_x)
+
 
 func active_camera():
-	_camera.current = true
+	camera_manager.active_camera()
 #endregion
 
 #region Crouching
@@ -223,7 +223,7 @@ func crouch(from_queue := false) -> void:
 	
 	if is_on_floor():
 		var h_vel := Vector3(velocity.x, 0, velocity.z)
-		if h_vel.length() >= slide_min_speed:
+		if h_vel.length() >= slide_min_speed and (Input.is_action_pressed("movement_sprint") or from_queue):
 			_is_sliding = true
 			if not from_queue and h_vel.length() > 0:
 				add_impulse(h_vel.normalized() * slide_boost * mass)

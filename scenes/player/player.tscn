@@ -8,9 +8,10 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 
-[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("grabbing_behavior_component")]
+[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("camera_manager", "grabbing_behavior_component")]
 collision_mask = 11
 script = ExtResource("1_3vyb7")
+camera_manager = NodePath("Head/PlayerCamera/FirstPersonCameraManager")
 sprint_max_speed = 30.0
 grabbing_behavior_component = NodePath("GrabbingBehaviorComponent")
 
@@ -31,6 +32,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
 [node name="InSightCheckerComponent" parent="Head/PlayerCamera" unique_id=1048829725 instance=ExtResource("2_lvxji")]
 
+[node name="FirstPersonCameraManager" type="Node" parent="Head/PlayerCamera" unique_id=1635476278 node_paths=PackedStringArray("camera")]
+script = ExtResource("5_p47bc")
+debug = true
+camera = NodePath("..")
+
+[node name="ZoomLerpTimer" type="Timer" parent="Head/PlayerCamera/FirstPersonCameraManager" unique_id=1985620409]
+unique_name_in_owner = true
+
 [node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("in_sight_checker_component", "grabbing_behavior_component") instance=ExtResource("2_dovo2")]
 accessibility_name = "Root node for HUD"
 in_sight_checker_component = NodePath("../Head/PlayerCamera/InSightCheckerComponent")
@@ -41,12 +50,4 @@ unique_name_in_owner = true
 grabbing_pivot = NodePath("../Head/PlayerCamera/GrabbingPoint")
 grabbing_collision_mask = 4
 
-[node name="CameraManager" type="Node" parent="." unique_id=1635476278 node_paths=PackedStringArray("camera")]
-script = ExtResource("5_p47bc")
-debug = true
-camera = NodePath("../Head/PlayerCamera")
-
-[node name="ZoomLerpTimer" type="Timer" parent="CameraManager" unique_id=1985620409]
-unique_name_in_owner = true
-
-[connection signal="timeout" from="CameraManager/ZoomLerpTimer" to="CameraManager" method="_on_zoom_lerp_timer_timeout"]
+[connection signal="timeout" from="Head/PlayerCamera/FirstPersonCameraManager/ZoomLerpTimer" to="Head/PlayerCamera/FirstPersonCameraManager" method="_on_zoom_lerp_timer_timeout"]

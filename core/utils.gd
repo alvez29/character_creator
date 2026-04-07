@@ -24,3 +24,7 @@ func ms_to_kmh(ms_value: float) -> float:
 
 func kmh_to_ms(kmh_value: float) -> float:
 	return kmh_value / 3.6
+
+func exp_interp(a: float, b: float, t: float, k: float = 5.0) -> float:
+	var weight = 1.0 - exp(-k * t)
+	return lerp(a, b, weight)

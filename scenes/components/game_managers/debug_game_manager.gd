@@ -17,4 +17,4 @@ func _input(event):
 			if is_camera_in_player:
 				vehicle.active_camera()
 			else:
-				player.active_camera()
+				player.camera_manager.active_camera()

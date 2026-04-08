@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="FirstPersonTemplate"
+config/name="Template"
 run/main_scene="uid://dyw1jrukswskr"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/show_image=false
@@ -25,7 +25,6 @@ PlayerController="*uid://d4dv7c6qcv6mu"
 [display]
 
 window/stretch/mode="viewport"
-window/stretch/scale=2.0
 
 [input]
 

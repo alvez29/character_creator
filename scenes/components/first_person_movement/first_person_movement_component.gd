@@ -186,8 +186,6 @@ func _apply_friction(delta: float) -> void:
 	var friction := slide_friction * delta if _is_sliding else ground_friction * delta
 	h_vel = h_vel.move_toward(Vector3.ZERO, friction)
 	
-	print(slide_min_slope_angle)
-	
 	if _is_sliding and h_vel.length() < max_speed and _body.get_floor_angle() < slide_min_slope_angle:
 		_is_sliding = false
 	

@@ -28,3 +28,13 @@ func kmh_to_ms(kmh_value: float) -> float:
 func exp_interp(a: float, b: float, t: float, k: float = 5.0) -> float:
 	var weight = 1.0 - exp(-k * t)
 	return lerp(a, b, weight)
+
+func damp(source: float, target: float, lambda: float, delta: float):
+	return lerp(source, target, 1 - exp(-lambda * delta))
+
+func damp_vector(source: Vector2, target: Vector2, lambda: float, delta: float):
+	var x = damp(source.x, target.x, lambda, delta)
+	var y = damp(source.y, target.y, lambda, delta)
+	
+	return Vector2(x, y)
+ 

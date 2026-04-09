@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cxh2soij7m05g"]
 
 [ext_resource type="Script" uid="uid://b1cg71ddas4y2" path="res://scenes/vehicle/vehicle.gd" id="1_1nnvc"]
+[ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://assets/grid/grid.tres" id="2_015gl"]
 [ext_resource type="Script" uid="uid://mbk05m00otm2" path="res://scenes/vehicle/vehicle_spring_arm.gd" id="2_udt0a"]
 [ext_resource type="Script" uid="uid://bxkr0xolo8p5i" path="res://scenes/components/input_handler/input_handler_component.gd" id="3_cs81w"]
 [ext_resource type="Script" uid="uid://cx852611qp62i" path="res://scenes/components/pawn_component/pawn_component.gd" id="4_015gl"]
@@ -8,7 +9,12 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_udt0a"]
 size = Vector3(1.6, 0.7942383, 3.7202148)
 
+[sub_resource type="BoxMesh" id="BoxMesh_015gl"]
+material = ExtResource("2_015gl")
+size = Vector3(1.6, 0.794, 3.72)
+
 [sub_resource type="TorusMesh" id="TorusMesh_udt0a"]
+material = ExtResource("2_015gl")
 inner_radius = 0.2
 outer_radius = 0.36
 
@@ -28,6 +34,10 @@ rear_right_wheel = NodePath("BRWheel")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1489369933]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.7893815, -0.36010742)
 shape = SubResource("BoxShape3D_udt0a")
+
+[node name="Mesh" type="CSGMesh3D" parent="." unique_id=1270204562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.7893815, -0.36010742)
+mesh = SubResource("BoxMesh_015gl")
 
 [node name="FLWheel" type="VehicleWheel3D" parent="." unique_id=1425042667]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.74, 0.36, 0.9448081)

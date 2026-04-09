@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://c61pyyvbrubrd"]
 
 [ext_resource type="Script" uid="uid://bpkn155k8hs2v" path="res://scenes/player/player.gd" id="1_3vyb7"]
-[ext_resource type="PackedScene" uid="uid://bs0465sn6sty3" path="res://scenes/ui/hud/hud.tscn" id="2_dovo2"]
 [ext_resource type="PackedScene" uid="uid://dpe67156hqg57" path="res://scenes/components/grab/grabbing_behavior_component.tscn" id="2_gmlin"]
 [ext_resource type="PackedScene" uid="uid://cdi8lkac86ot3" path="res://scenes/components/in_sight_checker/in_sight_checker_component.tscn" id="2_lvxji"]
 [ext_resource type="Script" uid="uid://cqw6kiicmccof" path="res://scenes/components/camera_manager/camera_manager.gd" id="5_p47bc"]
@@ -11,54 +10,52 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 
-[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_manager")]
+[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_manager", "camera_pivot", "collision_shape")]
 collision_mask = 11
 script = ExtResource("1_3vyb7")
 pawn_component = NodePath("PawnComponent")
 input_handler = NodePath("InputHandlerComponent")
 movement_component = NodePath("FirstPersonMovementComponent")
 grabbing_behavior_component = NodePath("GrabbingBehaviorComponent")
-camera_manager = NodePath("Head/PlayerCamera/FirstPersonCameraManager")
+camera_manager = NodePath("CameraPivot/PlayerCamera/FirstPersonCameraManager")
+camera_pivot = NodePath("CameraPivot")
+collision_shape = NodePath("PlayerCollision")
 
 [node name="PlayerCollision" type="CollisionShape3D" parent="." unique_id=727603932]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_dkjbp")
 
-[node name="Head" type="Node3D" parent="." unique_id=462373781]
+[node name="CameraPivot" type="Node3D" parent="." unique_id=462373781]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
-[node name="PlayerCamera" type="Camera3D" parent="Head" unique_id=490894457]
+[node name="PlayerCamera" type="Camera3D" parent="CameraPivot" unique_id=490894457]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
-[node name="GrabbingPoint" type="Marker3D" parent="Head/PlayerCamera" unique_id=1410982591]
+[node name="GrabbingPoint" type="Marker3D" parent="CameraPivot/PlayerCamera" unique_id=1410982591]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="FirstPersonCameraManager" type="Node" parent="Head/PlayerCamera" unique_id=1635476278 node_paths=PackedStringArray("camera")]
+[node name="FirstPersonCameraManager" type="Node" parent="CameraPivot/PlayerCamera" unique_id=1635476278 node_paths=PackedStringArray("camera")]
 script = ExtResource("5_p47bc")
 debug = true
 camera = NodePath("..")
 
-[node name="ZoomLerpTimer" type="Timer" parent="Head/PlayerCamera/FirstPersonCameraManager" unique_id=1985620409]
+[node name="ZoomLerpTimer" type="Timer" parent="CameraPivot/PlayerCamera/FirstPersonCameraManager" unique_id=1985620409]
 unique_name_in_owner = true
 
-[node name="InSightCheckerComponent" parent="Head/PlayerCamera" unique_id=1048829725 instance=ExtResource("2_lvxji")]
-
-[node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("in_sight_checker_component", "grabbing_behavior_component") instance=ExtResource("2_dovo2")]
-accessibility_name = "Root node for HUD"
-in_sight_checker_component = NodePath("../Head/PlayerCamera/InSightCheckerComponent")
-grabbing_behavior_component = NodePath("../GrabbingBehaviorComponent")
+[node name="InSightCheckerComponent" parent="CameraPivot/PlayerCamera" unique_id=1048829725 instance=ExtResource("2_lvxji")]
 
 [node name="GrabbingBehaviorComponent" parent="." unique_id=466324627 node_paths=PackedStringArray("grabbing_pivot") instance=ExtResource("2_gmlin")]
 unique_name_in_owner = true
-grabbing_pivot = NodePath("../Head/PlayerCamera/GrabbingPoint")
+grabbing_pivot = NodePath("../CameraPivot/PlayerCamera/GrabbingPoint")
 grabbing_collision_mask = 4
 
 [node name="PawnComponent" type="Node" parent="." unique_id=1536290982 node_paths=PackedStringArray("input_handler_component", "camera")]
 script = ExtResource("6_75vfm")
 input_handler_component = NodePath("../InputHandlerComponent")
-camera = NodePath("../Head/PlayerCamera")
+camera = NodePath("../CameraPivot/PlayerCamera")
 
 [node name="InputHandlerComponent" type="Node" parent="." unique_id=1874636421]
 script = ExtResource("7_0owmy")
@@ -66,4 +63,4 @@ script = ExtResource("7_0owmy")
 [node name="FirstPersonMovementComponent" type="Node" parent="." unique_id=2072597657]
 script = ExtResource("8_qek5x")
 
-[connection signal="timeout" from="Head/PlayerCamera/FirstPersonCameraManager/ZoomLerpTimer" to="Head/PlayerCamera/FirstPersonCameraManager" method="_on_zoom_lerp_timer_timeout"]
+[connection signal="timeout" from="CameraPivot/PlayerCamera/FirstPersonCameraManager/ZoomLerpTimer" to="CameraPivot/PlayerCamera/FirstPersonCameraManager" method="_on_zoom_lerp_timer_timeout"]

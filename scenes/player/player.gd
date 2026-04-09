@@ -1,18 +1,14 @@
 class_name Player
 extends CharacterBody3D
 
-@export_category("Settings")
-@export var mouse_sensitivity: float = 0.003
-
 @export_category("Components")
 @export var pawn_component: PawnComponent
 @export var input_handler: InputHandlerComponent
 @export var movement_component: FirstPersonMovementComponent
 @export var grabbing_behavior_component: GrabbingBehaviorComponent
 @export var camera_manager: FirstPersonCameraManager
-
-@onready var _head: Node3D = %Head
-@onready var _collision_shape: CollisionShape3D = %PlayerCollision
+@export var camera_pivot: Node3D
+@export var collision_shape: CollisionShape3D
 
 var _crouch_tween: Tween
 var _crouch_tween_speed: float = 0.15
@@ -31,7 +27,6 @@ func _ready() -> void:
 	if input_handler:
 		input_handler.crouch_pressed.connect(_on_crouch_pressed)
 		input_handler.crouch_released.connect(_on_crouch_released)
-		input_handler.camera_rotation.connect(_on_camera_rotation)
 
 	if movement_component:
 		movement_component.on_crouch_height_changed.connect(_on_crouch_height_changed)
@@ -50,11 +45,18 @@ func _on_unpossessed() -> void:
 
 
 #region Movement
-func _process(_delta: float) -> void:
-	if not input_handler or not movement_component: return
-	movement_component.set_sprinting(input_handler.is_sprinting)
-	if camera_manager: 
-		camera_manager.tilt(input_handler.movement_dir.x)
+func _process(delta: float) -> void:
+	if not input_handler: return
+	
+	var mouse_delta = input_handler.consume_mouse_delta()
+	if mouse_delta != Vector2.ZERO:
+		rotate_y(-mouse_delta.x * SettingsManager.mouse_sensitivity)
+		camera_pivot.rotate_x(-mouse_delta.y * SettingsManager.mouse_sensitivity)
+		camera_pivot.rotation.x = clamp(camera_pivot.rotation.x, deg_to_rad(-80), deg_to_rad(80))
+	
+	if camera_manager and movement_component:
+		camera_manager.tilt(input_handler.movement_dir.x, delta)
+		movement_component.set_sprinting(input_handler.is_sprinting)
 
 
 func _physics_process(delta: float) -> void:
@@ -64,7 +66,6 @@ func _physics_process(delta: float) -> void:
 	
 	var input_dir := input_handler.movement_dir
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
 	movement_component.move(wish_dir, delta)
 	
 	if input_handler.is_jumping and is_on_floor():
@@ -79,18 +80,12 @@ func _on_crouch_pressed() -> void:
 func _on_crouch_released() -> void:
 	if not movement_component: return
 	movement_component.uncrouch()
-
-
-func _on_camera_rotation(mouse_delta: Vector2) -> void:
-	rotate_y(-mouse_delta.x * mouse_sensitivity)
-	_head.rotate_x(-mouse_delta.y * mouse_sensitivity)
-	_head.rotation.x = clamp(_head.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 #endregion
 
 
 #region Crouching (reacts to MovementComponent signals)
 func _on_crouch_height_changed(delta: float) -> void:
-	_collision_shape.shape.height = max(_collision_shape.shape.height + delta, 0.8)
+	collision_shape.shape.height = max(collision_shape.shape.height + delta, 0.8)
 
 
 func _tween_eyes_height(target_height: float) -> void:
@@ -98,7 +93,7 @@ func _tween_eyes_height(target_height: float) -> void:
 	_crouch_tween = create_tween()
 	_crouch_tween.set_ease(Tween.EASE_OUT)
 	_crouch_tween.set_trans(Tween.TRANS_CUBIC)
-	_crouch_tween.tween_property(_head, "position:y", target_height, _crouch_tween_speed)
+	_crouch_tween.tween_property(camera_pivot, "position:y", target_height, _crouch_tween_speed)
 #endregion
 
 

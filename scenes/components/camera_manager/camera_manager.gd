@@ -98,10 +98,14 @@ func _shake(trauma_to_use: float):
 	_shake_tilt = deg_to_rad(max_roll * amount * randf_range(-1.0, 1.0))
 
 
-func tilt(input: float):
+# Aplica inclinación de cámara basada en input lateral (efecto visual, SÍ usa interpolación)
+# A diferencia de la rotación del mouse (que es directa), este es un efecto estético
+# y por tanto sí beneficia de interpolación suave
+func tilt(input: float, delta: float):
 	if should_tilt:
 		var desired_tilt := deg_to_rad(-tilt_angle) * input
 		_target_tilt = desired_tilt
+		# La interpolación ya se hace en _try_process_tilt con delta
 
 
 func active_camera():

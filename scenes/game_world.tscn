@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://8lhxqd2xwtln" path="res://scenes/components/grab/grabbable_meta_component.gd" id="2_lnu2h"]
 [ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://assets/grid/grid.tres" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://cxh2soij7m05g" path="res://scenes/vehicle/vehicle.tscn" id="4_lbhrr"]
-[ext_resource type="Script" uid="uid://djjay7plrrh6j" path="res://scenes/components/game_managers/debug_game_manager.gd" id="5_iywne"]
+[ext_resource type="Script" uid="uid://djjay7plrrh6j" path="res://globals/game_managers/debug_game_manager.gd" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://bs2jm62cmkbrk" path="res://scenes/light/light_scene.tscn" id="6_6c6v5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yqjtg"]
 radius = 1.0
@@ -30,23 +31,51 @@ size = Vector3(3, 40, 40)
 material = ExtResource("2_yqjtg")
 size = Vector3(3, 40, 40)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yqjtg"]
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
+ground_color = Color(0, 0, 0, 1)
 
-[sub_resource type="Sky" id="Sky_yqjtg"]
-sky_material = SubResource("ProceduralSkyMaterial_yqjtg")
+[sub_resource type="Sky" id="Sky_tyhie"]
+sky_material = SubResource("PhysicalSkyMaterial_gn88m")
+radiance_size = 2
 
-[sub_resource type="Environment" id="Environment_lnu2h"]
+[sub_resource type="Environment" id="Environment_6c6v5"]
 background_mode = 2
-sky = SubResource("Sky_yqjtg")
+background_intensity = 100000.0
+sky = SubResource("Sky_tyhie")
+tonemap_mode = 3
+tonemap_white = 8.0
+ssao_enabled = true
+ssao_detail = 2.0
+sdfgi_enabled = true
+sdfgi_bounce_feedback = 0.9
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_gi_inject = 1.14
+volumetric_fog_anisotropy = 0.7
+volumetric_fog_sky_affect = 0.295
+adjustment_saturation = 1.17
 
-[node name="Game" type="Node3D" unique_id=1001126890]
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_bhwwd"]
+auto_exposure_scale = 0.22
+auto_exposure_speed = 0.8
+dof_blur_far_distance = 1.44
+dof_blur_near_distance = 0.01
+auto_exposure_min_sensitivity = 8.01
+
+[node name="GameWorld" type="Node3D" unique_id=1001126890]
 
 [node name="Player" parent="." unique_id=228149766 instance=ExtResource("1_uwrxv")]
+
+[node name="Vehicle" parent="." unique_id=68410669 instance=ExtResource("4_lbhrr")]
+transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, -2, 7, -5)
 
 [node name="Ball" type="RigidBody3D" parent="." unique_id=1048092950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_layer = 4
-collision_mask = 7
+collision_mask = 15
 continuous_cd = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ball" unique_id=1860700245]
@@ -70,24 +99,33 @@ shape = SubResource("BoxShape3D_8cj0n")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1185807024]
 mesh = SubResource("PlaneMesh_uwrxv")
 
-[node name="Pilar2" type="StaticBody3D" parent="." unique_id=575237361]
+[node name="Ramp" type="StaticBody3D" parent="." unique_id=575237361]
 transform = Transform3D(-0.50000006, 0.86602545, 0, -0.86602545, -0.50000006, 0, 0, 0, 1, -24, 6.6000004, 18)
 collision_layer = 2
 collision_mask = 0
 
-[node name="Cube" type="CollisionShape3D" parent="Pilar2" unique_id=1684563860]
+[node name="Cube" type="CollisionShape3D" parent="Ramp" unique_id=1684563860]
 shape = SubResource("BoxShape3D_yqjtg")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Pilar2" unique_id=1197796290]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp" unique_id=1197796290]
 mesh = SubResource("BoxMesh_yqjtg")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=102793329]
-environment = SubResource("Environment_lnu2h")
+[node name="Lightning" type="Node3D" parent="." unique_id=370967795]
 
-[node name="Vehicle" parent="." unique_id=68410669 instance=ExtResource("4_lbhrr")]
-transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, -2, 7, -5)
+[node name="WorldEnvironment" parent="Lightning" unique_id=2102959781 instance=ExtResource("6_6c6v5")]
+environment = SubResource("Environment_6c6v5")
+camera_attributes = SubResource("CameraAttributesPractical_bhwwd")
+
+[node name="Sun" parent="Lightning/WorldEnvironment" index="0" unique_id=1519200599]
+transform = Transform3D(1, 0, 0, 0, 0.12607798, 0.99202037, 0, -0.99202037, 0.12607798, -4.86868, 8.33126, 2.18251)
+
+[node name="ReflectionProbe" parent="Lightning/WorldEnvironment" index="1" unique_id=993397437]
+intensity = 0.0
+box_projection = true
 
 [node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
 script = ExtResource("5_iywne")
 vehicle = NodePath("../Vehicle")
 player = NodePath("../Player")
+
+[editable path="Lightning/WorldEnvironment"]

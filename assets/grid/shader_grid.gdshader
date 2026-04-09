@@ -35,4 +35,5 @@ void fragment() {
     weights /= (weights.x + weights.y + weights.z);
 
     ALBEDO = col_x * weights.x + col_y * weights.y + col_z * weights.z;
+	ROUGHNESS = 1.0;
 }

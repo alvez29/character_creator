@@ -21,11 +21,18 @@ script = ExtResource("1_qao66")
 unique_name_in_owner = true
 layout_mode = 1
 
-[node name="DebugCounter" type="Label" parent="." unique_id=1578624692]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=700852993]
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 8
+offset_bottom = 40.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="DebugInfo" type="Label" parent="MarginContainer" unique_id=1578624692]
+unique_name_in_owner = true
+layout_mode = 2
 script = ExtResource("1_bngdn")
 
 [node name="InventoryBar" parent="." unique_id=86737076 instance=ExtResource("4_ax4tw")]

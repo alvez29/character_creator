@@ -9,7 +9,7 @@ func _ready() -> void:
 	await animation_player.animation_finished
 	loading_screen_ready.emit()
 
-func _on_progress_changed(new_value: float) -> void:
+func _on_progress_changed(_new_value: float) -> void:
 	pass
 
 func _on_load_finished() -> void:

@@ -22,6 +22,7 @@ Utils="*uid://byiqxg54ujptn"
 SceneLoader="*uid://bg1nof8q4arpr"
 PlayerController="*uid://d4dv7c6qcv6mu"
 SettingsManager="*uid://cu3byu20p6ldj"
+UIState="*uid://ccxh03gu8isie"
 
 [display]
 
@@ -154,3 +155,5 @@ common/physics_interpolation=true
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=5
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=5

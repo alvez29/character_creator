@@ -11,7 +11,7 @@ size = Vector3(1.6, 0.7942383, 3.7202148)
 
 [sub_resource type="BoxMesh" id="BoxMesh_015gl"]
 material = ExtResource("2_015gl")
-size = Vector3(1.6, 0.794, 3.72)
+size = Vector3(0.995, 0.794, 3.72)
 
 [sub_resource type="TorusMesh" id="TorusMesh_udt0a"]
 material = ExtResource("2_015gl")

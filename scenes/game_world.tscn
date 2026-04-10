@@ -117,15 +117,23 @@ environment = SubResource("Environment_6c6v5")
 camera_attributes = SubResource("CameraAttributesPractical_bhwwd")
 
 [node name="Sun" parent="Lightning/WorldEnvironment" index="0" unique_id=1519200599]
-transform = Transform3D(1, 0, 0, 0, 0.12607798, 0.99202037, 0, -0.99202037, 0.12607798, -4.86868, 8.33126, 2.18251)
+transform = Transform3D(0.9659258, -0.032631382, -0.25675374, 0.258819, 0.121781975, 0.95821804, 0, -0.99202037, 0.12607798, -4.86868, 8.33126, 2.18251)
 
 [node name="ReflectionProbe" parent="Lightning/WorldEnvironment" index="1" unique_id=993397437]
 intensity = 0.0
 box_projection = true
 
+[node name="LightmapGI" type="LightmapGI" parent="Lightning" unique_id=1495033192]
+transform = Transform3D(0.9659259, -0.032631382, -0.25675374, 0.25881904, 0.121781975, 0.95821804, 0, -0.99202037, 0.12607796, -4.86868, 8.33126, 2.18251)
+quality = 2
+supersampling = true
+bounces = 10
+
 [node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
 script = ExtResource("5_iywne")
 vehicle = NodePath("../Vehicle")
 player = NodePath("../Player")
+
+[node name="DayCycleComponent" type="Node" parent="DebugGameManager" unique_id=875153203]
 
 [editable path="Lightning/WorldEnvironment"]

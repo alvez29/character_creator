@@ -11,6 +11,7 @@ signal config_loaded_from_file_system
 ## Settings that are used in _process or need to be updated quickly
 #region Quick Access Settings
 var mouse_sensitivity: float = 0.0
+var fov: float = 90
 #endregion
 
 
@@ -18,7 +19,8 @@ var config_id_to_section = {
 	"resolution_width": Setting.Section.VIDEO,
 	"resolution_height": Setting.Section.VIDEO,
 	"window_mode": Setting.Section.VIDEO,
-	"mouse_sensitivity": Setting.Section.CONTROLS
+	"mouse_sensitivity": Setting.Section.CONTROLS,
+	"viewport_scale_3d": Setting.Section.VIDEO,
 }
 
 var config_id_system_path = {
@@ -75,6 +77,8 @@ func _apply_setting(setting: Setting):
 		match setting.key:
 			"mouse_sensitivity":
 				mouse_sensitivity = setting.value
+			"fov":
+				fov = setting.value
 			_:
 				push_warning("[Settings] Unknown local setting: %s" % setting.key)
 #endregion

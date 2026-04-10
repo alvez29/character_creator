@@ -13,7 +13,7 @@ signal has_released_something
 @onready var _grabbing_joint: Generic6DOFJoint3D = %GrabbingJoint
 
 var _grabbing_object: GrabbableComponent
-var _is_grabbing = false
+var is_grabbing = false
 
 func _ready() -> void:
 	var remote_transform = RemoteTransform3D.new()
@@ -25,7 +25,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("movement_grab"):
-		if _is_grabbing:
+		if is_grabbing:
 			_stop_grabbing()
 		else:
 			_try_grab()
@@ -43,7 +43,7 @@ func _try_grab():
 			_grabbing_object = grabbable
 			_grabbing_object.grab()
 			_grabbing_joint.node_b = _grabbing_object.target_body.get_path()
-			_is_grabbing = true
+			is_grabbing = true
 			has_grabbed_something.emit()
 
 
@@ -51,5 +51,5 @@ func _stop_grabbing():
 	if _grabbing_object:
 		_grabbing_joint.node_b = NodePath("")
 		_grabbing_object.release()
-		_is_grabbing = false
+		is_grabbing = false
 		has_released_something.emit()

@@ -8,3 +8,5 @@ render_priority = 0
 shader = ExtResource("1_ocim3")
 shader_parameter/texture_albedo = ExtResource("2_pj40p")
 shader_parameter/texture_world_size = Vector2(2, 2)
+shader_parameter/blend_sharpness = 4.0
+shader_parameter/roughness_value = 1.0

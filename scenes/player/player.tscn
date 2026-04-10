@@ -10,7 +10,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 
-[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_manager", "camera_pivot", "collision_shape")]
+[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_manager", "camera_pivot", "collision_shape", "camera")]
 collision_mask = 11
 script = ExtResource("1_3vyb7")
 pawn_component = NodePath("PawnComponent")
@@ -20,6 +20,7 @@ grabbing_behavior_component = NodePath("GrabbingBehaviorComponent")
 camera_manager = NodePath("CameraPivot/PlayerCamera/FirstPersonCameraManager")
 camera_pivot = NodePath("CameraPivot")
 collision_shape = NodePath("PlayerCollision")
+camera = NodePath("CameraPivot/PlayerCamera")
 
 [node name="PlayerCollision" type="CollisionShape3D" parent="." unique_id=727603932]
 unique_name_in_owner = true

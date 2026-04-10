@@ -41,7 +41,7 @@ _data = {
 }
 
 [node name="Panel" type="Panel" unique_id=1356788180]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(50, 50)
 offset_right = 40.0
 offset_bottom = 40.0
 pivot_offset = Vector2(20, 20)

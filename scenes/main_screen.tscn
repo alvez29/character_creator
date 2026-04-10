@@ -72,8 +72,16 @@ script = ExtResource("2_lushf")
 
 [node name="GameWorld" parent="GameSubviewportContainer/GameSubviewport" unique_id=1001126890 instance=ExtResource("2_kusfh")]
 
-[node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("player", "in_sight_checker_component", "grabbing_behavior_component") instance=ExtResource("3_aum10")]
+[node name="HUD" parent="." unique_id=305026626 node_paths=PackedStringArray("player") instance=ExtResource("3_aum10")]
 layout_mode = 1
 player = NodePath("../GameSubviewportContainer/GameSubviewport/GameWorld/Player")
-in_sight_checker_component = NodePath("../GameSubviewportContainer/GameSubviewport/GameWorld/Player/CameraPivot/PlayerCamera/InSightCheckerComponent")
-grabbing_behavior_component = NodePath("../GameSubviewportContainer/GameSubviewport/GameWorld/Player/GrabbingBehaviorComponent")
+
+[node name="AimerStateMachine" parent="HUD/Aimer" parent_id_path=PackedInt32Array(305026626, 1966211920) index="1" unique_id=2111037045 node_paths=PackedStringArray("in_sight_checker_component", "grabbing_behavior_component")]
+in_sight_checker_component = NodePath("../../../GameSubviewportContainer/GameSubviewport/GameWorld/Player/CameraPivot/PlayerCamera/InSightCheckerComponent")
+grabbing_behavior_component = NodePath("../../../GameSubviewportContainer/GameSubviewport/GameWorld/Player/GrabbingBehaviorComponent")
+
+[editable path="GameSubviewportContainer/GameSubviewport/GameWorld"]
+[editable path="GameSubviewportContainer/GameSubviewport/GameWorld/Player"]
+[editable path="GameSubviewportContainer/GameSubviewport/GameWorld/Lightning/WorldEnvironment"]
+[editable path="HUD"]
+[editable path="HUD/Aimer"]

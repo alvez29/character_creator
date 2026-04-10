@@ -3,6 +3,7 @@ shader_type spatial;
 uniform sampler2D texture_albedo : source_color;
 uniform vec2 texture_world_size = vec2(2.0, 2.0);
 uniform float blend_sharpness = 4.0;
+uniform float roughness_value = 1.0;
 
 varying vec3 local_pos;
 varying vec3 local_normal;
@@ -35,5 +36,5 @@ void fragment() {
     weights /= (weights.x + weights.y + weights.z);
 
     ALBEDO = col_x * weights.x + col_y * weights.y + col_z * weights.z;
-	ROUGHNESS = 1.0;
+	ROUGHNESS = roughness_value;
 }

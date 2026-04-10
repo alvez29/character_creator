@@ -9,6 +9,7 @@ extends CharacterBody3D
 @export var camera_manager: FirstPersonCameraManager
 @export var camera_pivot: Node3D
 @export var collision_shape: CollisionShape3D
+@export var camera: Camera3D
 
 var _crouch_tween: Tween
 var _crouch_tween_speed: float = 0.15
@@ -57,6 +58,8 @@ func _process(delta: float) -> void:
 	if camera_manager and movement_component:
 		camera_manager.tilt(input_handler.movement_dir.x, delta)
 		movement_component.set_sprinting(input_handler.is_sprinting)
+		if movement_component._is_sliding or movement_component._is_sprinting:
+			camera_manager.adjust_fov_by_speed(delta, velocity.length())
 
 
 func _physics_process(delta: float) -> void:

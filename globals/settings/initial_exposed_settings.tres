@@ -37,7 +37,13 @@ key = "viewport_scale_3d"
 value = 0.5
 metadata/_custom_type_script = "uid://cwx2ajsffvo7k"
 
+[sub_resource type="Resource" id="Resource_tm78d"]
+script = ExtResource("2_5flbr")
+key = "fov"
+value = 75.0
+metadata/_custom_type_script = "uid://cwx2ajsffvo7k"
+
 [resource]
 script = ExtResource("1_a0pvr")
-settings = Array[ExtResource("2_5flbr")]([SubResource("Resource_5flbr"), SubResource("Resource_yh61p"), SubResource("Resource_fvs3i"), SubResource("Resource_tsdib"), SubResource("Resource_f67y7")])
+settings = Array[ExtResource("2_5flbr")]([SubResource("Resource_5flbr"), SubResource("Resource_yh61p"), SubResource("Resource_fvs3i"), SubResource("Resource_tsdib"), SubResource("Resource_f67y7"), SubResource("Resource_tm78d")])
 metadata/_custom_type_script = "uid://cr2dyrqmui8s7"

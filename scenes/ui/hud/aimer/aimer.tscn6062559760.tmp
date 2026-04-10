@@ -411,5 +411,4 @@ root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_ax4tw")
 
 [node name="AimerStateMachine" type="Node" parent="." unique_id=2111037045]
-unique_name_in_owner = true
 script = ExtResource("2_x2ayx")

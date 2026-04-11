@@ -7,8 +7,8 @@ signal on_state_changed(new_state: StateMachineState, source_transition: StateMa
 var actual_state: StateMachineState
 var transitions: Array[StateMachineTransition] = []
 
-var _transitions_by_origin: Dictionary = {}
-var _transition_to_check: Array[StateMachineTransition] = []
+var _transitions_by_origin: Dictionary[StateMachineState, Array] = {}
+var _transition_to_check: Array = []
 
 func _ready() -> void:
 	initialize_states()
@@ -33,10 +33,6 @@ func _setup_current_state_transitions():
 		return
 	
 	_transition_to_check = _transitions_by_origin.get(actual_state, [])
-	
-	for transition in _transition_to_check:
-		if not transition.condition_met.is_connected(change_state):
-			transition.condition_met.connect(change_state)
 
 
 @abstract
@@ -49,20 +45,14 @@ func get_transitions() -> Array[StateMachineTransition]
 
 func _process(_delta: float) -> void:
 	for transition in _transition_to_check:
-		transition.check_condition()
+		if transition.check_condition():
+			change_state(transition)
+			break
 
 
 func change_state(source_transition: StateMachineTransition = null):
-	for transition in _transition_to_check:
-		if transition.condition_met.is_connected(change_state):
-			transition.condition_met.disconnect(change_state)
-	
 	actual_state = source_transition.target_state
 	
-	_transition_to_check = _transitions_by_origin.get(actual_state, [])
+	_setup_current_state_transitions()
 	
-	for transition in _transition_to_check:
-		if not transition.condition_met.is_connected(change_state):
-			transition.condition_met.connect(change_state)
-	
-	on_state_changed.emit(source_transition)
+	on_state_changed.emit(actual_state, source_transition)

@@ -16,9 +16,6 @@ var brake := 0.0
 var steering := 0.0
 var handbrake := false
 
-# Acumulador para movimiento de mouse
-# _unhandled_input se ejecuta de forma asíncrona/irregular, causando jitter
-# Acumulamos los deltas y los consumimos en _process() para rotación fluida y sin lag
 var _mouse_delta_accumulated := Vector2.ZERO
 
 
@@ -30,9 +27,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_released("movement_crouch"):
 		emit_signal("crouch_released")
 		
-	# Solo acumular el delta del mouse, NO emitir señal aquí
-	# _unhandled_input es asíncrono -> causa jitter
-	# El delta se consume en _process() para aplicación directa sin interpolación
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_mouse_delta_accumulated += event.relative
 
@@ -61,8 +55,6 @@ func process_inputs() -> void:
 	handbrake = Input.is_action_pressed("vehicle_handbrake")
 
 
-# Obtiene y resetea el delta acumulado del mouse
-# Patrón: Acumular en _unhandled_input -> Consumir en _process() -> Aplicar directamente (sin SLERP/interpolación)
 func consume_mouse_delta() -> Vector2:
 	var delta = _mouse_delta_accumulated
 	_mouse_delta_accumulated = Vector2.ZERO

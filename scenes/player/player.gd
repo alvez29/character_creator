@@ -58,8 +58,12 @@ func _process(delta: float) -> void:
 	if camera_manager and movement_component:
 		camera_manager.tilt(input_handler.movement_dir.x, delta)
 		movement_component.set_sprinting(input_handler.is_sprinting)
-		if movement_component._is_sliding or movement_component._is_sprinting:
-			camera_manager.adjust_fov_by_speed(delta, velocity.length())
+		var is_running = movement_component._is_sprinting
+		var is_sliding = movement_component._is_sliding
+		var in_air = not is_on_floor()
+		var speed = Vector3(velocity.x, 0, velocity.z).length()
+		
+		camera_manager.adjust_dynamic_fov(delta, speed, is_running or is_sliding or in_air)
 
 
 func _physics_process(delta: float) -> void:

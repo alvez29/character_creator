@@ -80,6 +80,10 @@ player = NodePath("../GameSubviewportContainer/GameSubviewport/GameWorld/Player"
 in_sight_checker_component = NodePath("../../../GameSubviewportContainer/GameSubviewport/GameWorld/Player/CameraPivot/PlayerCamera/InSightCheckerComponent")
 grabbing_behavior_component = NodePath("../../../GameSubviewportContainer/GameSubviewport/GameWorld/Player/GrabbingBehaviorComponent")
 
+[node name="DebugInfo" parent="HUD/MarginContainer" parent_id_path=PackedInt32Array(305026626, 700852993) index="0" unique_id=1578624692 node_paths=PackedStringArray("player", "camera")]
+player = NodePath("../../../GameSubviewportContainer/GameSubviewport/GameWorld/Player")
+camera = NodePath("../../../GameSubviewportContainer/GameSubviewport/GameWorld/Player/CameraPivot/PlayerCamera")
+
 [editable path="GameSubviewportContainer/GameSubviewport/GameWorld"]
 [editable path="GameSubviewportContainer/GameSubviewport/GameWorld/Player"]
 [editable path="GameSubviewportContainer/GameSubviewport/GameWorld/Lightning/WorldEnvironment"]

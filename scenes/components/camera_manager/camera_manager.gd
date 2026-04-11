@@ -25,8 +25,11 @@ signal on_zoom_lerp_finished
 
 @export_category("Camera FOV")
 @export var should_change_fov_by_speed := true
-@export var max_fov_speed: float = 20.0
-@export var max_fov_addition_possible: float = 20
+@export var base_fov: float = 75.0
+@export var action_min_fov: float = 80.0
+@export var action_max_fov: float = 100.0
+@export var fov_max_speed_reference: float = 20.0
+@export var fov_lerp_speed: float = 8.0
 
 #region Zoom
 var _current_camera_zoom = Vector2(1, 1)
@@ -44,7 +47,6 @@ var _shake_tilt: float = 0.0
 #endregion
 
 #region FOV
-var fov_addition: float = 0.0
 #endregion
 
 func _process(delta: float) -> void:
@@ -112,16 +114,19 @@ func tilt(input: float, delta: float):
 		_target_tilt = desired_tilt
 
 
-func adjust_fov_by_speed(delta: float, speed):
+func adjust_dynamic_fov(delta: float, current_speed: float, is_action_state: bool):
+	var current_base_fov = SettingsManager.fov if SettingsManager else base_fov
+	
 	if should_change_fov_by_speed:
-		var min_fov = 70
-		var max_fov = 90
-		var max_speed = 20
+		var target_fov = current_base_fov
 		
-		var target_fov = lerp(min_fov, max_fov, clamp(speed / max_speed, 0, 1))
+		if is_action_state and current_speed > 1.0:
+			var speed_factor = clamp(current_speed / fov_max_speed_reference, 0.0, 1.0)
+			target_fov = lerp(action_min_fov, action_max_fov, speed_factor)
 		
-		fov_addition = lerp(fov_addition, target_fov - SettingsManager.fov, 5 * delta)
-		camera.fov = SettingsManager.fov + fov_addition
+		camera.fov = Utils.damp(camera.fov, target_fov, fov_lerp_speed, delta)
+	else:
+		camera.fov = Utils.damp(camera.fov, current_base_fov, fov_lerp_speed, delta)
 
 func active_camera():
 	camera.current = true

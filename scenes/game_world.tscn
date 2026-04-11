@@ -18,13 +18,6 @@ height = 2.0
 radial_segments = 16
 rings = 16
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_8cj0n"]
-size = Vector3(100, 1, 100)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_uwrxv"]
-material = ExtResource("2_yqjtg")
-size = Vector2(100, 100)
-
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
 ground_color = Color(0, 0, 0, 1)
 
@@ -82,23 +75,9 @@ mesh = SubResource("SphereMesh_yqjtg")
 script = ExtResource("2_lnu2h")
 target_body = NodePath("..")
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=950999442]
-collision_layer = 2
-collision_mask = 0
-
-[node name="FloorCollision" type="CollisionShape3D" parent="Floor" unique_id=573449214]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_8cj0n")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1185807024]
-mesh = SubResource("PlaneMesh_uwrxv")
-
-[node name="SquaredShape" parent="Floor" unique_id=1786801823 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -23, 5, 29)
-
-[node name="Ramp" parent="." unique_id=1805671691 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(-0.50000006, 0.86602545, 0, -0.86602545, -0.50000006, 0, 0, 0, 1, -22, 2, 34)
-dimensions = Vector3(1, 10, 5)
+[node name="Floor" parent="." unique_id=1786801823 instance=ExtResource("7_bhwwd")]
+mesh_collision_mask = 0
+dimensions = Vector3(100, 1, 100)
 
 [node name="Lightning" type="Node3D" parent="." unique_id=370967795]
 
@@ -125,5 +104,35 @@ vehicle = NodePath("../Vehicle")
 player = NodePath("../Player")
 
 [node name="DayCycleComponent" type="Node" parent="DebugGameManager" unique_id=875153203]
+
+[node name="SquaredShape5" parent="." unique_id=1057553935 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 5.5, 2)
+collision_mask = 13
+dimensions = Vector3(5, 10, 5)
+
+[node name="SquaredShape" parent="." unique_id=414240664 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 5.5, 1)
+collision_mask = 13
+dimensions = Vector3(5, 10, 5)
+
+[node name="SquaredShape3" parent="." unique_id=1016500386 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(-3.7855163e-08, -2.1855692e-08, -1, -0.49999994, 0.8660252, 0, 0.8660252, 0.49999994, -4.371139e-08, -13, 6.176, 0.6)
+collision_mask = 13
+dimensions = Vector3(5, 1, 2.5)
+
+[node name="SquaredShape4" parent="." unique_id=352976033 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(-1.2904783e-08, 0, 1, 0, 0.9999999, 0, -1, -2.9802322e-08, -4.371139e-08, -9.07724, 7.975833, -6.3999996)
+collision_mask = 13
+dimensions = Vector3(10, 1, 2.5)
+
+[node name="SquaredShape6" parent="." unique_id=1772643289 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0, 1, -22.67724, 4.1758327, 4.8)
+collision_mask = 13
+dimensions = Vector3(6.344, 1, 2.5)
+
+[node name="SquaredShape2" parent="." unique_id=2135630295 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(0.8660253, 0.5, 0, -0.5, 0.8660253, 0, 0, 0, 1, -9.5, 1.3, 4.7000003)
+collision_mask = 13
+dimensions = Vector3(6.344, 1, 2.5)
 
 [editable path="Lightning/WorldEnvironment"]

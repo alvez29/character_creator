@@ -17,6 +17,8 @@ func _process(_delta: float) -> void:
 		var speed_ms = snappedf(player.velocity.length(), 0.01)
 		var speed_kmh = snappedf(Utils.ms_to_kmh(player.velocity.length()), 0.01)
 		
+		building_text += "Max Jump Height: %0.2fm \n" % Utils.get_max_jump_height(player.movement_component.jump_velocity, 9.8 * player.movement_component.gravity_factor)
+		
 		building_text += "Player Speed \n"
 		building_text += "    | %0.1f m/s\n" % speed_ms
 		building_text += "    | %0.1f km/h\n" % speed_kmh

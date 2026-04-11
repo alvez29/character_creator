@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c87xhud3r4fcw"]
 
 [ext_resource type="Script" uid="uid://do3eh3pvdvdao" path="res://scenes/shape/squared_shape.gd" id="1_vpw1a"]
+[ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://assets/grid/grid.tres" id="2_1f5p7"]
 [ext_resource type="Shader" uid="uid://crjo1yofparpw" path="res://assets/grid/shader_grid.gdshader" id="2_vpw1a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
@@ -23,6 +24,7 @@ material = SubResource("ShaderMaterial_0k53r")
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_vpw1a")
+material = ExtResource("2_1f5p7")
 
 [node name="SquaredCollisionShape" type="CollisionShape3D" parent="." unique_id=209021173]
 unique_name_in_owner = true

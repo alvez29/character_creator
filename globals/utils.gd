@@ -37,4 +37,8 @@ func damp_vector(source: Vector2, target: Vector2, lambda: float, delta: float):
 	var y = damp(source.y, target.y, lambda, delta)
 	
 	return Vector2(x, y)
+
+
+func get_max_jump_height(jump_velocity, gravity) -> float:
+	return jump_velocity * jump_velocity / (2 * gravity)
  

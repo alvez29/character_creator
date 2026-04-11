@@ -73,7 +73,6 @@ func _process(delta: float) -> void:
 		var speed = Vector3(velocity.x, 0, velocity.z).length()
 		
 		camera_manager.adjust_dynamic_fov(delta, speed, is_running or is_sliding or in_air)
-		camera_manager.process_speed_shake(0.3, is_sliding)
 
 
 func _physics_process(delta: float) -> void:

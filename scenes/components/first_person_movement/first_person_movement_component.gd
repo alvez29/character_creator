@@ -14,7 +14,9 @@ signal on_finished_sliding
 @export var ground_friction: float = 40.0
 @export var air_acceleration: float = 50.0
 @export var air_speed_limit: float = 1.0
-@export var jump_velocity: float = 5.0
+@export var jump_velocity: float = 7
+@export var gravity_factor: float = 1
+@export var gravity_vector: Vector3 = Vector3(0, -9.8, 0)
 
 @export_category("Sliding")
 @export var slide_min_speed: float = 6.0
@@ -165,11 +167,11 @@ func _get_desired_max_speed() -> float:
 
 func _apply_gravity_and_slope_forces() -> void:
 	if not _body.is_on_floor():
-		add_force(_body.get_gravity() * mass)
+		add_force(gravity_vector * gravity_factor  * mass)
 		if _is_crouched:
 			uncrouch()
 	elif _is_sliding:
-		var slope_force := _body.get_gravity().slide(_body.get_floor_normal()) * slide_gravity_multiplier
+		var slope_force := (gravity_vector * gravity_factor).slide(_body.get_floor_normal()) * slide_gravity_multiplier
 		add_force(slope_force * mass)
 
 

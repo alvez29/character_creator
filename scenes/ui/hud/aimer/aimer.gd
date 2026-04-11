@@ -10,9 +10,9 @@ var state_machine: StateMachineComponent = %AimerStateMachine
 func _ready() -> void:
 	state_machine.on_state_changed.connect(on_state_transition)
 
-func on_state_transition(transition_met: StateMachineTransition):
-	var old_state: StateMachineState = transition_met.origin_state
-	var new_state: StateMachineState = transition_met.target_state
+func on_state_transition(_actual_state: StateMachineState, source_transition: StateMachineTransition):
+	var old_state: StateMachineState = source_transition.origin_state
+	var new_state: StateMachineState = source_transition.target_state
 	
 	var animation_name = old_state.name + "__" + new_state.name
 	

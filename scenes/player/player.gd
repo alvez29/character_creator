@@ -1,6 +1,11 @@
 class_name Player
 extends CharacterBody3D
 
+enum CrouchMode { HOLD, TOGGLE }
+
+@export_category("Controls")
+@export var crouch_mode: CrouchMode = CrouchMode.HOLD
+
 @export_category("Components")
 @export var pawn_component: PawnComponent
 @export var input_handler: InputHandlerComponent
@@ -13,6 +18,7 @@ extends CharacterBody3D
 
 var _crouch_tween: Tween
 var _crouch_tween_speed: float = 0.15
+var _is_crouch_action_pressed: bool = false
 
 
 func _ready() -> void:
@@ -28,10 +34,13 @@ func _ready() -> void:
 	if input_handler:
 		input_handler.crouch_pressed.connect(_on_crouch_pressed)
 		input_handler.crouch_released.connect(_on_crouch_released)
+		input_handler.sprint_pressed.connect(_on_sprint_pressed)
 
 	if movement_component:
 		movement_component.on_crouch_height_changed.connect(_on_crouch_height_changed)
 		movement_component.on_eyes_height_changed.connect(_tween_eyes_height)
+		movement_component.on_finished_sliding.connect(_on_finished_sliding)
+
 
 #region Possession
 func _on_possessed() -> void:
@@ -64,6 +73,7 @@ func _process(delta: float) -> void:
 		var speed = Vector3(velocity.x, 0, velocity.z).length()
 		
 		camera_manager.adjust_dynamic_fov(delta, speed, is_running or is_sliding or in_air)
+		camera_manager.process_speed_shake(0.3, is_sliding)
 
 
 func _physics_process(delta: float) -> void:
@@ -81,16 +91,42 @@ func _physics_process(delta: float) -> void:
 
 func _on_crouch_pressed() -> void:
 	if not movement_component: return
-	movement_component.crouch()
+	_is_crouch_action_pressed = true
+	
+	if movement_component._is_sliding:
+		movement_component.uncrouch()
+	elif crouch_mode == CrouchMode.TOGGLE:
+		if movement_component._is_crouched:
+			movement_component.uncrouch()
+		else:
+			movement_component.crouch()
+	else:
+		movement_component.crouch()
 
 
 func _on_crouch_released() -> void:
 	if not movement_component: return
-	movement_component.uncrouch()
+	_is_crouch_action_pressed = false
+	
+	if crouch_mode == CrouchMode.HOLD:
+		if not movement_component._is_sliding:
+			movement_component.uncrouch()
+
+
+func _on_sprint_pressed() -> void:
+	if not movement_component: return
+	if movement_component._is_sliding or movement_component._is_crouched:
+		movement_component.uncrouch()
+
+
+func _on_finished_sliding() -> void:
+	if crouch_mode == CrouchMode.HOLD and not _is_crouch_action_pressed:
+		if movement_component and movement_component._is_crouched:
+			movement_component.uncrouch()
 #endregion
 
 
-#region Crouching (reacts to MovementComponent signals)
+#region Crouching
 func _on_crouch_height_changed(delta: float) -> void:
 	collision_shape.shape.height = max(collision_shape.shape.height + delta, 0.8)
 
@@ -104,7 +140,7 @@ func _tween_eyes_height(target_height: float) -> void:
 #endregion
 
 
-#region External Physics (pasarelas al MovementComponent)
+#region External Physics
 func add_impulse(impulse: Vector3) -> void:
 	if movement_component: movement_component.add_impulse(impulse)
 

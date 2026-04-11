@@ -46,8 +46,6 @@ var _continuous_trauma: float = 0.0
 var _shake_tilt: float = 0.0
 #endregion
 
-#region FOV
-#endregion
 
 func _process(delta: float) -> void:
 	_try_process_shake(delta)
@@ -114,6 +112,9 @@ func tilt(input: float, delta: float):
 		_target_tilt = desired_tilt
 
 
+func process_speed_shake(shake: float, is_action_state: bool):
+	set_continuous_shake(is_action_state, shake)
+
 func adjust_dynamic_fov(delta: float, current_speed: float, is_action_state: bool):
 	var current_base_fov = SettingsManager.fov if SettingsManager else base_fov
 	
@@ -128,9 +129,11 @@ func adjust_dynamic_fov(delta: float, current_speed: float, is_action_state: boo
 	else:
 		camera.fov = Utils.damp(camera.fov, current_base_fov, fov_lerp_speed, delta)
 
+
 func active_camera():
 	camera.current = true
 	
+
 
 func _on_zoom_lerp_timer_timeout() -> void:
 	emit_signal("on_zoom_lerp_finished")

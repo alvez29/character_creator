@@ -1,9 +1,7 @@
 class_name FirstPersonMovementComponent
 extends Node
 
-## Emitted when crouching so the owner can adjust collision shape.
 signal on_crouch_height_changed(delta: float)
-## Emitted when eyes height should tween to a new position.
 signal on_eyes_height_changed(target_height: float)
 signal on_started_sliding
 signal on_finished_sliding
@@ -19,7 +17,7 @@ signal on_finished_sliding
 @export var jump_velocity: float = 5.0
 
 @export_category("Sliding")
-@export var slide_min_speed: float = 5.0
+@export var slide_min_speed: float = 6.0
 @export var slide_friction: float = 1.0
 @export var slide_min_slope_angle: float = deg_to_rad(10)
 @export var slide_max_speed: float = 100.0
@@ -129,7 +127,7 @@ func crouch(from_queue := false) -> void:
 	
 	var h_vel := Vector3(_body.velocity.x, 0, _body.velocity.z)
 	
-	if h_vel.length() >= slide_min_speed and (_is_sprinting or from_queue):
+	if h_vel.length() >= slide_min_speed:
 		_is_sliding = true
 		if not from_queue and h_vel.length() > 0:
 			add_impulse(h_vel.normalized() * slide_boost * mass)
@@ -186,7 +184,7 @@ func _apply_friction(delta: float) -> void:
 	var friction := slide_friction * delta if _is_sliding else ground_friction * delta
 	h_vel = h_vel.move_toward(Vector3.ZERO, friction)
 	
-	if _is_sliding and h_vel.length() < max_speed and _body.get_floor_angle() < slide_min_slope_angle:
+	if _is_sliding and h_vel.length() < slide_min_speed and _body.get_floor_angle() < slide_min_slope_angle:
 		_is_sliding = false
 	
 	_body.velocity.x = h_vel.x

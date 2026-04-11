@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cxh2soij7m05g" path="res://scenes/vehicle/vehicle.tscn" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://djjay7plrrh6j" path="res://globals/game_managers/debug_game_manager.gd" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://bs2jm62cmkbrk" path="res://scenes/light/light_scene.tscn" id="6_6c6v5"]
+[ext_resource type="PackedScene" uid="uid://c87xhud3r4fcw" path="res://scenes/shape/squared_shape.tscn" id="7_bhwwd"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_yqjtg"]
 radius = 1.0
@@ -23,13 +24,6 @@ size = Vector3(100, 1, 100)
 [sub_resource type="PlaneMesh" id="PlaneMesh_uwrxv"]
 material = ExtResource("2_yqjtg")
 size = Vector2(100, 100)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
-size = Vector3(3, 40, 40)
-
-[sub_resource type="BoxMesh" id="BoxMesh_yqjtg"]
-material = ExtResource("2_yqjtg")
-size = Vector3(3, 40, 40)
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
 ground_color = Color(0, 0, 0, 1)
@@ -99,16 +93,12 @@ shape = SubResource("BoxShape3D_8cj0n")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1185807024]
 mesh = SubResource("PlaneMesh_uwrxv")
 
-[node name="Ramp" type="StaticBody3D" parent="." unique_id=575237361]
-transform = Transform3D(-0.50000006, 0.86602545, 0, -0.86602545, -0.50000006, 0, 0, 0, 1, -24, 6.6000004, 18)
-collision_layer = 2
-collision_mask = 0
+[node name="SquaredShape" parent="Floor" unique_id=1786801823 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -23, 5, 29)
 
-[node name="Cube" type="CollisionShape3D" parent="Ramp" unique_id=1684563860]
-shape = SubResource("BoxShape3D_yqjtg")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp" unique_id=1197796290]
-mesh = SubResource("BoxMesh_yqjtg")
+[node name="Ramp" parent="." unique_id=1805671691 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(-0.50000006, 0.86602545, 0, -0.86602545, -0.50000006, 0, 0, 0, 1, -22, 2, 34)
+dimensions = Vector3(1, 10, 5)
 
 [node name="Lightning" type="Node3D" parent="." unique_id=370967795]
 

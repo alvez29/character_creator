@@ -3,6 +3,8 @@ extends Node
 
 signal crouch_pressed
 signal crouch_released
+signal sprint_pressed
+signal sprint_released
 
 @export var is_active := false
 
@@ -26,6 +28,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		emit_signal("crouch_pressed")
 	elif event.is_action_released("movement_crouch"):
 		emit_signal("crouch_released")
+		
+	if event.is_action_pressed("movement_sprint"):
+		emit_signal("sprint_pressed")
+	elif event.is_action_released("movement_sprint"):
+		emit_signal("sprint_released")
 		
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_mouse_delta_accumulated += event.relative

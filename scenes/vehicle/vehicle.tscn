@@ -1,22 +1,21 @@
 [gd_scene format=3 uid="uid://cxh2soij7m05g"]
 
 [ext_resource type="Script" uid="uid://b1cg71ddas4y2" path="res://scenes/vehicle/vehicle.gd" id="1_1nnvc"]
-[ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://assets/grid/grid.tres" id="2_015gl"]
+[ext_resource type="ArrayMesh" uid="uid://b7ukavqgtexe5" path="res://assets/car/red/Car.obj" id="2_bswb0"]
 [ext_resource type="Script" uid="uid://mbk05m00otm2" path="res://scenes/vehicle/vehicle_spring_arm.gd" id="2_udt0a"]
+[ext_resource type="Texture2D" uid="uid://b8ngx57mb0740" path="res://assets/car/red/car_red.png" id="3_1bgs2"]
 [ext_resource type="Script" uid="uid://bxkr0xolo8p5i" path="res://scenes/components/input_handler/input_handler_component.gd" id="3_cs81w"]
 [ext_resource type="Script" uid="uid://cx852611qp62i" path="res://scenes/components/pawn_component/pawn_component.gd" id="4_015gl"]
+[ext_resource type="ArrayMesh" uid="uid://dth4u577f4ybl" path="res://assets/car/red/wheel.obj" id="5_1bgs2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_udt0a"]
-size = Vector3(1.6, 0.7942383, 3.7202148)
+size = Vector3(1.6, 1.1007812, 3.7202148)
 
-[sub_resource type="BoxMesh" id="BoxMesh_015gl"]
-material = ExtResource("2_015gl")
-size = Vector3(0.995, 0.794, 3.72)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bswb0"]
+albedo_texture = ExtResource("3_1bgs2")
 
-[sub_resource type="TorusMesh" id="TorusMesh_udt0a"]
-material = ExtResource("2_015gl")
-inner_radius = 0.2
-outer_radius = 0.36
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bgs2"]
+albedo_texture = ExtResource("3_1bgs2")
 
 [node name="Vehicle" type="VehicleBody3D" unique_id=68410669 node_paths=PackedStringArray("input_handler", "pawn_component", "front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel")]
 collision_layer = 8
@@ -32,50 +31,55 @@ rear_left_wheel = NodePath("BLWheel")
 rear_right_wheel = NodePath("BRWheel")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1489369933]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.7893815, -0.36010742)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.80297923, -0.36010742)
 shape = SubResource("BoxShape3D_udt0a")
 
-[node name="Mesh" type="CSGMesh3D" parent="." unique_id=1270204562]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.7893815, -0.36010742)
-mesh = SubResource("BoxMesh_015gl")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1582914531]
+transform = Transform3D(0.635, 0, 0, 0, 0.635, 0, 0, 0, 0.635, 0, 0.034640968, -0.42911673)
+mesh = ExtResource("2_bswb0")
+surface_material_override/0 = SubResource("StandardMaterial3D_bswb0")
 
 [node name="FLWheel" type="VehicleWheel3D" parent="." unique_id=1425042667]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.74, 0.36, 0.9448081)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61370206, 0.27992868, 0.9448081)
 use_as_traction = true
 use_as_steering = true
-wheel_radius = 0.36
+wheel_radius = 0.27
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FLWheel" unique_id=1750445357]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("TorusMesh_udt0a")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="FLWheel" unique_id=641825707]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="FRWheel" type="VehicleWheel3D" parent="." unique_id=652610507]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7404833, 0.36, 0.9448081)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614, 0.27992868, 0.9448081)
 use_as_traction = true
 use_as_steering = true
-wheel_radius = 0.36
+wheel_radius = 0.27
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FRWheel" unique_id=40961904]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("TorusMesh_udt0a")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="FRWheel" unique_id=705174782]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="BLWheel" type="VehicleWheel3D" parent="." unique_id=270741852]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.74, 0.36, -1.3958482)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61370206, 0.27992868, -1.3958482)
 use_as_traction = true
-wheel_radius = 0.36
+wheel_radius = 0.27
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BLWheel" unique_id=1499020328]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("TorusMesh_udt0a")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="BLWheel" unique_id=785487151]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="BRWheel" type="VehicleWheel3D" parent="." unique_id=738994421]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7404833, 0.36, -1.3958482)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614, 0.27992868, -1.3958482)
 use_as_traction = true
-wheel_radius = 0.36
+wheel_radius = 0.27
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="BRWheel" unique_id=620222548]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("TorusMesh_udt0a")
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=951695254 node_paths=PackedStringArray("target")]
 transform = Transform3D(-4.371139e-08, -0.34037957, 0.9402881, 0, 0.9402881, 0.34037957, -1, 1.4878464e-08, -4.11013e-08, 0, 0, 0)

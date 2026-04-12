@@ -9,7 +9,7 @@
 [ext_resource type="ArrayMesh" uid="uid://dth4u577f4ybl" path="res://assets/car/red/wheel.obj" id="5_1bgs2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_udt0a"]
-size = Vector3(1.6, 1.1007812, 3.7202148)
+size = Vector3(1.6, 2.0235534, 6.324258)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bswb0"]
 albedo_texture = ExtResource("3_1bgs2")
@@ -31,53 +31,49 @@ rear_left_wheel = NodePath("BLWheel")
 rear_right_wheel = NodePath("BRWheel")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1489369933]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.80297923, -0.36010742)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 1.1991673, -0.41468048)
 shape = SubResource("BoxShape3D_udt0a")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1582914531]
-transform = Transform3D(0.635, 0, 0, 0, 0.635, 0, 0, 0, 0.635, 0, 0.034640968, -0.42911673)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.034640968, -0.42911673)
 mesh = ExtResource("2_bswb0")
 surface_material_override/0 = SubResource("StandardMaterial3D_bswb0")
 
 [node name="FLWheel" type="VehicleWheel3D" parent="." unique_id=1425042667]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61370206, 0.27992868, 0.9448081)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9868052, 0.46058917, 1.7523886)
 use_as_traction = true
 use_as_steering = true
-wheel_radius = 0.27
+wheel_radius = 0.455
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="FLWheel" unique_id=641825707]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
 mesh = ExtResource("5_1bgs2")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="FRWheel" type="VehicleWheel3D" parent="." unique_id=652610507]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614, 0.27992868, 0.9448081)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.987, 0.46058917, 1.7523886)
 use_as_traction = true
 use_as_steering = true
-wheel_radius = 0.27
+wheel_radius = 0.455
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="FRWheel" unique_id=705174782]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
 mesh = ExtResource("5_1bgs2")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="BLWheel" type="VehicleWheel3D" parent="." unique_id=270741852]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61370206, 0.27992868, -1.3958482)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9868052, 0.46058917, -1.9103377)
 use_as_traction = true
-wheel_radius = 0.27
+wheel_radius = 0.455
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="BLWheel" unique_id=785487151]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
 mesh = ExtResource("5_1bgs2")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 
 [node name="BRWheel" type="VehicleWheel3D" parent="." unique_id=738994421]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.614, 0.27992868, -1.3958482)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.987, 0.46058917, -1.9103377)
 use_as_traction = true
-wheel_radius = 0.27
+wheel_radius = 0.455
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="BRWheel" unique_id=620222548]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
 mesh = ExtResource("5_1bgs2")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
 

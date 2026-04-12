@@ -49,7 +49,7 @@ func _process(_delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	input_handler.process_inputs()
+	input_handler.process_movement_related_inputs()
 	handle_vehicle_control(delta)
 	handle_engine_velocity()
 

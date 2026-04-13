@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://b4jewvrecxx44"]
+
+[ext_resource type="PackedScene" uid="uid://c61pyyvbrubrd" path="res://first_person_template_project/scenes/player/player.tscn" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://8lhxqd2xwtln" path="res://first_person_template_project/components/grab/grabbable_meta_component.gd" id="2_lnu2h"]
+[ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://first_person_template_project/assets/grid/grid.tres" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://cxh2soij7m05g" path="res://first_person_template_project/scenes/vehicle/vehicle.tscn" id="4_lbhrr"]
+[ext_resource type="Script" uid="uid://djjay7plrrh6j" path="res://core/globals/game_managers/debug_game_manager.gd" id="5_iywne"]
+[ext_resource type="Script" uid="uid://cjnna1lo7x51n" path="res://first_person_template_project/components/punch/punchable_meta_component.gd" id="5_o8qi1"]
+[ext_resource type="PackedScene" uid="uid://bs2jm62cmkbrk" path="res://core/light/light_scene.tscn" id="6_6c6v5"]
+[ext_resource type="PackedScene" uid="uid://c87xhud3r4fcw" path="res://first_person_template_project/scenes/shape/squared_shape.tscn" id="7_bhwwd"]
+[ext_resource type="Script" uid="uid://gty1fgwujnsu" path="res://core/components/day_night_cycle_component/day_cycle_component.gd" id="8_pdbwf"]
+[ext_resource type="Script" uid="uid://1vxc7vc55qnl" path="res://core/multimesh/multimesh_configurator.gd" id="9_u1jpj"]
+[ext_resource type="ArrayMesh" uid="uid://cujxm8mbybx0f" path="res://first_person_template_project/assets/trees/tree/tree_2_1/tree_rt_2_1_tree_rt_2_1.res" id="9_uh34q"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yqjtg"]
+radius = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_yqjtg"]
+material = ExtResource("2_yqjtg")
+radius = 1.0
+height = 2.0
+radial_segments = 16
+rings = 16
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
+ground_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_tyhie"]
+sky_material = SubResource("PhysicalSkyMaterial_gn88m")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment_6c6v5"]
+background_mode = 2
+background_intensity = 100000.0
+sky = SubResource("Sky_tyhie")
+tonemap_mode = 3
+tonemap_white = 8.0
+ssao_enabled = true
+ssao_detail = 2.0
+sdfgi_enabled = true
+sdfgi_bounce_feedback = 0.9
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_gi_inject = 1.14
+volumetric_fog_anisotropy = 0.7
+volumetric_fog_sky_affect = 0.295
+adjustment_saturation = 1.17
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_bhwwd"]
+auto_exposure_scale = 0.22
+auto_exposure_speed = 0.8
+dof_blur_far_distance = 1.44
+dof_blur_near_distance = 0.01
+auto_exposure_min_sensitivity = 8.01
+
+[sub_resource type="MultiMesh" id="MultiMesh_u1jpj"]
+transform_format = 1
+instance_count = 5
+mesh = ExtResource("9_uh34q")
+buffer = PackedFloat32Array(1, 0, 0, 7.42, 0, 1, 0, 2.54, 0, 0, 1, 0, 1, 0, 0, 3.03, 0, 1, 0, 0.635, 0, 0, 1, 0, 1, 0, 0, 4.62, 0, 1, 0, 6.055, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, -4.705, 0, 0, 1, 0, 1, 0, 0, 0.265, 0, 1, 0, -0.33, 0, 0, 1, 0)
+
+[node name="GameWorld" type="Node3D" unique_id=1001126890]
+
+[node name="Player" parent="." unique_id=228149766 instance=ExtResource("1_uwrxv")]
+
+[node name="Vehicle" parent="." unique_id=68410669 instance=ExtResource("4_lbhrr")]
+transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, -2, 7, -5)
+
+[node name="Ball" type="RigidBody3D" parent="." unique_id=1048092950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 4
+collision_mask = 15
+continuous_cd = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ball" unique_id=1860700245]
+shape = SubResource("SphereShape3D_yqjtg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ball" unique_id=820284761]
+mesh = SubResource("SphereMesh_yqjtg")
+
+[node name="GrabbableComponent" type="Node" parent="Ball" unique_id=1932556111 node_paths=PackedStringArray("target_body")]
+script = ExtResource("2_lnu2h")
+target_body = NodePath("..")
+
+[node name="PunchableComponent" type="Node" parent="Ball" unique_id=1016104561 node_paths=PackedStringArray("target_body")]
+script = ExtResource("5_o8qi1")
+target_body = NodePath("..")
+
+[node name="Floor" parent="." unique_id=1786801823 instance=ExtResource("7_bhwwd")]
+collision_mask = 0
+mesh_collision_mask = 0
+dimensions = Vector3(100, 1, 100)
+
+[node name="Lightning" type="Node3D" parent="." unique_id=370967795]
+
+[node name="WorldEnvironment" parent="Lightning" unique_id=2102959781 instance=ExtResource("6_6c6v5")]
+environment = SubResource("Environment_6c6v5")
+camera_attributes = SubResource("CameraAttributesPractical_bhwwd")
+
+[node name="Sun" parent="Lightning/WorldEnvironment" index="0" unique_id=1519200599]
+transform = Transform3D(0.96592593, -0.032631364, -0.25675374, 0.25881904, 0.12178199, 0.958218, -5.712554e-09, -0.9920203, 0.12607796, -4.86868, 8.33126, 2.18251)
+
+[node name="ReflectionProbe" parent="Lightning/WorldEnvironment" index="1" unique_id=993397437]
+intensity = 0.0
+box_projection = true
+
+[node name="LightmapGI" type="LightmapGI" parent="Lightning" unique_id=1495033192]
+transform = Transform3D(0.9659259, -0.032631382, -0.25675374, 0.25881904, 0.121781975, 0.95821804, 0, -0.99202037, 0.12607796, -4.86868, 8.33126, 2.18251)
+quality = 2
+supersampling = true
+bounces = 10
+
+[node name="Building" type="Node3D" parent="." unique_id=2128534925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 5.5, 2)
+
+[node name="SquaredShape5" parent="Building" unique_id=1057553935 instance=ExtResource("7_bhwwd")]
+dimensions = Vector3(5, 10, 5)
+
+[node name="SquaredShape" parent="Building" unique_id=414240664 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -1)
+dimensions = Vector3(5, 10, 5)
+
+[node name="SquaredShape3" parent="Building" unique_id=1016500386 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(-3.7855163e-08, -2.1855692e-08, -1, -0.49999994, 0.8660252, 0, 0.8660252, 0.49999994, -4.371139e-08, 9, 0.6760001, -1.4)
+dimensions = Vector3(5, 1, 2.5)
+
+[node name="SquaredShape4" parent="Building" unique_id=352976033 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(-1.2904783e-08, 0, 1, 0, 0.9999999, 0, -1, -2.9802322e-08, -4.371139e-08, 12.92276, 2.475833, -8.4)
+dimensions = Vector3(10, 1, 2.5)
+
+[node name="SquaredShape6" parent="Building" unique_id=1772643289 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0, 1, -0.6772404, -1.3241673, 2.8000002)
+dimensions = Vector3(6.344, 1, 2.5)
+
+[node name="SquaredShape2" parent="Building" unique_id=2135630295 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(0.8660253, 0.5, 0, -0.5, 0.8660253, 0, 0, 0, 1, 12.5, -4.2, 2.7000003)
+dimensions = Vector3(6.344, 1, 2.5)
+
+[node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
+script = ExtResource("5_iywne")
+vehicle = NodePath("../Vehicle")
+player = NodePath("../Player")
+
+[node name="DayCycleComponent" type="Node" parent="DebugGameManager" unique_id=875153203]
+script = ExtResource("8_pdbwf")
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="." unique_id=286053733]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 6, 0.5, 0)
+multimesh = SubResource("MultiMesh_u1jpj")
+script = ExtResource("9_u1jpj")
+instances_positions = Array[Vector3]([Vector3(7.42, 2.54, 0), Vector3(3.03, 0.635, 0), Vector3(4.62, 6.055, 0), Vector3(0, -4.705, 0), Vector3(0.265, -0.33, 0)])
+instances_rotations = Array[Vector3]([Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)])
+instances_scales = Array[Vector3]([Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1)])
+
+[editable path="Lightning/WorldEnvironment"]

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://6ewmtonod3g0"]
+
+[ext_resource type="Script" uid="uid://bj7rwuuquuq6h" path="res://first_person_template_project/scenes/ui/inventory_bar/inventory_bar.gd" id="1_52ibg"]
+
+[node name="InventoryBar" type="HBoxContainer" unique_id=86737076]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -20.0
+offset_right = 10.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_52ibg")

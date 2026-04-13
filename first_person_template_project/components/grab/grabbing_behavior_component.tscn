@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://dpe67156hqg57"]
+
+[ext_resource type="Script" uid="uid://dlbviys3ovbf5" path="res://first_person_template_project/components/grab/grabbing_behavior.gd" id="1_3ipup"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_gmlin"]
+radius = 0.1
+
+[node name="GrabbingBehaviorComponent" type="Node3D" unique_id=466324627]
+script = ExtResource("1_3ipup")
+
+[node name="GrabAnchor" type="StaticBody3D" parent="." unique_id=1893902183]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GrabAnchor" unique_id=1052986522]
+shape = SubResource("SphereShape3D_gmlin")
+debug_color = Color(0.7171725, 0.4809904, 7.70092e-07, 1)
+
+[node name="GrabbingJoint" type="Generic6DOFJoint3D" parent="." unique_id=283685389]
+unique_name_in_owner = true
+node_a = NodePath("../GrabAnchor")
+exclude_nodes_from_collision = false
+linear_limit_x/enabled = false
+linear_limit_x/softness = 2.0
+linear_limit_x/restitution = 0.1
+linear_limit_x/damping = 0.2
+linear_limit_y/enabled = false
+linear_limit_y/softness = 2.0
+linear_limit_y/restitution = 0.1
+linear_limit_y/damping = 0.2
+linear_limit_z/enabled = false
+linear_limit_z/softness = 2.0
+linear_limit_z/restitution = 0.1
+linear_limit_z/damping = 0.2
+linear_spring_x/enabled = true
+linear_spring_x/stiffness = 200.0
+linear_spring_x/damping = 9.0
+linear_spring_y/enabled = true
+linear_spring_y/stiffness = 200.0
+linear_spring_y/damping = 9.0
+linear_spring_z/enabled = true
+linear_spring_z/stiffness = 200.0
+linear_spring_z/damping = 9.0
+angular_spring_x/enabled = true
+angular_spring_x/stiffness = 50.0
+angular_spring_y/enabled = true
+angular_spring_y/stiffness = 50.0
+angular_spring_z/enabled = true
+angular_spring_z/stiffness = 50.0

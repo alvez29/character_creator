@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://cxh2soij7m05g"]
+
+[ext_resource type="Script" uid="uid://b1cg71ddas4y2" path="res://first_person_template_project/scenes/vehicle/vehicle.gd" id="1_1nnvc"]
+[ext_resource type="Script" uid="uid://mbk05m00otm2" path="res://first_person_template_project/scenes/vehicle/vehicle_spring_arm.gd" id="2_udt0a"]
+[ext_resource type="Texture2D" uid="uid://b8ngx57mb0740" path="res://first_person_template_project/assets/car/red/car_red.png" id="3_1bgs2"]
+[ext_resource type="Script" uid="uid://bxkr0xolo8p5i" path="res://core/components/input_handler_component/input_handler_component.gd" id="3_cs81w"]
+[ext_resource type="Script" uid="uid://cx852611qp62i" path="res://core/components/pawn_component/pawn_component.gd" id="4_015gl"]
+[ext_resource type="ArrayMesh" uid="uid://dth4u577f4ybl" path="res://first_person_template_project/assets/car/red/wheel.obj" id="5_1bgs2"]
+[ext_resource type="Script" uid="uid://cjnna1lo7x51n" path="res://first_person_template_project/components/punch/punchable_meta_component.gd" id="7_uufqd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_udt0a"]
+size = Vector3(1.6, 1.4015992, 4.3929787)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bgs2"]
+albedo_texture = ExtResource("3_1bgs2")
+
+[node name="Vehicle" type="VehicleBody3D" unique_id=68410669 node_paths=PackedStringArray("input_handler", "pawn_component", "front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel")]
+collision_layer = 8
+collision_mask = 15
+center_of_mass_mode = 1
+angular_damp = 3.0
+script = ExtResource("1_1nnvc")
+input_handler = NodePath("Components/InputHandlerComponent")
+pawn_component = NodePath("Components/PawnComponent")
+front_left_wheel = NodePath("FLWheel")
+front_right_wheel = NodePath("FRWheel")
+rear_left_wheel = NodePath("BLWheel")
+rear_right_wheel = NodePath("BRWheel")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1489369933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 0.8881902, -0.43392712)
+shape = SubResource("BoxShape3D_udt0a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1098704977]
+
+[node name="FLWheel" type="VehicleWheel3D" parent="." unique_id=1425042667]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6961775, 0.27992868, 1.1411778)
+use_as_traction = true
+use_as_steering = true
+wheel_radius = 0.375
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="FLWheel" unique_id=641825707]
+transform = Transform3D(0.795, 0, 0, 0, 0.795, 0, 0, 0, 0.795, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
+
+[node name="FRWheel" type="VehicleWheel3D" parent="." unique_id=652610507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66898364, 0.27992868, 1.1411778)
+use_as_traction = true
+use_as_steering = true
+wheel_radius = 0.375
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="FRWheel" unique_id=705174782]
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
+
+[node name="BLWheel" type="VehicleWheel3D" parent="." unique_id=270741852]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6961775, 0.27992868, -1.5215249)
+use_as_traction = true
+wheel_radius = 0.375
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="BLWheel" unique_id=785487151]
+transform = Transform3D(0.795, 0, 0, 0, 0.795, 0, 0, 0, 0.795, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
+
+[node name="BRWheel" type="VehicleWheel3D" parent="." unique_id=738994421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66898364, 0.27992868, -1.5215249)
+use_as_traction = true
+wheel_radius = 0.375
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BRWheel" unique_id=620222548]
+transform = Transform3D(0.795, 0, 0, 0, 0.795, 0, 0, 0, 0.795, 0, 0, 0)
+mesh = ExtResource("5_1bgs2")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bgs2")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=951695254 node_paths=PackedStringArray("target")]
+transform = Transform3D(-4.371139e-08, -0.34037957, 0.9402881, 0, 0.9402881, 0.34037957, -1, 1.4878464e-08, -4.11013e-08, 0, 0, 0)
+collision_mask = 2
+spring_length = 8.0
+script = ExtResource("2_udt0a")
+target = NodePath("..")
+smooth_speed = 8.0
+
+[node name="VehicleCamera" type="Camera3D" parent="SpringArm3D" unique_id=492338418]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.95178735, -0.30675858, 0, 0.30675858, 0.95178735, 0, 0, 0)
+
+[node name="Components" type="Node" parent="." unique_id=585799416]
+
+[node name="InputHandlerComponent" type="Node" parent="Components" unique_id=166088447]
+script = ExtResource("3_cs81w")
+metadata/_custom_type_script = "uid://bxkr0xolo8p5i"
+
+[node name="PawnComponent" type="Node" parent="Components" unique_id=1262051955 node_paths=PackedStringArray("input_handler_component", "camera")]
+script = ExtResource("4_015gl")
+input_handler_component = NodePath("../InputHandlerComponent")
+camera = NodePath("../../SpringArm3D/VehicleCamera")
+metadata/_custom_type_script = "uid://cx852611qp62i"
+
+[node name="PunchableComponent" type="Node" parent="Components" unique_id=268940492 node_paths=PackedStringArray("target_body")]
+script = ExtResource("7_uufqd")
+target_body = NodePath("../..")

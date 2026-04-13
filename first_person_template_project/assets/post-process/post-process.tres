@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cbdcxxgt756at"]
+
+[ext_resource type="Shader" uid="uid://dw2w0wf46vlrn" path="res://first_person_template_project/assets/post-process/post-process.gdshader" id="1_pvwxs"]
+
+[resource]
+shader = ExtResource("1_pvwxs")
+shader_parameter/colors = 9.7370004150075
+shader_parameter/noise = 0.0
+shader_parameter/dither_strength = 1.42000006745

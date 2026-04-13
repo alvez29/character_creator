@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cdi8lkac86ot3"]
+
+[ext_resource type="Script" uid="uid://cq71rt7k4mrxf" path="res://first_person_template_project/components/in_sight_checker/in_sight_checker_component.gd" id="1_r1cw2"]
+
+[node name="InSightCheckerComponent" type="Node3D" unique_id=1048829725]
+script = ExtResource("1_r1cw2")
+
+[node name="InSightRaycast" type="RayCast3D" parent="." unique_id=613891729]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -7)
+collision_mask = 4
+debug_shape_custom_color = Color(1, 0.27058825, 1, 1)
+debug_shape_thickness = 1
+
+[node name="CheckerTimer" type="Timer" parent="." unique_id=1210964551]
+unique_name_in_owner = true
+wait_time = 0.1
+
+[connection signal="timeout" from="CheckerTimer" to="." method="_on_timer_timeout"]

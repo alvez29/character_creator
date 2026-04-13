@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://fd0h2suxq0q2"]
+
+[ext_resource type="Script" uid="uid://bh3jfi6l6ed52" path="res://first_person_template_project/components/punch/punching_behavior_component.gd" id="1_terxl"]
+
+[node name="PunchingBehaviorComponent" type="Node" unique_id=1111581180]
+script = ExtResource("1_terxl")
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=1284109635]
+one_shot = true

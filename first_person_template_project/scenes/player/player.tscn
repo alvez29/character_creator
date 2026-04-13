@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dpe67156hqg57" path="res://first_person_template_project/components/grab/grabbing_behavior_component.tscn" id="2_gmlin"]
 [ext_resource type="PackedScene" uid="uid://cdi8lkac86ot3" path="res://first_person_template_project/components/in_sight_checker/in_sight_checker_component.tscn" id="2_lvxji"]
 [ext_resource type="PackedScene" uid="uid://bkuhdux6dpsjs" path="res://first_person_template_project/scenes/arms/arms.tscn" id="2_qek5x"]
+[ext_resource type="Script" uid="uid://35fwy8hcwvk5" path="res://first_person_template_project/components/smooth_shake/smooth_shake_component.gd" id="4_rep30"]
 [ext_resource type="PackedScene" uid="uid://bxtgyh42ubei0" path="res://core/components/camera_manager_component/first_person/first_person_camera_manager.tscn" id="5_5gtgg"]
 [ext_resource type="Script" uid="uid://cx852611qp62i" path="res://core/components/pawn_component/pawn_component.gd" id="6_75vfm"]
 [ext_resource type="Script" uid="uid://bxkr0xolo8p5i" path="res://core/components/input_handler_component/input_handler_component.gd" id="7_0owmy"]
@@ -11,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://fd0h2suxq0q2" path="res://first_person_template_project/components/punch/punching_behavior_component.tscn" id="9_prya0"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
+radius = 0.4
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rep30"]
 
 [node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_manager", "camera_pivot", "collision_shape", "camera", "punching_behavior_component")]
 collision_mask = 11
@@ -44,7 +48,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 [node name="InSightCheckerComponent" parent="CameraPivot/PlayerCamera" unique_id=1048829725 node_paths=PackedStringArray("subject") instance=ExtResource("2_lvxji")]
 subject = NodePath("../../..")
 
-[node name="Arms" parent="CameraPivot/PlayerCamera" unique_id=936707057 node_paths=PackedStringArray("player") instance=ExtResource("2_qek5x")]
+[node name="Arms" parent="CameraPivot/PlayerCamera" unique_id=455996207 node_paths=PackedStringArray("player") instance=ExtResource("2_qek5x")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -1.7, 0)
 player = NodePath("../../..")
 
@@ -70,10 +74,18 @@ script = ExtResource("7_0owmy")
 script = ExtResource("8_qek5x")
 body = NodePath("../..")
 gravity_factor = 2.0
+eyes_height = 1.7
 
 [node name="PunchingBehaviorComponent" parent="Components" unique_id=1111581180 node_paths=PackedStringArray("subject", "input_handler_component") instance=ExtResource("9_prya0")]
 subject = NodePath("../..")
 input_handler_component = NodePath("../InputHandlerComponent")
 punching_collision_mask = 14
+punching_radius = 1.0
+punching_cooldown = 0.0
 should_punch_against_floor = true
 punch_against_mask = 2
+
+[node name="CameraShakeComponent" type="Node" parent="Components" unique_id=1713804184 node_paths=PackedStringArray("target_node")]
+script = ExtResource("4_rep30")
+target_node = NodePath("../../CameraPivot/PlayerCamera")
+noise = SubResource("FastNoiseLite_rep30")

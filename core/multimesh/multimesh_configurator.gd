@@ -18,7 +18,7 @@ var _is_updating: bool = false
 		instances_scales = v
 		_try_apply()
 
-@export_group("Distribución Aleatoria")
+@export_group("Random")
 @export var random_area_size: Vector3 = Vector3(10.0, 0.0, 10.0)
 @export var random_rotation_y_only: bool = true
 @export var random_scale_min: float = 0.8
@@ -28,8 +28,7 @@ func _try_apply():
 	if Engine.is_editor_hint() and not _is_updating:
 		apply_to_multimesh()
 
-# Sin asignar a variable
-@export_tool_button("Inicializar Array")
+@export_tool_button("Init Array", "Breakpoint")
 var init_array = func initialize_array():
 	if not multimesh:
 		push_error("Asigna un MultiMesh primero")
@@ -45,13 +44,11 @@ var init_array = func initialize_array():
 		instances_scales.append(Vector3.ONE)
 	_is_updating = false
 	
-	print("✓ Arrays inicializados: ", instances_positions.size(), " elementos")
 	apply_to_multimesh()
 
-@export_tool_button("Aplicar → MultiMesh")
+@export_tool_button("Apply Multimesh", "CodeRegionFoldedRightArrow")
 var apply_multimesh = func():
 	apply_to_multimesh()
-	print("✓ Aplicado")
 
 func apply_to_multimesh():
 	if not multimesh:
@@ -69,10 +66,10 @@ func apply_to_multimesh():
 		b = b.scaled(sca)
 		multimesh.set_instance_transform(i, Transform3D(b, pos))
 
-@export_tool_button("Leer ← MultiMesh")
+@export_tool_button("Write Multimesh", "Edit")
 var read_from = func read_from_multimesh():
 	if not multimesh:
-		push_error("No hay MultiMesh")
+		push_error("No MultiMesh")
 		return
 	
 	_is_updating = true
@@ -83,16 +80,13 @@ var read_from = func read_from_multimesh():
 		var t = multimesh.get_instance_transform(i)
 		instances_positions.append(t.origin)
 		
-		# En Godot 4, get_scale() y get_euler() funcionan bien en Basis.
 		instances_scales.append(t.basis.get_scale())
 		
 		var euler = t.basis.get_euler()
 		instances_rotations.append(Vector3(rad_to_deg(euler.x), rad_to_deg(euler.y), rad_to_deg(euler.z)))
 	_is_updating = false
 	
-	print("✓ Leído: ", instances_positions.size(), " transformaciones")
-
-@export_tool_button("➕ Añadir Instancia")
+@export_tool_button("Add Instance", "Add")
 var add_instance = func():
 	if not multimesh:
 		return
@@ -105,7 +99,7 @@ var add_instance = func():
 	_is_updating = false
 	apply_to_multimesh()
 
-@export_tool_button("➖ Reducir Instancia")
+@export_tool_button("Reduce Instance", "Remove")
 var remove_instance = func():
 	if not multimesh or multimesh.instance_count == 0:
 		return
@@ -121,37 +115,31 @@ var remove_instance = func():
 	_is_updating = false
 	apply_to_multimesh()
 
-@export_tool_button("🎲 Distribuir Aleatoriamente")
+@export_tool_button("Random Distribute", "RandomNumberGenerator")
 var distribute_random = func():
 	if not multimesh or multimesh.instance_count == 0:
-		push_error("Asigna un MultiMesh y asegúrate de tener instancias primero")
 		return
 	
 	_is_updating = true
 	
-	# Asegurarnos de que tienen el tamaño correcto
 	if instances_positions.size() != multimesh.instance_count:
 		instances_positions.resize(multimesh.instance_count)
 		instances_rotations.resize(multimesh.instance_count)
 		instances_scales.resize(multimesh.instance_count)
 		
 	for i in range(multimesh.instance_count):
-		# Posición aleatoria basándonos en el tamaño configurado (centrado en 0,0,0)
 		var x = randf_range(-random_area_size.x / 2.0, random_area_size.x / 2.0)
 		var y = randf_range(-random_area_size.y / 2.0, random_area_size.y / 2.0)
 		var z = randf_range(-random_area_size.z / 2.0, random_area_size.z / 2.0)
 		instances_positions[i] = Vector3(x, y, z)
 		
-		# Rotación aleatoria
 		if random_rotation_y_only:
 			instances_rotations[i] = Vector3(0, randf_range(0, 360), 0)
 		else:
 			instances_rotations[i] = Vector3(randf_range(0, 360), randf_range(0, 360), randf_range(0, 360))
 			
-		# Escala aleatoria uniforme
 		var s = randf_range(random_scale_min, random_scale_max)
 		instances_scales[i] = Vector3(s, s, s)
 		
 	_is_updating = false
 	apply_to_multimesh()
-	print("✓ Distribución aleatoria aplicada en ", multimesh.instance_count, " elementos")

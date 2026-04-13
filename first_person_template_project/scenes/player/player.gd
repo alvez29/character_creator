@@ -21,7 +21,6 @@ var _crouch_tween: Tween
 var _crouch_tween_speed: float = 0.15
 var _is_crouch_action_pressed: bool = false
 
-
 func _ready() -> void:
 	floor_snap_length = 0.5
 	floor_stop_on_slope = false
@@ -33,9 +32,9 @@ func _ready() -> void:
 			_on_possessed()
 
 	if input_handler:
-		input_handler.crouch_pressed.connect(_on_crouch_pressed)
+		input_handler.crouch_started_pressed.connect(_on_crouch_started_pressed)
 		input_handler.crouch_released.connect(_on_crouch_released)
-		input_handler.sprint_pressed.connect(_on_sprint_pressed)
+		input_handler.sprint_started_pressed.connect(_on_sprint_started_pressed)
 
 	if movement_component:
 		movement_component.on_crouch_height_changed.connect(_on_crouch_height_changed)
@@ -89,7 +88,7 @@ func _physics_process(delta: float) -> void:
 		movement_component.jump()
 
 
-func _on_crouch_pressed() -> void:
+func _on_crouch_started_pressed() -> void:
 	if not movement_component: return
 	_is_crouch_action_pressed = true
 	
@@ -113,7 +112,7 @@ func _on_crouch_released() -> void:
 			movement_component.uncrouch()
 
 
-func _on_sprint_pressed() -> void:
+func _on_sprint_started_pressed() -> void:
 	if not movement_component: return
 	if movement_component._is_sliding or movement_component._is_crouched:
 		movement_component.uncrouch()

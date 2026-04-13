@@ -14,6 +14,7 @@ signal has_released_something
 
 var _grabbing_object: GrabbableComponent
 var is_grabbing = false
+var _snap_to_anchor_tween: Tween
 
 func _ready() -> void:
 	var remote_transform = RemoteTransform3D.new()
@@ -47,6 +48,17 @@ func _try_grab():
 
 
 func snap_object_to_position():
+	if _snap_to_anchor_tween: _snap_to_anchor_tween.kill()
+	
+	_snap_to_anchor_tween = create_tween()
+	_snap_to_anchor_tween.set_trans(Tween.TRANS_SINE)
+	_snap_to_anchor_tween.set_ease(Tween.EASE_OUT)
+	_snap_to_anchor_tween.tween_property(_grabbing_object.target_body, "global_position", _grabbing_joint.global_position, 0.1)
+	_snap_to_anchor_tween.tween_callback(_on_object_snapped)
+	
+
+func _on_object_snapped():
+	_grabbing_object.target_body.global_position = _grabbing_joint.global_position
 	_grabbing_joint.node_b = _grabbing_object.target_body.get_path()
 	is_grabbing = true
 	has_grabbed_something.emit()

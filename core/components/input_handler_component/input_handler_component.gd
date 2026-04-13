@@ -3,11 +3,11 @@
 class_name InputHandlerComponent
 extends Node
 
-signal crouch_pressed
+signal crouch_started_pressed
 signal crouch_released
-signal sprint_pressed
+signal sprint_started_pressed
 signal sprint_released
-signal punch_pressed
+signal punch_started_pressed
 signal punch_released
 
 @export var is_active := false
@@ -29,17 +29,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 	
 	if event.is_action_pressed("movement_crouch"):
-		crouch_pressed.emit()
+		crouch_started_pressed.emit()
 	elif event.is_action_released("movement_crouch"):
 		crouch_released.emit()
 		
 	if event.is_action_pressed("movement_sprint"):
-		sprint_pressed.emit()
+		sprint_started_pressed.emit()
 	elif event.is_action_released("movement_sprint"):
 		sprint_released.emit()
 	
 	if event.is_action_pressed("action_punch"):
-		punch_pressed.emit()
+		punch_started_pressed.emit()
 	elif event.is_action_released("action_punch"):
 		punch_released.emit()
 		

@@ -1,7 +1,8 @@
 class_name PunchingBehaviorComponent
 extends Node
 
-signal on_punch_command
+signal on_charging_punch
+signal on_released_punch
 
 @export_category("Setting")
 @export var subject: Node3D
@@ -12,6 +13,7 @@ signal on_punch_command
 @export var punching_impulse: float = 20.0
 @export var torque_impulse: Vector3 = Vector3.ZERO
 @export var particles: CPUParticles3D
+@export var max_charge_time: float = 1.0
 
 @export_category("Self punch")
 @export var should_punch_against_floor = false
@@ -19,24 +21,48 @@ signal on_punch_command
 
 @onready var cooldown_timer: Timer = $CooldownTimer
 var _can_punch: bool = true
+var _is_charging_punch: bool = false
+var _charge_time: float = 0.0
 
 func _ready() -> void:
 	if input_handler_component:
-		input_handler_component.punch_pressed.connect(_on_punch_input_pressed)
+		input_handler_component.punch_started_pressed.connect(_on_punch_input_started_pressed)
+		input_handler_component.punch_released.connect(_on_punch_input_released)
 	
-	if cooldown_timer:
+	if cooldown_timer and punching_cooldown > 0.0:
 		cooldown_timer.wait_time = punching_cooldown
 		cooldown_timer.timeout.connect(_on_cooldown_timer_timeout)
 
 
-func _on_punch_input_pressed():
+func _process(delta: float) -> void:
+	if _is_charging_punch:
+		_charge_time += delta
+	else:
+		_charge_time -= delta
+		
+	_charge_time = clamp(_charge_time, 0, max_charge_time)
+	print(_charge_time)
+
+
+func _on_punch_input_started_pressed():
 	if _can_punch:
-		on_punch_command.emit()
-		cooldown_timer.start()
-		_can_punch = false
+		on_charging_punch.emit()
+		_is_charging_punch = true
+
+func _on_punch_input_released():
+	if _can_punch:
+		on_released_punch.emit()
+		_is_charging_punch = false
 
 
 func punch(world: World3D, position: Vector3, custom_direction: Vector3 = Vector3.ZERO):
+	if punching_cooldown > 0.0:
+		cooldown_timer.start()
+		_can_punch = false
+	
+	var charge_factor = remap(_charge_time, 0.0, max_charge_time, 0.0, 1.0)
+	_charge_time = 0.0
+	
 	var intersection = Utils.Physics.intersect_shape_with_point(world, position, punching_radius, punching_collision_mask)
 	
 	if intersection.collided:
@@ -55,7 +81,7 @@ func punch(world: World3D, position: Vector3, custom_direction: Vector3 = Vector
 					var intersection_point = intersection.point
 					
 					var direction = custom_direction if custom_direction != Vector3.ZERO else (intersection_point - position)
-					punchable_component.punch(intersection_point, direction, punching_impulse, torque_impulse)
+					punchable_component.punch(intersection_point, direction, charge_factor * punching_impulse, torque_impulse)
 
 
 func _on_cooldown_timer_timeout():

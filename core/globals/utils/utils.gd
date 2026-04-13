@@ -1,6 +1,7 @@
 extends Node
 
 var Physics: PhysicsUtils = PhysicsUtils.new()
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 class PhysicsUtils:
 	func intersect_ray(

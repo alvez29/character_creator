@@ -26767,6 +26767,17 @@ _subresources={
 "slice_99/start_frame": 0,
 "slices/amount": 0
 }
+},
+"meshes": {
+"ArmsMesh": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://first_person_template_project/assets/arms/ArmsMesh.res",
+"save_to_file/path": "uid://cuo86p4e5wjd1"
+}
 }
 }
 fbx/importer=0

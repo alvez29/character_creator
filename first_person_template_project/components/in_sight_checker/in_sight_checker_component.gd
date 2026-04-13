@@ -30,7 +30,7 @@ func check_in_front():
 	var direction := -camera.global_transform.basis.z
 	var target := origin + (direction * interact_distance)
 
-	var result = Utils.Physics.intersect_ray(get_world_3d(), origin, target, null, [subject.get_rid()])
+	var result = Utils.Physics.intersect_ray(get_world_3d(), origin, target, 0xFFFFFFFF, [subject.get_rid()])
 	
 	if result and result.collider:
 		var collider = result.collider

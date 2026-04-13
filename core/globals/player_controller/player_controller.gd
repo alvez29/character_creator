@@ -43,6 +43,8 @@ func _get_pawn_component(node: Node) -> PawnComponent:
 		return node
 		
 	for child in node.get_children():
-		if child is PawnComponent:
-			return child
+		var result = _get_pawn_component(child)
+		if result != null:
+			return result
+	
 	return null

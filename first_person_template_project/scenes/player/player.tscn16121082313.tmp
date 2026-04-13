@@ -69,11 +69,11 @@ script = ExtResource("7_0owmy")
 [node name="FirstPersonMovementComponent" type="Node" parent="Components" unique_id=2072597657 node_paths=PackedStringArray("body")]
 script = ExtResource("8_qek5x")
 body = NodePath("../..")
-gravity_factor = 2.0
 
-[node name="PunchingBehaviorComponent" parent="Components" unique_id=1111581180 node_paths=PackedStringArray("subject", "input_handler_component") instance=ExtResource("9_prya0")]
-subject = NodePath("../..")
-input_handler_component = NodePath("../InputHandlerComponent")
+[node name="PunchingBehaviorComponent" parent="Components" unique_id=1111581180 node_paths=PackedStringArray("input_handler_component") instance=ExtResource("9_prya0")]
 punching_collision_mask = 14
-should_punch_against_floor = true
-punch_against_mask = 2
+punching_radius = null
+punching_cooldown = null
+punching_impulse = null
+torque_impulse = null
+input_handler_component = NodePath("../InputHandlerComponent")

@@ -45,7 +45,9 @@ func execute_punch():
 	var bone_position = bone_transform.origin
 	var bone_global_position = to_global(bone_position)
 	
-	player.punching_behavior_component.punch(get_world_3d(), bone_global_position)
+	var punch_direction = -player.camera_pivot.global_transform.basis.z if player.camera_pivot else -player.global_transform.basis.z
+	
+	player.punching_behavior_component.punch(get_world_3d(), bone_global_position, punch_direction)
 
 
 func _on_animation_tree_animation_started(anim_name: StringName) -> void:

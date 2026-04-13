@@ -67,7 +67,8 @@ buffer = PackedFloat32Array(1, 0, 0, 7.42, 0, 1, 0, 2.54, 0, 0, 1, 0, 1, 0, 0, 3
 [node name="Player" parent="." unique_id=228149766 instance=ExtResource("1_uwrxv")]
 
 [node name="Vehicle" parent="." unique_id=68410669 instance=ExtResource("4_lbhrr")]
-transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, -2, 7, -5)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2, 7, -5)
+gravity_scale = 1.0
 
 [node name="Ball" type="RigidBody3D" parent="." unique_id=1048092950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -139,14 +140,6 @@ dimensions = Vector3(6.344, 1, 2.5)
 transform = Transform3D(0.8660253, 0.5, 0, -0.5, 0.8660253, 0, 0, 0, 1, 12.5, -4.2, 2.7000003)
 dimensions = Vector3(6.344, 1, 2.5)
 
-[node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
-script = ExtResource("5_iywne")
-vehicle = NodePath("../Vehicle")
-player = NodePath("../Player")
-
-[node name="DayCycleComponent" type="Node" parent="DebugGameManager" unique_id=875153203]
-script = ExtResource("8_pdbwf")
-
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="." unique_id=286053733]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 6, 0.5, 0)
 multimesh = SubResource("MultiMesh_u1jpj")
@@ -154,5 +147,13 @@ script = ExtResource("9_u1jpj")
 instances_positions = Array[Vector3]([Vector3(7.42, 2.54, 0), Vector3(3.03, 0.635, 0), Vector3(4.62, 6.055, 0), Vector3(0, -4.705, 0), Vector3(0.265, -0.33, 0)])
 instances_rotations = Array[Vector3]([Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)])
 instances_scales = Array[Vector3]([Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1)])
+
+[node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
+script = ExtResource("5_iywne")
+vehicle = NodePath("../Vehicle")
+player = NodePath("../Player")
+
+[node name="DayCycleComponent" type="Node" parent="DebugGameManager" unique_id=875153203]
+script = ExtResource("8_pdbwf")
 
 [editable path="Lightning/WorldEnvironment"]

@@ -76,4 +76,4 @@ subject = NodePath("../..")
 input_handler_component = NodePath("../InputHandlerComponent")
 punching_collision_mask = 14
 should_punch_against_floor = true
-punch_against_mask = 2
+punch_against_mask = 16711682

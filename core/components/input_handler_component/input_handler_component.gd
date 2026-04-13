@@ -8,6 +8,7 @@ signal crouch_released
 signal sprint_pressed
 signal sprint_released
 signal punch_pressed
+signal punch_released
 
 @export var is_active := false
 
@@ -39,6 +40,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("action_punch"):
 		punch_pressed.emit()
+	elif event.is_action_released("action_punch"):
+		punch_released.emit()
 		
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_mouse_delta_accumulated += event.relative

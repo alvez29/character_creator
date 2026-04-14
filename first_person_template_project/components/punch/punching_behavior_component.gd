@@ -41,7 +41,6 @@ func _process(delta: float) -> void:
 		_charge_time -= delta
 		
 	_charge_time = clamp(_charge_time, 0, max_charge_time)
-	print(_charge_time)
 
 
 func _on_punch_input_started_pressed():

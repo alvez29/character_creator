@@ -1,0 +1,72 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://binrqq5y4f3rp"
+path="res://.godot/imported/Pueblo74.fbx-a741e0e5f90b20352319762a453e67c0.scn"
+
+[deps]
+
+source_file="res://first_person_template_project/assets/car/low_poly/textures/Pueblo74.fbx"
+dest_files=["res://.godot/imported/Pueblo74.fbx-a741e0e5f90b20352319762a453e67c0.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=true
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Sport454": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://first_person_template_project/assets/car/low_poly/materials/Sport454.tres",
+"use_external/path": "uid://d1v5nvf0t2urr"
+},
+"UCB_Glass_256": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://first_person_template_project/assets/car/low_poly/materials/UCB_Glass_256.tres",
+"use_external/path": "uid://3ms2y0cv2ku1"
+},
+"gt1_Bottom": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://first_person_template_project/assets/car/low_poly/materials/gt1_Bottom.tres",
+"use_external/path": "uid://bnra3uue430ye"
+},
+"gt1_headlights_3": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://first_person_template_project/assets/car/low_poly/materials/gt1_headlights_3.tres",
+"use_external/path": "uid://cgqmjhqj0kbp5"
+},
+"trf_cmp_old_1": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://first_person_template_project/assets/car/low_poly/materials/trf_cmp_old_1.tres",
+"use_external/path": "uid://dip1j8mergk2q"
+}
+}
+}
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1
+fbx/naming_version=2

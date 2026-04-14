@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://b7ukavqgtexe5"
-path="res://.godot/imported/Car.obj-fa0db6c1fcadf63886985d3d158a8b85.mesh"
+path="res://.godot/imported/car.obj-702751d967432a6410cef6fbc80335ec.mesh"
 
 [deps]
 
-files=["res://.godot/imported/Car.obj-fa0db6c1fcadf63886985d3d158a8b85.mesh"]
+files=["res://.godot/imported/car.obj-702751d967432a6410cef6fbc80335ec.mesh"]
 
-source_file="res://first_person_template_project/assets/car/red/Car.obj"
-dest_files=["res://.godot/imported/Car.obj-fa0db6c1fcadf63886985d3d158a8b85.mesh", "res://.godot/imported/Car.obj-fa0db6c1fcadf63886985d3d158a8b85.mesh"]
+source_file="res://first_person_template_project/assets/car/red/car.obj"
+dest_files=["res://.godot/imported/car.obj-702751d967432a6410cef6fbc80335ec.mesh", "res://.godot/imported/car.obj-702751d967432a6410cef6fbc80335ec.mesh"]
 
 [params]
 

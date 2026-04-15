@@ -1,3 +1,4 @@
+## Reactive array variable that emits a signal locally every time its internal collection gets modified or manipulated.
 class_name ReactiveArray
 extends Reactive
 

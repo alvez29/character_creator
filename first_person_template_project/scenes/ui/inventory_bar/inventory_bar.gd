@@ -1,5 +1,5 @@
+## UI container that dynamically instantiates and manages the inventory layout visually representing slots layout.
 extends HBoxContainer
-
 
 var _inventory_bar_slot_scene = preload("uid://ddekk37cyuquq")
 

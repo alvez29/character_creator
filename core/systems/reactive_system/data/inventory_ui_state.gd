@@ -1,3 +1,4 @@
+## Concrete reactive UI state model representing the player's inventory slot selection and inputs.
 class_name InventoryUIState
 extends Reactive
 

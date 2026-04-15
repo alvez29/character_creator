@@ -1,3 +1,4 @@
+## SubViewport component handling specific 3D scale rendering and global input capture overrides for the game view.
 class_name GameSubviewport
 extends SubViewport
 

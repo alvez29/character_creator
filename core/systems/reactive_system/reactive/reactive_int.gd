@@ -1,3 +1,4 @@
+## Reactive integer variable that triggers change signals whenever its inner value is updated.
 class_name ReactiveInt
 extends Reactive
 

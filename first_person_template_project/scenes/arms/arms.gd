@@ -1,3 +1,4 @@
+## Component handling the player's arms procedural animation, state transitions, and triggering punches.
 class_name Arms
 extends Node3D
 

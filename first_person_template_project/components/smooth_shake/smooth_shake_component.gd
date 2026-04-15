@@ -1,3 +1,4 @@
+## Procedural shake component that uses noise functions to generate dynamic trauma-based position and rotation offsets.
 class_name ShakeComponent
 extends Node
 

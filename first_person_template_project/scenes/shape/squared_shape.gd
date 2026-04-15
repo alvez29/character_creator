@@ -1,3 +1,4 @@
+## Tool script providing a custom 3D squared shape with dynamic visual dimensions and physics collision bindings.
 @tool
 extends StaticBody3D
 

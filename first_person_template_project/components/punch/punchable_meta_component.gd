@@ -1,3 +1,4 @@
+## Component that allows an object to be punched, applying the physics impulse to its parent body.
 class_name PunchableComponent
 extends MetaComponent
 

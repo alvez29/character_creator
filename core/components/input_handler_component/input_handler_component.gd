@@ -1,5 +1,4 @@
-## this script should be filled with custom actions to provide to other nodes
-
+## Component responsible for capturing and exposing player input actions to other systems and nodes.
 class_name InputHandlerComponent
 extends Node
 

@@ -1,5 +1,5 @@
+## Scene element that displays a visual transition and progress while another scene is being asynchronously loaded.
 extends CanvasLayer
-
 signal loading_screen_ready
 
 @export var animation_player: AnimationPlayer

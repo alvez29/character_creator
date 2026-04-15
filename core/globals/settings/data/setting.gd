@@ -1,3 +1,4 @@
+## Data class that represents a single configuration or game setting mapping its visual definition to a system registry key.
 class_name Setting
 extends Resource
 

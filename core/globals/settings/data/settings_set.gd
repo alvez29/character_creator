@@ -1,3 +1,4 @@
+## Data resource representing an exposed settings set containing setting objects dynamically configured.
 class_name SettingsSet
 extends Resource
 

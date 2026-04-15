@@ -1,3 +1,4 @@
+## Component that handles first-person physics movement mechanics including walking, sprinting, jumping, crouching, sliding, and wall-running.
 class_name FirstPersonMovementComponent
 extends Node
 

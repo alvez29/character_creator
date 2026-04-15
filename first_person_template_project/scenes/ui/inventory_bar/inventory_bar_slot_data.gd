@@ -1,3 +1,4 @@
+## Data logic container representing the context of a specific inventory slot payload.
 class_name InventoryBarSlotData
 extends Node
 

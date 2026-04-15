@@ -1,5 +1,5 @@
+## Global utility library holding static physics queries syntax sugar, conversion methods, and math functions.
 extends Node
-
 var Physics: PhysicsUtils = PhysicsUtils.new()
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 

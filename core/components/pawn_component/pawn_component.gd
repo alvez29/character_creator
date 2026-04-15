@@ -1,3 +1,4 @@
+## Component that allows a Node to be possessed and controlled by a player controller, enabling input and camera capture.
 class_name PawnComponent
 extends Node
 

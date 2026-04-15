@@ -1,3 +1,4 @@
+## Reactive object variable wrapper that connects to its underlying children's properties to propagate signal updates through the observer tree.
 class_name ReactiveObject
 extends Reactive
 

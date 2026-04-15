@@ -1,5 +1,5 @@
+## Follow-camera mount that smoothly interpolates transformation towards a defined spatial target.
 extends SpringArm3D
-
 @export var target: Node3D
 @export var smooth_speed: float = 6.0
 

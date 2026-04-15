@@ -1,3 +1,4 @@
+## Abstract component to build discrete state machines that transition between distinct states based on provided conditions.
 @abstract
 class_name StateMachineComponent
 extends Node

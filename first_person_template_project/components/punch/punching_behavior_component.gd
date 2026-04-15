@@ -1,3 +1,4 @@
+## Component that handles charging and releasing punches, applying directional force to PunchableComponent targets.
 class_name PunchingBehaviorComponent
 extends Node
 

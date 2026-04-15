@@ -1,3 +1,4 @@
+## Abstract base component used to assign metadata to a target Node automatically upon entering the tree.
 @abstract
 class_name MetaComponent
 extends Node

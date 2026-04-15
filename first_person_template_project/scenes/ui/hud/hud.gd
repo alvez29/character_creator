@@ -1,4 +1,4 @@
-## This node is separated from the 3D node to be rendered in the base desired resolution and not subviewport 3d scale override
+## Root control node for the UI Heads-Up Display rendering the crosshair and debug info elements.
 extends Control
 
 @export

@@ -1,5 +1,5 @@
+## Global manager that handles loading, applying, and saving game configuration settings from the filesystem.
 extends Node
-
 signal config_saved_correctly
 signal config_loaded_from_file_system
 

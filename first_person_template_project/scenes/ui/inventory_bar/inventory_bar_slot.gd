@@ -1,3 +1,4 @@
+## Visual pane representing a singular inventory slot, handling its own selection status and styles dynamically.
 class_name InventoryBarSlot
 extends Panel
 

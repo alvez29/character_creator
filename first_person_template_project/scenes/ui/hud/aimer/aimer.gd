@@ -1,3 +1,4 @@
+## UI crosshair component reacting to different game states via animations, like highlighting when hovering grabbables.
 class_name Aimer
 extends Panel
 

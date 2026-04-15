@@ -1,3 +1,4 @@
+## Main component representing the player character, managing movement, input processing and component coordination.
 class_name Player
 extends CharacterBody3D
 

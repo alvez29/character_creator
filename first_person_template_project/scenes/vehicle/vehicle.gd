@@ -1,3 +1,4 @@
+## Vehicle physics body defining engine forces, wheel traction, steering, handbrakes, and anti-roll custom physics.
 class_name Vehicle
 extends VehicleBody3D
 

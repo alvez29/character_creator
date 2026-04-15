@@ -1,3 +1,4 @@
+## State machine dictating specific behaviors and transitions for the player's crosshair element based on environment interactions.
 class_name AimerStateMachine
 extends StateMachineComponent
 

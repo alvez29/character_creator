@@ -1,5 +1,5 @@
+## Global singleton that handles asynchronous loading of game scenes, triggering visual transitions and load status updates.
 extends Node
-
 signal progress_changed(progress)
 signal load_finished
 

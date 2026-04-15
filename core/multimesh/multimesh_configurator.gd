@@ -1,3 +1,4 @@
+## Editor tool that allows creating, editing, and distributing instances within a MultiMeshInstance3D from the inspector.
 @tool
 extends MultiMeshInstance3D
 

@@ -1,3 +1,4 @@
+## Label displaying various on-screen debugging metrics like frames per second, player physics speed, and game state.
 class_name DebugInfo
 extends Label
 

@@ -1,3 +1,4 @@
+## Base class for the reactive properties system, enabling nodes to observe and respond to variable changes via signals.
 class_name Reactive
 extends Resource
 

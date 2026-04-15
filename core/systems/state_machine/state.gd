@@ -1,3 +1,4 @@
+## Resource representing a standalone conceptual state in a State Machine context.
 class_name StateMachineState
 extends Resource
 

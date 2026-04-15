@@ -1,3 +1,4 @@
+## Reactive string wrapper that emits a signal upon text changes.
 class_name ReactiveString
 extends Reactive
 

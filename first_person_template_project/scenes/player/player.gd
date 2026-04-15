@@ -11,6 +11,7 @@ enum CrouchMode { HOLD, TOGGLE }
 @export var input_handler: InputHandlerComponent
 @export var movement_component: FirstPersonMovementComponent
 @export var grabbing_behavior_component: GrabbingBehaviorComponent
+@export var camera_shake_component: ShakeComponent
 @export var camera_manager: FirstPersonCameraManager
 @export var camera_pivot: Node3D
 @export var collision_shape: CollisionShape3D
@@ -65,15 +66,29 @@ func _process(delta: float) -> void:
 		camera_pivot.rotation.x = clamp(camera_pivot.rotation.x, deg_to_rad(-80), deg_to_rad(80))
 	
 	if camera_manager and movement_component:
-		camera_manager.tilt(input_handler.movement_dir.x, delta)
 		movement_component.set_sprinting(input_handler.is_sprinting)
+		
 		var is_running = movement_component._is_sprinting
 		var is_sliding = movement_component._is_sliding
+		var is_wall_running = movement_component._is_wall_running
 		var in_air = not is_on_floor()
 		var speed = Vector3(velocity.x, 0, velocity.z).length()
 		
-		camera_manager.adjust_dynamic_fov(delta, speed, is_running or is_sliding or in_air)
-
+		var tilt_val = input_handler.movement_dir.x
+		if is_wall_running:
+			var dot = transform.basis.x.dot(movement_component._wall_normal)
+			tilt_val = clamp(dot * 15.0, -15.0, 15.0)
+			
+		camera_manager.tilt(tilt_val, delta)
+		camera_manager.adjust_dynamic_fov(delta, speed, is_running or is_sliding or is_wall_running or in_air)
+		
+		if is_sliding:
+			var min_s = movement_component.slide_min_speed
+			var max_s = movement_component.sprint_max_speed + movement_component.slide_boost
+			var intensity = clampf(remap(speed, min_s, max_s, 0.0, 1.0), 0.0, 1.0)
+			camera_shake_component.start_shake(intensity)
+		elif camera_shake_component.is_shaking:
+			camera_shake_component.stop_shake()
 
 func _physics_process(delta: float) -> void:
 	if not input_handler or not movement_component: return
@@ -84,7 +99,7 @@ func _physics_process(delta: float) -> void:
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	movement_component.move(wish_dir, delta)
 	
-	if input_handler.is_jumping and is_on_floor():
+	if input_handler.is_jumping and (is_on_floor() or movement_component._is_wall_running):
 		movement_component.jump()
 
 

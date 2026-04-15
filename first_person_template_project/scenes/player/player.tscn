@@ -15,14 +15,17 @@
 radius = 0.4
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_rep30"]
+noise_type = 3
+frequency = 0.1
 
-[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_manager", "camera_pivot", "collision_shape", "camera", "punching_behavior_component")]
+[node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_shake_component", "camera_manager", "camera_pivot", "collision_shape", "camera", "punching_behavior_component")]
 collision_mask = 11
 script = ExtResource("1_3vyb7")
 pawn_component = NodePath("Components/PawnComponent")
 input_handler = NodePath("Components/InputHandlerComponent")
 movement_component = NodePath("Components/FirstPersonMovementComponent")
 grabbing_behavior_component = NodePath("GrabbingBehaviorComponent")
+camera_shake_component = NodePath("Components/CameraShakeComponent")
 camera_manager = NodePath("Components/FirstPersonCameraManager")
 camera_pivot = NodePath("CameraPivot")
 collision_shape = NodePath("PlayerCollision")
@@ -80,7 +83,7 @@ eyes_height = 1.7
 subject = NodePath("../..")
 input_handler_component = NodePath("../InputHandlerComponent")
 punching_collision_mask = 14
-punching_radius = 1.0
+punching_radius = 0.7
 punching_cooldown = 0.0
 should_punch_against_floor = true
 punch_against_mask = 2
@@ -89,3 +92,6 @@ punch_against_mask = 2
 script = ExtResource("4_rep30")
 target_node = NodePath("../../CameraPivot/PlayerCamera")
 noise = SubResource("FastNoiseLite_rep30")
+amplitude_translation = Vector3(0.5, 0.5, 0)
+amplitude_rotation = Vector3(0, 0, 0)
+frequency = 20.0

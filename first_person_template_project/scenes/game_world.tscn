@@ -114,6 +114,10 @@ quality = 2
 supersampling = true
 bounces = 10
 
+[node name="SquaredShape5" parent="." unique_id=80581859 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 2.5, -10)
+dimensions = Vector3(1.7, 4.145, 9.55)
+
 [node name="Building" type="Node3D" parent="." unique_id=2128534925]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 5.5, 2)
 

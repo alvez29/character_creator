@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://sdrv23kaa82m"]
+
+[ext_resource type="Script" uid="uid://jvy3qb8kqm5b" path="res://first_person_template_project/scenes/vehicle/sphere_vehicle.gd" id="1_sphgd"]
+[ext_resource type="PackedScene" uid="uid://c1uhje0x7s2xe" path="res://first_person_template_project/assets/car/low_poly/low_poly.tscn" id="2_lc700"]
+[ext_resource type="Script" uid="uid://mbk05m00otm2" path="res://first_person_template_project/scenes/vehicle/vehicle_spring_arm.gd" id="3_udt0a"]
+[ext_resource type="Script" uid="uid://bxkr0xolo8p5i" path="res://core/components/input_handler_component/input_handler_component.gd" id="4_cs81w"]
+[ext_resource type="Script" uid="uid://cx852611qp62i" path="res://core/components/pawn_component/pawn_component.gd" id="5_015gl"]
+[ext_resource type="Script" uid="uid://cjnna1lo7x51n" path="res://first_person_template_project/components/punch/punchable_meta_component.gd" id="6_uufqd"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sph01"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sph01"]
+radius = 1.0
+
+[node name="SphereVehicle" type="RigidBody3D" unique_id=1674135674 node_paths=PackedStringArray("input_handler", "pawn_component", "visual_node", "ground_raycast")]
+collision_layer = 8
+collision_mask = 15
+physics_material_override = SubResource("PhysicsMaterial_sph01")
+script = ExtResource("1_sphgd")
+input_handler = NodePath("Components/InputHandlerComponent")
+pawn_component = NodePath("Components/PawnComponent")
+visual_node = NodePath("VisualNode")
+ground_raycast = NodePath("GroundRayCast")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=47476648]
+shape = SubResource("SphereShape3D_sph01")
+
+[node name="GroundRayCast" type="RayCast3D" parent="." unique_id=785322252]
+target_position = Vector3(0, -1.2, 0)
+collision_mask = 3
+
+[node name="VisualNode" type="Node3D" parent="." unique_id=984123333]
+top_level = true
+
+[node name="LowPoly" parent="VisualNode" unique_id=1075177811 instance=ExtResource("2_lc700")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.75, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=948919390 node_paths=PackedStringArray("target")]
+transform = Transform3D(-4.371139e-08, -0.34037957, 0.9402881, 0, 0.9402881, 0.34037957, -1, 1.4878464e-08, -4.11013e-08, 0, 0, 0)
+collision_mask = 2
+spring_length = 8.0
+script = ExtResource("3_udt0a")
+target = NodePath("../VisualNode")
+smooth_speed = 20.0
+
+[node name="VehicleCamera" type="Camera3D" parent="SpringArm3D" unique_id=540196137]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.95178735, -0.30675858, 0, 0.30675858, 0.95178735, 0, 0, 0)
+
+[node name="Components" type="Node" parent="." unique_id=157554739]
+
+[node name="InputHandlerComponent" type="Node" parent="Components" unique_id=1560185651]
+script = ExtResource("4_cs81w")
+metadata/_custom_type_script = "uid://bxkr0xolo8p5i"
+
+[node name="PawnComponent" type="Node" parent="Components" unique_id=39864364 node_paths=PackedStringArray("input_handler_component", "camera")]
+script = ExtResource("5_015gl")
+input_handler_component = NodePath("../InputHandlerComponent")
+camera = NodePath("../../SpringArm3D/VehicleCamera")
+metadata/_custom_type_script = "uid://cx852611qp62i"
+
+[node name="PunchableComponent" type="Node" parent="Components" unique_id=515339993 node_paths=PackedStringArray("target_body")]
+script = ExtResource("6_uufqd")
+impulse_factor = 10.0
+target_body = NodePath("../..")

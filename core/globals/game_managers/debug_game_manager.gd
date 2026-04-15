@@ -1,7 +1,7 @@
 ## A global manager that handles debug actions and utility keys such as changing maximum FPS and alternating pawn possession.
 extends Node
 @export
-var vehicle: Vehicle
+var vehicle: SphereVehicle
 
 @export var player: Player
 
@@ -14,6 +14,7 @@ var _selected_max_fps_option: int = 4
 func _ready() -> void:
 	player.pawn_component.possess()
 	Engine.max_fps = max_fps_options[_selected_max_fps_option]
+
 
 func _input(event):
 	if event is InputEventKey:

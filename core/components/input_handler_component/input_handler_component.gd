@@ -14,6 +14,7 @@ signal punch_released
 var movement_dir := Vector2.ZERO
 var is_sprinting := false
 var is_jumping := false
+var is_jump_just_pressed := false
 var is_crouching := false
 
 var accelerate := 0.0
@@ -50,6 +51,7 @@ func _reset_state():
 	movement_dir = Vector2.ZERO
 	is_sprinting = false
 	is_jumping = false
+	is_jump_just_pressed = false
 	is_crouching = false
 	_mouse_delta_accumulated = Vector2.ZERO
 
@@ -62,6 +64,7 @@ func process_movement_related_inputs() -> void:
 	movement_dir = Input.get_vector("movement_move_left", "movement_move_right", "movement_move_forward", "movement_move_backward")
 	is_sprinting = Input.is_action_pressed("movement_sprint")
 	is_jumping = Input.is_action_pressed("movement_jump")
+	is_jump_just_pressed = Input.is_action_just_pressed("movement_jump")
 	is_crouching = Input.is_action_pressed("movement_crouch")
 	
 	accelerate = Input.get_action_strength("vehicle_accelerate")

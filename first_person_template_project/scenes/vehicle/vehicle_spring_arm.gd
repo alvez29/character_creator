@@ -13,5 +13,5 @@ func _physics_process(delta: float) -> void:
 	if is_instance_valid(target):
 		global_position = global_position.lerp(target.global_position, smooth_speed * delta)
 		
-		var target_rotation_y = target.global_rotation.y + PI
+		var target_rotation_y = target.global_rotation.y
 		global_rotation.y = lerp_angle(global_rotation.y, target_rotation_y, smooth_speed * delta)

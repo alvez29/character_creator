@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://c61pyyvbrubrd"]
 
 [ext_resource type="Script" uid="uid://bpkn155k8hs2v" path="res://first_person_template_project/scenes/player/player.gd" id="1_3vyb7"]
-[ext_resource type="Material" uid="uid://ik05u7esr0o4" path="res://core/assets/materials/base_particle_material.tres" id="2_gi32q"]
 [ext_resource type="PackedScene" uid="uid://dpe67156hqg57" path="res://first_person_template_project/components/grab/grabbing_behavior_component.tscn" id="2_gmlin"]
 [ext_resource type="PackedScene" uid="uid://cdi8lkac86ot3" path="res://first_person_template_project/components/in_sight_checker/in_sight_checker_component.tscn" id="2_lvxji"]
 [ext_resource type="PackedScene" uid="uid://bkuhdux6dpsjs" path="res://first_person_template_project/scenes/arms/arms.tscn" id="2_qek5x"]
@@ -16,24 +15,18 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dkjbp"]
 radius = 0.4
 
-[sub_resource type="SphereMesh" id="SphereMesh_olp5t"]
-material = ExtResource("2_gi32q")
-radius = 0.005
-height = 0.01
-
 [sub_resource type="Resource" id="Resource_gi32q"]
 script = ExtResource("11_olp5t")
-frequency = 20.0
 metadata/_custom_type_script = "uid://clymrdtl4hbas"
 
 [node name="PlayerBody" type="CharacterBody3D" unique_id=228149766 node_paths=PackedStringArray("pawn_component", "input_handler", "movement_component", "grabbing_behavior_component", "camera_shake_component", "camera_manager", "camera_pivot", "collision_shape", "camera", "punching_behavior_component")]
-collision_mask = 15
+collision_mask = 11
 script = ExtResource("1_3vyb7")
 pawn_component = NodePath("Components/PawnComponent")
 input_handler = NodePath("Components/InputHandlerComponent")
 movement_component = NodePath("Components/FirstPersonMovementComponent")
 grabbing_behavior_component = NodePath("GrabbingBehaviorComponent")
-camera_shake_component = NodePath("Components/CameraShakeComponent")
+camera_shake_component = NodePath("")
 camera_manager = NodePath("Components/FirstPersonCameraManager")
 camera_pivot = NodePath("CameraPivot")
 collision_shape = NodePath("PlayerCollision")
@@ -48,20 +41,6 @@ shape = SubResource("CapsuleShape3D_dkjbp")
 [node name="CameraPivot" type="Node3D" parent="." unique_id=462373781]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-
-[node name="SpeedLines" type="CPUParticles3D" parent="CameraPivot" unique_id=1476249684]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-amount = 30
-local_coords = true
-mesh = SubResource("SphereMesh_olp5t")
-emission_shape = 2
-emission_sphere_radius = 1.0
-emission_colors = PackedColorArray(1, 1, 1, 1)
-direction = Vector3(0, 0, 1)
-spread = 10.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 4.0
-initial_velocity_max = 10.0
 
 [node name="PlayerCamera" type="Camera3D" parent="CameraPivot" unique_id=490894457]
 unique_name_in_owner = true
@@ -99,7 +78,6 @@ script = ExtResource("7_0owmy")
 script = ExtResource("8_qek5x")
 body = NodePath("../..")
 gravity_factor = 2.0
-wall_run_initial_up_force = 0.0
 eyes_height = 1.7
 
 [node name="PunchingBehaviorComponent" parent="Components" unique_id=1111581180 node_paths=PackedStringArray("subject", "input_handler_component") instance=ExtResource("9_prya0")]

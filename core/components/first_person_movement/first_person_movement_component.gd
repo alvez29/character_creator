@@ -26,8 +26,10 @@ signal on_finished_sliding
 @export_category("Wall Running")
 @export var can_wall_run: bool = true
 @export var wall_run_max_duration: float = 1.5
-@export var wall_run_gravity_multiplier: float = 0.2
+@export var wall_run_gravity_multiplier: float = 0.5
 @export var wall_run_min_speed: float = 3.0
+@export var wall_run_friction: float = 1.5
+@export var wall_run_initial_up_force: float = 2.5
 @export var wall_jump_force: float = 6.0
 @export var wall_jump_push_force: float = 6.0
 @export var wall_run_fall_speed: float = 1.2
@@ -55,7 +57,9 @@ var _is_sliding := false : set = _set_is_sliding
 var _is_sprinting := false
 var _is_wall_running := false
 var _wall_normal := Vector3.ZERO
+var _last_wall_normal := Vector3.ZERO
 var _wall_run_timer := 0.0
+var _skip_wall_check_frames := 0
 var _crouch_queued := false
 var _accumulated_force: Vector3 = Vector3.ZERO
 var _just_landed_flag := false
@@ -80,8 +84,15 @@ func _physics_process(delta: float) -> void:
 	_apply_friction(delta)
 	
 	var was_on_floor := body.is_on_floor()
+	var was_on_wall := body.is_on_wall()
 	body.move_and_slide()
 	_just_landed_flag = body.is_on_floor() and not was_on_floor
+	
+	# If we just slid off the bottom of the wall, cancel the lateral stick force so we drop straight down
+	if _is_wall_running and was_on_wall and not body.is_on_wall():
+		var in_vel = body.velocity.dot(-_wall_normal)
+		if in_vel > 0:
+			body.velocity -= (-_wall_normal) * in_vel
 	
 	if _just_landed_flag and _crouch_queued:
 		_crouch_queued = false
@@ -128,7 +139,9 @@ func jump() -> void:
 		body.velocity.y = wall_jump_force
 		body.velocity += _wall_normal * wall_jump_push_force
 		_is_wall_running = false
-		_wall_run_timer = wall_run_max_duration
+		_last_wall_normal = _wall_normal
+		_wall_run_timer = 0.0
+		_skip_wall_check_frames = 4 # Skip enough frames to physically detach
 		return
 
 	if not body.is_on_floor(): return
@@ -196,9 +209,9 @@ func _get_desired_max_speed() -> float:
 func _apply_gravity_and_slope_forces() -> void:
 	if not body.is_on_floor():
 		if _is_wall_running:
-			add_force(-_wall_normal * 40.0 * mass)
+			add_force(-_wall_normal * 2.0 * mass)
+			add_force(gravity_vector * gravity_factor * wall_run_gravity_multiplier * mass)
 			body.velocity = body.velocity.slide(_wall_normal)
-			body.velocity.y = min(body.velocity.y, 0.0)
 			body.velocity.y = max(body.velocity.y, -wall_run_fall_speed)
 		else:
 			add_force(gravity_vector * gravity_factor  * mass)
@@ -215,6 +228,13 @@ func _apply_accumulated_forces(delta: float) -> void:
 
 
 func _apply_friction(delta: float) -> void:
+	if _is_wall_running:
+		var h_vel := Vector3(body.velocity.x, 0, body.velocity.z)
+		h_vel = h_vel.move_toward(Vector3.ZERO, wall_run_friction * delta)
+		body.velocity.x = h_vel.x
+		body.velocity.z = h_vel.z
+		return
+
 	if not body.is_on_floor(): return
 	var h_vel := Vector3(body.velocity.x, 0, body.velocity.z)
 	var friction := slide_friction * delta if _is_sliding else ground_friction * delta
@@ -231,9 +251,16 @@ func _handle_wall_run_state(delta: float) -> void:
 		_is_wall_running = false
 		return
 		
+	if _skip_wall_check_frames > 0:
+		_skip_wall_check_frames -= 1
+		if body.is_on_wall() and body.get_wall_normal().is_equal_approx(_last_wall_normal):
+			_is_wall_running = false
+			return
+		
 	if body.is_on_floor():
 		_is_wall_running = false
 		_wall_run_timer = 0.0
+		_last_wall_normal = Vector3.ZERO
 		return
 		
 	var h_vel := Vector3(body.velocity.x, 0, body.velocity.z)
@@ -246,6 +273,18 @@ func _handle_wall_run_state(delta: float) -> void:
 		if entry_dot > wall_run_angle_limit:
 			if not _is_wall_running:
 				_is_wall_running = true
+				
+				# Maintain entry speed
+				var current_h_speed = h_vel.length()
+				var projected_vel = h_vel.slide(temp_normal)
+				if projected_vel.length() > 0.1:
+					projected_vel = projected_vel.normalized() * current_h_speed
+					body.velocity.x = projected_vel.x
+					body.velocity.z = projected_vel.z
+				
+				# Apply initial up force for parabola
+				if wall_run_initial_up_force > 0:
+					body.velocity.y = wall_run_initial_up_force
 			
 			_wall_normal = temp_normal
 			_wall_run_timer += delta

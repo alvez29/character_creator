@@ -2,6 +2,8 @@
 class_name PunchableComponent
 extends MetaComponent
 
+signal on_being_punched
+
 static var punchable_meta_key = &"punchable"
 
 @export
@@ -15,6 +17,7 @@ func get_related_meta() -> StringName:
 
 func punch(target_position: Vector3, punch_direction: Vector3, impulse: float = 20.0, torque: Vector3 = Vector3.ZERO):
 	if target_body is RigidBody3D:
+		on_being_punched.emit()
 		var direction = punch_direction.normalized()
 		var offset = target_position - target_body.global_position
 		target_body.apply_impulse(direction * impulse * impulse_factor, offset)

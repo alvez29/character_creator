@@ -12,7 +12,7 @@ enum CrouchMode { HOLD, TOGGLE }
 @export var input_handler: InputHandlerComponent
 @export var movement_component: FirstPersonMovementComponent
 @export var grabbing_behavior_component: GrabbingBehaviorComponent
-@export var camera_shake_component: ShakeComponent
+@export var camera_shake_component: ShakerComponent
 @export var camera_manager: FirstPersonCameraManager
 @export var camera_pivot: Node3D
 @export var collision_shape: CollisionShape3D
@@ -87,9 +87,8 @@ func _process(delta: float) -> void:
 			var min_s = movement_component.slide_min_speed
 			var max_s = movement_component.sprint_max_speed + movement_component.slide_boost
 			var intensity = clampf(remap(speed, min_s, max_s, 0.0, 1.0), 0.0, 1.0)
-			camera_shake_component.start_shake(intensity)
-		elif camera_shake_component.is_shaking:
-			camera_shake_component.stop_shake()
+			camera_shake_component.add_trauma(intensity)
+
 
 func _physics_process(delta: float) -> void:
 	if not input_handler or not movement_component: return
@@ -100,7 +99,9 @@ func _physics_process(delta: float) -> void:
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	movement_component.move(wish_dir, delta)
 	
-	if input_handler.is_jumping and (is_on_floor() or movement_component._is_wall_running):
+	if input_handler.is_jumping and is_on_floor():
+		movement_component.jump()
+	elif input_handler.is_jump_just_pressed and movement_component._is_wall_running:
 		movement_component.jump()
 
 

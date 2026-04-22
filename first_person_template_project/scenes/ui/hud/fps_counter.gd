@@ -25,10 +25,10 @@ func _process(_delta: float) -> void:
 		
 		add_line("State")
 		
-		if player.movement_component._is_crouched:
+		if player.movement_component.is_crouched:
 			add_line("    | Crouching")
 		
-		if player.movement_component._is_sliding:
+		if player.movement_component.is_sliding:
 			add_line("    | Sliding")
 		
 		if camera:

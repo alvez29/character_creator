@@ -52,10 +52,11 @@ signal on_finished_sliding
 @export_category("Physics")
 @export var mass: float = 1.0
 
-var _is_crouched := false
-var _is_sliding := false : set = _set_is_sliding
-var _is_sprinting := false
-var _is_wall_running := false
+var is_crouched := false
+var is_sliding := false : set = _set_is_sliding
+var is_sprinting := false
+var is_wall_running := false
+
 var _wall_normal := Vector3.ZERO
 var _last_wall_normal := Vector3.ZERO
 var _wall_run_timer := 0.0
@@ -89,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	_just_landed_flag = body.is_on_floor() and not was_on_floor
 	
 	# If we just slid off the bottom of the wall, cancel the lateral stick force so we drop straight down
-	if _is_wall_running and was_on_wall and not body.is_on_wall():
+	if is_wall_running and was_on_wall and not body.is_on_wall():
 		var in_vel = body.velocity.dot(-_wall_normal)
 		if in_vel > 0:
 			body.velocity -= (-_wall_normal) * in_vel
@@ -98,8 +99,8 @@ func _physics_process(delta: float) -> void:
 		_crouch_queued = false
 		crouch(true)
 	
-	if _last_sliding_state != _is_sliding:
-		if _is_sliding:
+	if _last_sliding_state != is_sliding:
+		if is_sliding:
 			on_started_sliding.emit()
 		else:
 			on_finished_sliding.emit()
@@ -112,8 +113,8 @@ func _set_is_sliding(value):
 		else:
 			on_finished_sliding.emit()
 	
-	_last_sliding_state = _is_sliding
-	_is_sliding = value
+	_last_sliding_state = is_sliding
+	is_sliding = value
 
 #region Public API
 func move(wish_dir: Vector3, delta: float) -> void:
@@ -122,7 +123,7 @@ func move(wish_dir: Vector3, delta: float) -> void:
 	var speed_limit := air_speed_limit
 	
 	if body.is_on_floor():
-		if _is_sliding:
+		if is_sliding:
 			accel = slide_steering if can_steer_while_sliding else 0.0
 			speed_limit = 0.0
 		else:
@@ -135,10 +136,10 @@ func move(wish_dir: Vector3, delta: float) -> void:
 
 
 func jump() -> void:
-	if _is_wall_running:
+	if is_wall_running:
 		body.velocity.y = wall_jump_force
 		body.velocity += _wall_normal * wall_jump_push_force
-		_is_wall_running = false
+		is_wall_running = false
 		_last_wall_normal = _wall_normal
 		_wall_run_timer = 0.0
 		_skip_wall_check_frames = 4 # Skip enough frames to physically detach
@@ -146,9 +147,9 @@ func jump() -> void:
 
 	if not body.is_on_floor(): return
 	body.velocity.y = jump_velocity
-	_is_sliding = false
+	is_sliding = false
 	_crouch_queued = false
-	if _is_crouched:
+	if is_crouched:
 		uncrouch()
 
 
@@ -161,31 +162,39 @@ func crouch(from_queue := false) -> void:
 	if not body.is_on_floor():
 		_crouch_queued = true
 		return
-	if _is_crouched: return
+	if is_crouched: return
 	
 	emit_signal("on_crouch_height_changed", -crouch_distance)
 	emit_signal("on_eyes_height_changed", eyes_height - crouch_distance)
-	_is_crouched = true
+	is_crouched = true
 	
 	var h_vel := Vector3(body.velocity.x, 0, body.velocity.z)
 	
 	if h_vel.length() >= slide_min_speed:
-		_is_sliding = true
+		is_sliding = true
 		if not from_queue and h_vel.length() > 0:
 			add_impulse(h_vel.normalized() * slide_boost * mass)
 
 
 func uncrouch() -> void:
-	if not _is_crouched: return
+	if not is_crouched: return
 	emit_signal("on_crouch_height_changed", crouch_distance)
 	emit_signal("on_eyes_height_changed", eyes_height)
-	_is_crouched = false
-	_is_sliding = false
+	is_crouched = false
+	is_sliding = false
 	_crouch_queued = false
 
 
 func set_sprinting(value: bool) -> void:
-	_is_sprinting = value
+	is_sprinting = value
+
+
+func cancel_wall_run() -> void:
+	if is_wall_running:
+		is_wall_running = false
+		_last_wall_normal = _wall_normal
+		_wall_run_timer = 0.0
+		_skip_wall_check_frames = 4
 
 
 func add_impulse(impulse: Vector3) -> void:
@@ -200,24 +209,24 @@ func add_force(force: Vector3) -> void:
 
 #region Internal
 func _get_desired_max_speed() -> float:
-	if _is_sprinting and not _is_crouched: return sprint_max_speed
-	if _is_crouched: return crouch_max_speed
-	if _is_sliding: return slide_max_speed
+	if is_sprinting and not is_crouched: return sprint_max_speed
+	if is_crouched: return crouch_max_speed
+	if is_sliding: return slide_max_speed
 	return max_speed
 
 
 func _apply_gravity_and_slope_forces() -> void:
 	if not body.is_on_floor():
-		if _is_wall_running:
+		if is_wall_running:
 			add_force(-_wall_normal * 2.0 * mass)
 			add_force(gravity_vector * gravity_factor * wall_run_gravity_multiplier * mass)
 			body.velocity = body.velocity.slide(_wall_normal)
 			body.velocity.y = max(body.velocity.y, -wall_run_fall_speed)
 		else:
 			add_force(gravity_vector * gravity_factor  * mass)
-		if _is_crouched:
+		if is_crouched:
 			uncrouch()
-	elif _is_sliding:
+	elif is_sliding:
 		var slope_force := (gravity_vector * gravity_factor).slide(body.get_floor_normal()) * slide_gravity_multiplier
 		add_force(slope_force * mass)
 
@@ -228,7 +237,7 @@ func _apply_accumulated_forces(delta: float) -> void:
 
 
 func _apply_friction(delta: float) -> void:
-	if _is_wall_running:
+	if is_wall_running:
 		var h_vel := Vector3(body.velocity.x, 0, body.velocity.z)
 		h_vel = h_vel.move_toward(Vector3.ZERO, wall_run_friction * delta)
 		body.velocity.x = h_vel.x
@@ -237,28 +246,28 @@ func _apply_friction(delta: float) -> void:
 
 	if not body.is_on_floor(): return
 	var h_vel := Vector3(body.velocity.x, 0, body.velocity.z)
-	var friction := slide_friction * delta if _is_sliding else ground_friction * delta
+	var friction := slide_friction * delta if is_sliding else ground_friction * delta
 	h_vel = h_vel.move_toward(Vector3.ZERO, friction)
 	
-	if _is_sliding and h_vel.length() < slide_min_speed and body.get_floor_angle() < slide_min_slope_angle:
-		_is_sliding = false
+	if is_sliding and h_vel.length() < slide_min_speed and body.get_floor_angle() < slide_min_slope_angle:
+		is_sliding = false
 	
 	body.velocity.x = h_vel.x
 	body.velocity.z = h_vel.z
 
 func _handle_wall_run_state(delta: float) -> void:
 	if not can_wall_run:
-		_is_wall_running = false
+		is_wall_running = false
 		return
 		
 	if _skip_wall_check_frames > 0:
 		_skip_wall_check_frames -= 1
 		if body.is_on_wall() and body.get_wall_normal().is_equal_approx(_last_wall_normal):
-			_is_wall_running = false
+			is_wall_running = false
 			return
 		
 	if body.is_on_floor():
-		_is_wall_running = false
+		is_wall_running = false
 		_wall_run_timer = 0.0
 		_last_wall_normal = Vector3.ZERO
 		return
@@ -271,8 +280,8 @@ func _handle_wall_run_state(delta: float) -> void:
 		
 		# Only allow wall run if we hit it at an angle, not head-on
 		if entry_dot > wall_run_angle_limit:
-			if not _is_wall_running:
-				_is_wall_running = true
+			if not is_wall_running:
+				is_wall_running = true
 				
 				# Maintain entry speed
 				var current_h_speed = h_vel.length()
@@ -289,7 +298,7 @@ func _handle_wall_run_state(delta: float) -> void:
 			_wall_normal = temp_normal
 			_wall_run_timer += delta
 		else:
-			_is_wall_running = false
+			is_wall_running = false
 	else:
-		_is_wall_running = false
+		is_wall_running = false
 #endregion

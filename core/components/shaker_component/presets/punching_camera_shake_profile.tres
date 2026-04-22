@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ShakeProfile" format=3 uid="uid://wh2vq0srb46v"]
+
+[ext_resource type="Script" uid="uid://clymrdtl4hbas" path="res://core/components/shaker_component/shake_profile.gd" id="1_wi2yt"]
+
+[resource]
+script = ExtResource("1_wi2yt")
+shake_type = 1
+amplitude_x = 0.05
+amplitude_y = 0.05
+amplitude_z = 0.05
+rotation_x = 0.1
+rotation_y = 0.1
+rotation_z = 0.1
+frequency = 100.0
+duration = 0.2
+metadata/_custom_type_script = "uid://clymrdtl4hbas"

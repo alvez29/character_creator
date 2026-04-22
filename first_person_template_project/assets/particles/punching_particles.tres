@@ -1,0 +1,7 @@
+[gd_resource type="ORMMaterial3D" format=3 uid="uid://paw6jc47o78b"]
+
+[resource]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0

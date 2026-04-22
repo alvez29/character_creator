@@ -5,6 +5,8 @@ extends Reactive
 var selected_slot_index := ReactiveInt.new(0, self)
 var slots_number := ReactiveInt.new(5, self)
 
+var items
+
 func _init():
 	super._init()
 

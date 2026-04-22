@@ -1,0 +1,95 @@
+[gd_resource type="AnimationNodeStateMachine" format=3 uid="uid://d0xu6sdo30da1"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v6wpb"]
+animation = &"custom_animations/charge_punch_l"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_23dlv"]
+animation = &"custom_animations/charge_punch_r"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_btw3q"]
+animation = &"custom_animations/guard"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_st26f"]
+animation = &"custom_animations/punch_l"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g70lg"]
+animation = &"custom_animations/punch_r"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uyvg3"]
+animation = &"custom_animations/relax"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v6wpb"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_uyvg3"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"relax_charge_punch_l"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_btw3q"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"charge_punch_l_punch_l"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_st26f"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"guard_charge_punch_l"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g70lg"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bw0o2"]
+xfade_time = 0.4
+advance_mode = 2
+advance_condition = &"guard_relax"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3rgxu"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"guard_charge_punch_r"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e0ikn"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"charge_punch_r_punch_r"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bf7nf"]
+xfade_time = 0.2
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_23dlv"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"relax_charge_punch_r"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cbf11"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"charge_punch_l_relax"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tbolk"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"charge_punch_r_relax"
+
+[resource]
+states/End/position = Vector2(1218.6666, 152.6294)
+states/Start/position = Vector2(151.33333, 159.27478)
+states/custom_animations_charge_punch_l/node = SubResource("AnimationNodeAnimation_v6wpb")
+states/custom_animations_charge_punch_l/position = Vector2(659.07404, 27.703703)
+states/custom_animations_charge_punch_r/node = SubResource("AnimationNodeAnimation_23dlv")
+states/custom_animations_charge_punch_r/position = Vector2(661.48987, 257.66666)
+states/custom_animations_guard/node = SubResource("AnimationNodeAnimation_btw3q")
+states/custom_animations_guard/position = Vector2(660.6666, 158.89517)
+states/custom_animations_punch_l/node = SubResource("AnimationNodeAnimation_st26f")
+states/custom_animations_punch_l/position = Vector2(989.00006, 52.54321)
+states/custom_animations_punch_r/node = SubResource("AnimationNodeAnimation_g70lg")
+states/custom_animations_punch_r/position = Vector2(982.69183, 256.55554)
+states/custom_animations_relax/node = SubResource("AnimationNodeAnimation_uyvg3")
+states/custom_animations_relax/position = Vector2(374.99997, 158)
+transitions = ["Start", "custom_animations_relax", SubResource("AnimationNodeStateMachineTransition_v6wpb"), "custom_animations_relax", "custom_animations_charge_punch_l", SubResource("AnimationNodeStateMachineTransition_uyvg3"), "custom_animations_charge_punch_l", "custom_animations_punch_l", SubResource("AnimationNodeStateMachineTransition_btw3q"), "custom_animations_guard", "custom_animations_charge_punch_l", SubResource("AnimationNodeStateMachineTransition_st26f"), "custom_animations_punch_l", "custom_animations_guard", SubResource("AnimationNodeStateMachineTransition_g70lg"), "custom_animations_guard", "custom_animations_relax", SubResource("AnimationNodeStateMachineTransition_bw0o2"), "custom_animations_guard", "custom_animations_charge_punch_r", SubResource("AnimationNodeStateMachineTransition_3rgxu"), "custom_animations_charge_punch_r", "custom_animations_punch_r", SubResource("AnimationNodeStateMachineTransition_e0ikn"), "custom_animations_punch_r", "custom_animations_guard", SubResource("AnimationNodeStateMachineTransition_bf7nf"), "custom_animations_relax", "custom_animations_charge_punch_r", SubResource("AnimationNodeStateMachineTransition_23dlv"), "custom_animations_charge_punch_l", "custom_animations_relax", SubResource("AnimationNodeStateMachineTransition_cbf11"), "custom_animations_charge_punch_r", "custom_animations_relax", SubResource("AnimationNodeStateMachineTransition_tbolk")]
+graph_offset = Vector2(88.35849, -7)

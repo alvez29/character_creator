@@ -1,7 +1,7 @@
 ## A global manager that handles debug actions and utility keys such as changing maximum FPS and alternating pawn possession.
 extends Node
 @export
-var vehicle: SphereVehicle
+var vehicle: Node3D
 
 @export var player: Player
 

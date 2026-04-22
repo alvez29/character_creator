@@ -2,5 +2,6 @@
 
 [resource]
 blend_mode = 1
+cull_mode = 2
 shading_mode = 0
 billboard_mode = 1

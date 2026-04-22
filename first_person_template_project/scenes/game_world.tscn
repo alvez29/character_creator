@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://b4jewvrecxx44"]
 
 [ext_resource type="PackedScene" uid="uid://c61pyyvbrubrd" path="res://first_person_template_project/scenes/player/player.tscn" id="1_uwrxv"]
-[ext_resource type="PackedScene" uid="uid://sdrv23kaa82m" path="res://first_person_template_project/scenes/vehicle/sphere_vehicle.tscn" id="2_4e4yq"]
 [ext_resource type="Script" uid="uid://8lhxqd2xwtln" path="res://first_person_template_project/components/grab/grabbable_meta_component.gd" id="2_lnu2h"]
 [ext_resource type="Material" uid="uid://c3x61pnysh166" path="res://first_person_template_project/assets/grid/grid.tres" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://c6wih642vxa3t" path="res://first_person_template_project/scenes/ball.gd" id="4_6iv14"]
@@ -28,15 +27,98 @@ height = 2.0
 radial_segments = 16
 rings = 16
 
+[sub_resource type="Shader" id="Shader_6iv14"]
+code = "shader_type spatial;
+
+// Parámetros de estiramiento
+uniform float stretch_factor_y : hint_range(0.0, 0.01) = 0.0007;
+uniform float stretch_factor_x : hint_range(0.0, 0.01) = 0.0004;
+uniform float max_stretch : hint_range(1.0, 5.0) = 2.0;
+uniform float min_stretch : hint_range(0.1, 1.0) = 0.5;
+
+// Opciones de estiramiento direccional
+uniform bool use_directional_stretch = false;
+uniform float directional_blend : hint_range(0.0, 1.0) = 0.5;
+
+// Velocidad del objeto (actualizada desde el script)
+uniform vec3 velocity = vec3(0.0);
+
+void vertex() {
+	float velocity_magnitude = length(velocity);
+	
+	if (velocity_magnitude > 0.001) {
+		if (use_directional_stretch && velocity_magnitude > 0.01) {
+			// Modo direccional: estira en la dirección del movimiento
+			vec3 velocity_dir = normalize(velocity);
+			
+			// Convertimos la velocidad a espacio local del objeto
+			vec3 local_vel = (MODEL_MATRIX * vec4(velocity_dir, 0.0)).xyz;
+			local_vel = normalize(local_vel);
+			
+			// Calculamos stretch direccional
+			float sy = 1.0 + velocity_magnitude * stretch_factor_y;
+			float sx = 1.0 - velocity_magnitude * stretch_factor_x;
+			
+			sy = clamp(sy, min_stretch, max_stretch);
+			sx = clamp(sx, min_stretch, max_stretch);
+			
+			// Aplicamos stretch en la dirección del movimiento
+			float stretch_along = sy;
+			float stretch_perpendicular = sx;
+			
+			// Proyectamos el vértice en la dirección de velocidad
+			float projection = dot(VERTEX, local_vel);
+			vec3 parallel = local_vel * projection;
+			vec3 perpendicular = VERTEX - parallel;
+			
+			// Mezclamos entre stretch clásico y direccional
+			vec3 classic_stretch = vec3(sx, sy, sx);
+			vec3 directional_vertex = parallel * stretch_along + perpendicular * stretch_perpendicular;
+			vec3 classic_vertex = VERTEX * classic_stretch;
+			
+			VERTEX = mix(classic_vertex, directional_vertex, directional_blend);
+			
+		} else {
+			// Modo clásico: estira en Y, comprime en X/Z
+			float sy = 1.0 + velocity_magnitude * stretch_factor_y;
+			float sx = 1.0 - velocity_magnitude * stretch_factor_x;
+			
+			sy = clamp(sy, min_stretch, max_stretch);
+			sx = clamp(sx, min_stretch, max_stretch);
+			
+			VERTEX.x *= sx;
+			VERTEX.y *= sy;
+			VERTEX.z *= sx;
+		}
+	}
+}
+
+void fragment() {
+	ALBEDO = vec3(1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k0cdq"]
+render_priority = 0
+shader = SubResource("Shader_6iv14")
+shader_parameter/stretch_factor_y = 0.002000000095
+shader_parameter/stretch_factor_x = 0.00800000038
+shader_parameter/max_stretch = 1.8000000379999999
+shader_parameter/min_stretch = 0.60000002524012
+shader_parameter/use_directional_stretch = true
+shader_parameter/directional_blend = 1.0
+shader_parameter/velocity = Vector3(0, 0, 0)
+
 [sub_resource type="Resource" id="Resource_k0cdq"]
 script = ExtResource("8_6iv14")
 shake_type = 1
-amplitude_x = 1.0
-amplitude_y = 1.0
-amplitude_z = 1.0
+amplitude_x = 0.6
+amplitude_y = 0.6
+amplitude_z = 0.6
 rotation_x = 0.0
 rotation_y = 0.0
 rotation_z = 0.0
+duration = 0.1
 metadata/_custom_type_script = "uid://clymrdtl4hbas"
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
@@ -91,14 +173,12 @@ buffer = PackedFloat32Array(1, 0, 0, 7.42, 0, 1, 0, 2.54, 0, 0, 1, 0, 1, 0, 0, 3
 
 [node name="Player" parent="." unique_id=228149766 instance=ExtResource("1_uwrxv")]
 
-[node name="SphereVehicle" parent="." unique_id=1674135674 instance=ExtResource("2_4e4yq")]
-
 [node name="Vehicle" parent="." unique_id=68410669 instance=ExtResource("4_lbhrr")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2, 7, -5)
 gravity_scale = 1.0
 
 [node name="Ball" type="RigidBody3D" parent="." unique_id=1048092950]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.4, -37.6514)
 collision_layer = 4
 collision_mask = 15
 can_sleep = false
@@ -110,6 +190,7 @@ shape = SubResource("SphereShape3D_yqjtg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ball" unique_id=820284761]
 mesh = SubResource("SphereMesh_yqjtg")
+surface_material_override/0 = SubResource("ShaderMaterial_k0cdq")
 
 [node name="GrabbableComponent" type="Node" parent="Ball" unique_id=1932556111 node_paths=PackedStringArray("target_body")]
 script = ExtResource("2_lnu2h")
@@ -117,15 +198,23 @@ target_body = NodePath("..")
 
 [node name="PunchableComponent" type="Node" parent="Ball" unique_id=1016104561 node_paths=PackedStringArray("target_body")]
 script = ExtResource("5_o8qi1")
+should_be_executed_immediately = false
 target_body = NodePath("..")
 
 [node name="ShakerComponent" type="Node" parent="Ball" unique_id=473966725 node_paths=PackedStringArray("target_node")]
 script = ExtResource("7_tr2iw")
-target_node = NodePath("..")
+target_node = NodePath("../MeshInstance3D")
 default_profile = SubResource("Resource_k0cdq")
 metadata/_custom_type_script = "uid://ddtplykbrlyn6"
 
-[node name="Floor" parent="." unique_id=1786801823 instance=ExtResource("7_bhwwd")]
+[node name="Floor2" parent="." unique_id=1786801823 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.033821106, 0, -74.52881)
+collision_mask = 0
+mesh_collision_mask = 0
+dimensions = Vector3(100, 1, 100)
+
+[node name="Floor" parent="." unique_id=8240278 instance=ExtResource("7_bhwwd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.016910553, 0, 34.501938)
 collision_mask = 0
 mesh_collision_mask = 0
 dimensions = Vector3(100, 1, 100)
@@ -154,16 +243,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 10, -40)
 dimensions = Vector3(61.15, 21.59, 9.55)
 
 [node name="SquaredShape5" parent="." unique_id=80581859 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 2.5, -10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.616838, 7.6111927, -7.7896886)
 dimensions = Vector3(1.7, 4.145, 9.55)
 
 [node name="SquaredShape7" parent="." unique_id=751825805 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(2.9802322e-08, 0, 1.0000001, 0, 1, 0, -1.0000001, 0, 2.9802322e-08, -16, 6, 2)
+transform = Transform3D(2.9802322e-08, 0, 2.3000004, 0, 1, 0, -1.0000001, 0, 6.854535e-08, -16, 6.284979, 1.9328015)
 material = SubResource("ShaderMaterial_6iv14")
 dimensions = Vector3(1.7, 4.145, 3.85)
 
 [node name="SquaredShape6" parent="." unique_id=1651168025 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 5, -20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.067299, 6.7086678, -16.627249)
 dimensions = Vector3(1.7, 4.145, 9.55)
 
 [node name="Building" type="Node3D" parent="." unique_id=2128534925]
@@ -177,20 +266,16 @@ dimensions = Vector3(5, 10, 5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -1)
 dimensions = Vector3(5, 10, 5)
 
-[node name="SquaredShape3" parent="Building" unique_id=1016500386 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(-3.7855163e-08, -2.1855692e-08, -1, -0.49999994, 0.8660252, 0, 0.8660252, 0.49999994, -4.371139e-08, 9, 0.6760001, -1.4)
-dimensions = Vector3(5, 1, 2.5)
-
 [node name="SquaredShape4" parent="Building" unique_id=352976033 instance=ExtResource("7_bhwwd")]
 transform = Transform3D(-1.2904783e-08, 0, 1, 0, 0.9999999, 0, -1, -2.9802322e-08, -4.371139e-08, 12.92276, 2.475833, -8.4)
 dimensions = Vector3(10, 1, 2.5)
 
 [node name="SquaredShape6" parent="Building" unique_id=1772643289 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0, 1, -0.6772404, -1.3241673, 2.8000002)
+transform = Transform3D(1.4860561, 0, 0, 0, 0.9999999, 0, 0, 0, 1.739084, -2.9014835, -1.3241673, 3.5154047)
 dimensions = Vector3(6.344, 1, 2.5)
 
 [node name="SquaredShape2" parent="Building" unique_id=2135630295 instance=ExtResource("7_bhwwd")]
-transform = Transform3D(0.8660253, 0.5, 0, -0.5, 0.8660253, 0, 0, 0, 1, 12.5, -4.2, 2.7000003)
+transform = Transform3D(0.8660253, 0.5, 0, -0.5, 0.8660253, 0, 0, 0, 1.4891708, 12.5, -4.2, 3.3449988)
 dimensions = Vector3(6.344, 1, 2.5)
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="." unique_id=286053733]
@@ -201,12 +286,12 @@ instances_positions = Array[Vector3]([Vector3(7.42, 2.54, 0), Vector3(3.03, 0.63
 instances_rotations = Array[Vector3]([Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)])
 instances_scales = Array[Vector3]([Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1)])
 
+[node name="DayCycleComponent" type="Node" parent="." unique_id=875153203]
+script = ExtResource("8_pdbwf")
+
 [node name="DebugGameManager" type="Node" parent="." unique_id=499689091 node_paths=PackedStringArray("vehicle", "player")]
 script = ExtResource("5_iywne")
-vehicle = NodePath("../SphereVehicle")
+vehicle = NodePath("../Vehicle")
 player = NodePath("../Player")
-
-[node name="DayCycleComponent" type="Node" parent="DebugGameManager" unique_id=875153203]
-script = ExtResource("8_pdbwf")
 
 [editable path="Lightning/WorldEnvironment"]

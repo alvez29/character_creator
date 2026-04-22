@@ -4,6 +4,8 @@ extends Node
 ## Applies procedural noise-based shaking or discrete random shaking (Smash Bros style)
 ## to its target node. Supports Node3D, Camera3D, Node2D, and Camera2D.
 
+signal on_shake_finished
+
 @export var target_node: Node
 
 ## Default profile to use if a trauma is added without specifying one.
@@ -74,15 +76,20 @@ func add_trauma(amount: float = 1.0, profile: ShakeProfile = null) -> void:
 		_trauma_tween.kill()
 		
 	_trauma_tween = create_tween()
-	_trauma_tween.tween_property(self, "trauma", 0.0, default_profile.duration)\
-		.set_trans(default_profile.transition_type)\
-		.set_ease(default_profile.ease_type)
+	_trauma_tween.tween_property(self, "trauma", 0.0, default_profile.duration)
+	_trauma_tween.tween_callback(func(): on_shake_finished.emit())
+	_trauma_tween.set_trans(default_profile.transition_type)
+	_trauma_tween.set_ease(default_profile.ease_type)
 
 
 func _process(delta: float) -> void:
 	if not is_instance_valid(target_node) or default_profile == null:
 		return
 		
+	
+	if Input.is_key_pressed(KEY_6):
+		add_trauma(1)
+	
 	var active_trauma: float = continuous_trauma if is_continuous else trauma
 	
 	# Restore initial state directly by subtracting the last evaluated offsets
@@ -164,17 +171,8 @@ func _apply_offsets(pos_offset: Variant, rot_offset: Variant, add: bool = true) 
 	
 	match _target_mode:
 		TargetMode.NODE3D, TargetMode.NODE2D:
-			if target_node is RigidBody3D or target_node is RigidBody2D:
-				# For physics bodies, apply visual shake to children instead of the body itself
-				for child in target_node.get_children():
-					if not (child is CollisionShape3D or child is CollisionPolygon3D or child is CollisionShape2D or child is CollisionPolygon2D or child is RayCast3D or child is RayCast2D):
-						if "position" in child:
-							child.position += pos_offset * mult
-						if "rotation" in child:
-							child.rotation += rot_offset * mult
-			else:
-				target_node.position += pos_offset * mult
-				target_node.rotation += rot_offset * mult
+			target_node.position += pos_offset * mult
+			target_node.rotation += rot_offset * mult
 		TargetMode.CAMERA2D:
 			target_node.offset += pos_offset * mult
 			target_node.rotation += rot_offset * mult

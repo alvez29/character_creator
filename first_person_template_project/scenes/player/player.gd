@@ -18,6 +18,11 @@ enum CrouchMode { HOLD, TOGGLE }
 @export var collision_shape: CollisionShape3D
 @export var camera: Camera3D
 @export var punching_behavior_component: PunchingBehaviorComponent
+@export var speed_lines: CPUParticles3D
+
+var speed: float:
+	get:
+		return velocity.length()
 
 var _crouch_tween: Tween
 var _crouch_tween_speed: float = 0.15
@@ -28,30 +33,34 @@ func _ready() -> void:
 	floor_stop_on_slope = false
 
 	if pawn_component:
-		pawn_component.on_possessed.connect(_on_possessed)
-		pawn_component.on_unpossessed.connect(_on_unpossessed)
+		pawn_component.on_possessed.connect(_on_pawn_component_on_possessed)
+		pawn_component.on_unpossessed.connect(_on_pawn_component_on_unpossessed)
 		if pawn_component.is_possessed:
-			_on_possessed()
+			_on_pawn_component_on_possessed()
 
 	if input_handler:
-		input_handler.crouch_started_pressed.connect(_on_crouch_started_pressed)
-		input_handler.crouch_released.connect(_on_crouch_released)
-		input_handler.sprint_started_pressed.connect(_on_sprint_started_pressed)
+		input_handler.crouch_started_pressed.connect(_on_input_handler_component_on_crouch_started_pressed)
+		input_handler.crouch_released.connect(_on_input_handler_component_on_crouch_released)
+		input_handler.sprint_started_pressed.connect(_on_input_handler_component_on_sprint_started_pressed)
 
 	if movement_component:
-		movement_component.on_crouch_height_changed.connect(_on_crouch_height_changed)
-		movement_component.on_eyes_height_changed.connect(_tween_eyes_height)
-		movement_component.on_finished_sliding.connect(_on_finished_sliding)
+		movement_component.on_crouch_height_changed.connect(_on_movement_component_on_crouch_height_changed)
+		movement_component.on_eyes_height_changed.connect(_on_movement_component_on_eyes_height_changed)
+		movement_component.on_finished_sliding.connect(_on_movement_component_on_finished_sliding)
+	
+	if punching_behavior_component:
+		punching_behavior_component.on_punch_collider_collided.connect(_on_punching_behavior_component_on_punch_collider_collided)
+
 
 
 #region Possession
-func _on_possessed() -> void:
+func _on_pawn_component_on_possessed() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if camera_manager: camera_manager.active_camera()
 	if input_handler: input_handler.is_active = true
 
 
-func _on_unpossessed() -> void:
+func _on_pawn_component_on_unpossessed() -> void:
 	if input_handler: input_handler.is_active = false
 #endregion
 
@@ -61,6 +70,7 @@ func _process(delta: float) -> void:
 	if not input_handler: return
 	
 	var mouse_delta = input_handler.consume_mouse_delta()
+	
 	if mouse_delta != Vector2.ZERO:
 		rotate_y(-mouse_delta.x * SettingsManager.mouse_sensitivity)
 		camera_pivot.rotate_x(-mouse_delta.y * SettingsManager.mouse_sensitivity)
@@ -69,11 +79,10 @@ func _process(delta: float) -> void:
 	if camera_manager and movement_component:
 		movement_component.set_sprinting(input_handler.is_sprinting)
 		
-		var is_running = movement_component._is_sprinting
-		var is_sliding = movement_component._is_sliding
-		var is_wall_running = movement_component._is_wall_running
+		var is_running = movement_component.is_sprinting
+		var is_sliding = movement_component.is_sliding
+		var is_wall_running = movement_component.is_wall_running
 		var in_air = not is_on_floor()
-		var speed = Vector3(velocity.x, 0, velocity.z).length()
 		
 		var tilt_val = input_handler.movement_dir.x
 		if is_wall_running:
@@ -83,12 +92,16 @@ func _process(delta: float) -> void:
 		camera_manager.tilt(tilt_val, delta)
 		camera_manager.adjust_dynamic_fov(delta, speed, is_running or is_sliding or is_wall_running or in_air)
 		
-		if is_sliding:
-			var min_s = movement_component.slide_min_speed
-			var max_s = movement_component.sprint_max_speed + movement_component.slide_boost
-			var intensity = clampf(remap(speed, min_s, max_s, 0.0, 1.0), 0.0, 1.0)
-			camera_shake_component.add_trauma(intensity)
+		update_speedlines()
 
+
+func update_speedlines():
+	speed_lines.emitting = speed > movement_component.max_speed
+	
+	if speed_lines and speed > movement_component.max_speed:
+		var speed_diference = movement_component.sprint_max_speed - speed
+		
+		speed_lines.amount = clamp(remap(speed_diference, 5.0, 10.0, 30.0, 40.0), 30.0, 40)
 
 func _physics_process(delta: float) -> void:
 	if not input_handler or not movement_component: return
@@ -101,18 +114,18 @@ func _physics_process(delta: float) -> void:
 	
 	if input_handler.is_jumping and is_on_floor():
 		movement_component.jump()
-	elif input_handler.is_jump_just_pressed and movement_component._is_wall_running:
+	elif input_handler.is_jump_just_pressed and movement_component.is_wall_running:
 		movement_component.jump()
 
 
-func _on_crouch_started_pressed() -> void:
+func _on_input_handler_component_on_crouch_started_pressed() -> void:
 	if not movement_component: return
 	_is_crouch_action_pressed = true
 	
-	if movement_component._is_sliding:
+	if movement_component.is_sliding:
 		movement_component.uncrouch()
 	elif crouch_mode == CrouchMode.TOGGLE:
-		if movement_component._is_crouched:
+		if movement_component.is_crouched:
 			movement_component.uncrouch()
 		else:
 			movement_component.crouch()
@@ -120,34 +133,39 @@ func _on_crouch_started_pressed() -> void:
 		movement_component.crouch()
 
 
-func _on_crouch_released() -> void:
+func _on_punching_behavior_component_on_punch_collider_collided(_punching_data: PunchingBehaviorComponent.PunchingCollisionData):
+	if movement_component.is_wall_running:
+		movement_component.cancel_wall_run()
+
+
+func _on_input_handler_component_on_crouch_released() -> void:
 	if not movement_component: return
 	_is_crouch_action_pressed = false
 	
 	if crouch_mode == CrouchMode.HOLD:
-		if not movement_component._is_sliding:
+		if not movement_component.is_sliding:
 			movement_component.uncrouch()
 
 
-func _on_sprint_started_pressed() -> void:
+func _on_input_handler_component_on_sprint_started_pressed() -> void:
 	if not movement_component: return
-	if movement_component._is_sliding or movement_component._is_crouched:
+	if movement_component.is_sliding or movement_component.is_crouched:
 		movement_component.uncrouch()
 
 
-func _on_finished_sliding() -> void:
+func _on_movement_component_on_finished_sliding() -> void:
 	if crouch_mode == CrouchMode.HOLD and not _is_crouch_action_pressed:
-		if movement_component and movement_component._is_crouched:
+		if movement_component and movement_component.is_crouched:
 			movement_component.uncrouch()
 #endregion
 
 
 #region Crouching
-func _on_crouch_height_changed(delta: float) -> void:
+func _on_movement_component_on_crouch_height_changed(delta: float) -> void:
 	collision_shape.shape.height = max(collision_shape.shape.height + delta, 0.8)
 
 
-func _tween_eyes_height(target_height: float) -> void:
+func _on_movement_component_on_eyes_height_changed(target_height: float) -> void:
 	if _crouch_tween: _crouch_tween.kill()
 	_crouch_tween = create_tween()
 	_crouch_tween.set_ease(Tween.EASE_OUT)

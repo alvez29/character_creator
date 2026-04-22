@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bjq60ojmfdrrk"]
+
+[ext_resource type="Shader" uid="uid://rwqqc6ydevc2" path="res://core/assets/shaders/circular_progress_bar/circular_progress_bar.gdshader" id="1_0scfh"]
+
+[resource]
+shader = ExtResource("1_0scfh")
+shader_parameter/progress = 1.0
+shader_parameter/ring_thickness = 0.05000000167648
+shader_parameter/ring_radius = 0.24900000856762
+shader_parameter/progress_color = Color(1, 1, 1, 1)
+shader_parameter/background_color = Color(0, 0, 0, 0)
+shader_parameter/gradient_color = Color(1, 1, 1, 1)
+shader_parameter/smoothness = 0.0010000000475
+shader_parameter/gradient_strength = 0.5
+shader_parameter/use_gradient = true
+shader_parameter/rotation_offset = 0.0

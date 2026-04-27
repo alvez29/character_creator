@@ -9,6 +9,9 @@ signal sprint_released
 signal hold_punch_started_pressed
 signal hold_punch_released
 signal punch_started_pressed
+signal select_inventory_slot(index: int)
+signal next_inventory_slot
+signal previous_inventory_slot
 
 @export var is_active := false
 
@@ -25,7 +28,6 @@ var handbrake := false
 
 var _mouse_delta_accumulated := Vector2.ZERO
 
-# Maps action names (StringName) to a boolean indicating if it is enabled
 var _input_configuration : Dictionary = {}
 
 
@@ -78,8 +80,39 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.is_action_pressed("action_punch"):
 			punch_started_pressed.emit()
 	
+	if is_action_enabled("ui_next_inventory_slot"):
+		if event.is_action_pressed("ui_next_inventory_slot"):
+			next_inventory_slot.emit()
+	
+	if is_action_enabled("ui_previous_inventory_slot"):
+		if event.is_action_pressed("ui_previous_inventory_slot"):
+			previous_inventory_slot.emit()
+	
+	if is_action_enabled("ui_first_inventory_slot"):
+		if event.is_action_pressed("ui_first_inventory_slot"):
+			select_inventory_slot.emit(0)
+	
+	if is_action_enabled("ui_second_inventory_slot"):
+		if event.is_action_pressed("ui_second_inventory_slot"):
+			select_inventory_slot.emit(1)
+	
+	if is_action_enabled("ui_third_inventory_slot"):
+		if event.is_action_pressed("ui_third_inventory_slot"):
+			select_inventory_slot.emit(2)
+
+	if is_action_enabled("ui_fourth_inventory_slot"):
+		if event.is_action_pressed("ui_fourth_inventory_slot"):
+			select_inventory_slot.emit(3)
+
+	if is_action_enabled("ui_fifth_inventory_slot"):
+		if event.is_action_pressed("ui_fifth_inventory_slot"):
+			select_inventory_slot.emit(4)
+
+	
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_mouse_delta_accumulated += event.relative
+
+
 
 
 func _reset_state() -> void:

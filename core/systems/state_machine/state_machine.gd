@@ -24,7 +24,7 @@ func initialize_states():
 
 func _build_transition_index():
 	for transition in transitions:
-		if not _transitions_by_origin.has(transition.origin_state):
+		if not _transitions_by_origin.(transition.origin_state):
 			_transitions_by_origin[transition.origin_state] = []
 		_transitions_by_origin[transition.origin_state].append(transition)
 

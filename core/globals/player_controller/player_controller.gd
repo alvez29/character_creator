@@ -1,5 +1,6 @@
 ## Global singleton responsible for capturing global UI inputs and managing player possession of characters or game pawns.
 extends Node
+
 var possessed_pawn: Node = null
 var _current_pawn_component: PawnComponent = null
 

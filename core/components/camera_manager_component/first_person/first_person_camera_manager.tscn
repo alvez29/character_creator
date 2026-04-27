@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cqw6kiicmccof" path="res://core/components/camera_manager_component/first_person/first_person_camera_manager.gd" id="1_vu35s"]
 
-[node name="FirstPersonCameraManager" type="Node" unique_id=1700573037 node_paths=PackedStringArray("camera")]
+[node name="FirstPersonCameraManager" type="Node" unique_id=1700573037]
 script = ExtResource("1_vu35s")
 debug = true
-camera = NodePath("")
 
 [node name="ZoomLerpTimer" type="Timer" parent="." unique_id=1972450229]
 unique_name_in_owner = true

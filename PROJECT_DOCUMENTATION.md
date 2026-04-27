@@ -71,6 +71,12 @@ Controls directional lights and environment/skybox parameters to dynamically tra
 ### 4.5. `InputHandlerComponent`
 Centralizes input polling (`Input.is_action_pressed()`, etc.) into variables that other components read from. This allows easy implementation of AI bots or external controllers by overriding the handler without changing movement logic.
 
+### 4.6. Inventory System (`core/components/inventory_component/`)
+A scalable, data-driven back-end for inventory management and equippable items.
+*   **Data Models (`ItemData` & `EquippableItemData`)**: Core `Resource` types defining static properties (names, stack limits) and the `PackedScene` to cleanly instantiate when equipped.
+*   **`InventoryComponent`**: The single source of truth for the player's pockets. It manages an array of `InventorySlotData`, handles stacking logic, and tracks the `active_slot_index`.
+*   It synchronizes unidirectionally with `InventoryUIState`, ensuring the front-end UI reacts instantly when underlying data changes.
+
 ---
 
 ## 5. Project Components (`first_person_template_project/components/`)
@@ -98,7 +104,8 @@ An optimization & interaction tool used to continuously or explicitly verify if 
 ## 6. Key Project Scenes & Actors
 
 ### 6.1. The Player (`first_person_template_project/scenes/player/`)
-An integration scene where the `CharacterBody3D` node aggregates the `FirstPersonMovementComponent`, `FirstPersonCameraManager`, `ShakerComponent`, `GrabbingBehavior`, and `PunchingBehaviorComponent` together to create the playable character.
+An integration scene where the `CharacterBody3D` node aggregates the core controllers (`Movement`, `Camera`, `Shaker`, `Input`) alongside behaviors (`Grabbing`, `Punching`, `Inventory`) to structure the playable character.
+*   **`Arms` System**: An IK/AnimationTree unified rig. It listens dynamically to the `InventoryComponent`'s active slot, seamlessly changing visual states or instantiating `EquippableItemData` models (like weapons/tools) directly into the view model's hand bones.
 
 ### 6.2. `SphereVehicle` (`first_person_template_project/scenes/vehicle/`)
 An independent physics-based vehicle controller inspired by arcade driving (e.g., Rocket League/Deadline Delivery).

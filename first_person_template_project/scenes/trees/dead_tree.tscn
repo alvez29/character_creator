@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://vah6jv7ppfjp"]
-
-[ext_resource type="PackedScene" uid="uid://ca420q13ikpnx" path="res://first_person_template_project/assets/trees/dead_tree/dead_tree_1/dead_tree_rt_1.glb" id="1_m1rss"]
-
-[node name="DeadTree" unique_id=242553449 instance=ExtResource("1_m1rss")]

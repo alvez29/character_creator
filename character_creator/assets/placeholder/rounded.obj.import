@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://06y8sedssrr7"
+path="res://.godot/imported/rounded.obj-a4c7468a63026a500a0b63093dc73cba.mesh"
+
+[deps]
+
+files=["res://.godot/imported/rounded.obj-a4c7468a63026a500a0b63093dc73cba.mesh"]
+
+source_file="res://character_creator/assets/placeholder/rounded.obj"
+dest_files=["res://.godot/imported/rounded.obj-a4c7468a63026a500a0b63093dc73cba.mesh", "res://.godot/imported/rounded.obj-a4c7468a63026a500a0b63093dc73cba.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

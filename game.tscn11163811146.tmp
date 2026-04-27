@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://dcmukevcuwclc"]
+
+[ext_resource type="PackedScene" uid="uid://cmexxxxgj5p8o" path="res://character_creator/scenes/character/character.tscn" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://dgrcrrq17q506" path="res://character_creator/components/character_creation/character_creator_ui.gd" id="1_feb5d"]
+[ext_resource type="Script" uid="uid://lfoqe0td23xk" path="res://character_creator/components/character_creation/character_creator_manager.gd" id="3_feb5d"]
+[ext_resource type="Script" uid="uid://d2xbvaxcykjei" path="res://character_creator/data/character_creation_settings.gd" id="4_fc0e3"]
+[ext_resource type="Script" uid="uid://but2pdti0eswi" path="res://character_creator/data/character_data.gd" id="5_7jktm"]
+
+[sub_resource type="Resource" id="Resource_7jktm"]
+script = ExtResource("4_fc0e3")
+metadata/_custom_type_script = "uid://d2xbvaxcykjei"
+
+[sub_resource type="Resource" id="Resource_ryrav"]
+script = ExtResource("5_7jktm")
+metadata/_custom_type_script = "uid://but2pdti0eswi"
+
+[node name="Game" type="Node" unique_id=859925755]
+
+[node name="UI" type="Control" parent="." unique_id=1347744063 node_paths=PackedStringArray("eyes_size_slider", "eyes_separation_slider")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_feb5d")
+eyes_size_slider = NodePath("HBoxContainer/VBoxContainer/EyesSize/HSlider")
+eyes_separation_slider = NodePath("HBoxContainer/VBoxContainer/EyesSeparation/HSlider")
+
+[node name="ColorRect" type="ColorRect" parent="UI" unique_id=1684468005]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24819139, 0.47937858, 0.54852754, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI" unique_id=1265028379]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterViewer" type="SubViewportContainer" parent="UI/HBoxContainer" unique_id=544462894]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SubViewport" type="SubViewport" parent="UI/HBoxContainer/CharacterViewer" unique_id=1350267822]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(360, 1280)
+render_target_update_mode = 4
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="UI/HBoxContainer/CharacterViewer/SubViewport" unique_id=40783245]
+transform = Transform3D(-0.99999994, 0, -8.742278e-08, 0, 1, 0, 8.742277e-08, 0, -1, 0, 0, 0)
+shadow_enabled = true
+
+[node name="3DScene" type="Node3D" parent="UI/HBoxContainer/CharacterViewer/SubViewport" unique_id=185188054]
+
+[node name="MeshInstance3D" parent="UI/HBoxContainer/CharacterViewer/SubViewport/3DScene" unique_id=57907366 instance=ExtResource("1_80nbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00086677074, 0.0025631785, 0.0010330677)
+
+[node name="LeftEyeDecal" parent="UI/HBoxContainer/CharacterViewer/SubViewport/3DScene/MeshInstance3D/CharacterMesh" parent_id_path=PackedInt32Array(57907366, 57907366) index="1" unique_id=387693673]
+transform = Transform3D(-1, -1.509958e-07, 6.600236e-15, 0, -4.371139e-08, -1, 1.509958e-07, -1, 4.371139e-08, -0.2245535, 0.4, -0.2)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HBoxContainer" unique_id=887850296]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="EyesSize" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=457639453]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesSize" unique_id=228347831]
+layout_mode = 2
+text = "Eyes Size"
+
+[node name="HSlider" type="HSlider" parent="UI/HBoxContainer/VBoxContainer/EyesSize" unique_id=1477747715]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="EyesSeparation" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=1907757565]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesSeparation" unique_id=945224396]
+layout_mode = 2
+text = "Eyes Separation"
+
+[node name="HSlider" type="HSlider" parent="UI/HBoxContainer/VBoxContainer/EyesSeparation" unique_id=233094433]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Components" type="Node" parent="." unique_id=1091825315]
+
+[node name="CharacterCreatorManager" type="Node" parent="Components" unique_id=211825677 node_paths=PackedStringArray("character_viewer", "character_ui")]
+script = ExtResource("3_feb5d")
+character_viewer = NodePath("../../UI/HBoxContainer/CharacterViewer/SubViewport/3DScene/MeshInstance3D/Components/CharacterVisualUpdater")
+character_ui = NodePath("../../UI")
+creation_settings = SubResource("Resource_7jktm")
+character_data = SubResource("Resource_ryrav")
+
+[editable path="UI/HBoxContainer/CharacterViewer/SubViewport/3DScene/MeshInstance3D"]

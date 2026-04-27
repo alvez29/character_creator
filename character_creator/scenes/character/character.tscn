@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://cmexxxxgj5p8o"]
+
+[ext_resource type="Texture2D" uid="uid://bgg5hcxshu0vn" path="res://character_creator/assets/placeholder/eye.png" id="1_atjwc"]
+[ext_resource type="ArrayMesh" uid="uid://b0scj1hfpk658" path="res://character_creator/assets/placeholder/normal.obj" id="1_n7nqo"]
+[ext_resource type="Material" uid="uid://d2lfuay7u3vxg" path="res://character_creator/assets/material/skin.tres" id="2_qe1sv"]
+[ext_resource type="Shader" uid="uid://uqh62vwesnkq" path="res://character_creator/assets/material/face_shape.gdshader" id="2_tjep3"]
+[ext_resource type="Script" uid="uid://u3nydvnii3r5" path="res://character_creator/components/character_creation/base/character_updater.gd" id="5_tjep3"]
+[ext_resource type="Script" uid="uid://pkknoef8k8nc" path="res://character_creator/components/character_creation/visual_updaters/eyes_visual_updater.gd" id="6_qe1sv"]
+[ext_resource type="Script" uid="uid://dixyt5cpoynl7" path="res://character_creator/components/character_creation/visual_updaters/skin_visual_updater.gd" id="7_tcefa"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tjep3"]
+render_priority = 0
+shader = ExtResource("2_tjep3")
+shader_parameter/textura_albedo = ExtResource("1_atjwc")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tjep3"]
+material = SubResource("ShaderMaterial_tjep3")
+size = Vector2(0.1, 0.1)
+
+[node name="Character" type="Node3D" unique_id=147835605]
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=876132249]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+mesh = ExtResource("1_n7nqo")
+surface_material_override/0 = ExtResource("2_qe1sv")
+
+[node name="EyesPivot" type="Node3D" parent="." unique_id=469001260]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.39573503, -0.247)
+
+[node name="LeftEyePivot" type="Node3D" parent="EyesPivot" unique_id=595349808]
+
+[node name="LeftEyeMesh" type="MeshInstance3D" parent="EyesPivot/LeftEyePivot" unique_id=6908626]
+transform = Transform3D(-1, -8.742277e-08, 3.8213705e-15, 0, -4.3711385e-08, -0.9999999, 8.742278e-08, -0.9999999, 4.3711385e-08, 0, 0, 0)
+mesh = SubResource("PlaneMesh_tjep3")
+
+[node name="RightEyePivot" type="Node3D" parent="EyesPivot" unique_id=1076554657]
+
+[node name="RightEyeMesh" type="MeshInstance3D" parent="EyesPivot/RightEyePivot" unique_id=1181769207]
+transform = Transform3D(1, 0, 0, 0, -4.3711385e-08, -0.9999999, 0, 0.9999999, -4.3711385e-08, 0, 0, 0)
+mesh = SubResource("PlaneMesh_tjep3")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1448011680]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.3745934e-07, 0.64, -1.4276484)
+current = true
+
+[node name="Components" type="Node" parent="." unique_id=1568319069]
+
+[node name="CharacterUpdater" type="Node" parent="Components" unique_id=2035698406]
+script = ExtResource("5_tjep3")
+
+[node name="EyesVisualUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=1733569221 node_paths=PackedStringArray("l_eye_mesh", "r_eye_mesh", "eyes_pivot", "l_eye_pivot", "r_eye_pivot")]
+script = ExtResource("6_qe1sv")
+l_eye_mesh = NodePath("../../../EyesPivot/LeftEyePivot/LeftEyeMesh")
+r_eye_mesh = NodePath("../../../EyesPivot/RightEyePivot/RightEyeMesh")
+eyes_pivot = NodePath("../../../EyesPivot")
+l_eye_pivot = NodePath("../../../EyesPivot/LeftEyePivot")
+r_eye_pivot = NodePath("../../../EyesPivot/RightEyePivot")
+
+[node name="MouthVisualUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=536015470]
+
+[node name="SkinVisualUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=1651526632 node_paths=PackedStringArray("face_mesh")]
+script = ExtResource("7_tcefa")
+face_mesh = NodePath("../../../Head")

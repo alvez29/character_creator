@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://co4h646cc77mm"
+path="res://.godot/imported/strong.obj-3a442529911c914c57442a1043c25529.mesh"
+
+[deps]
+
+files=["res://.godot/imported/strong.obj-3a442529911c914c57442a1043c25529.mesh"]
+
+source_file="res://character_creator/assets/placeholder/strong.obj"
+dest_files=["res://.godot/imported/strong.obj-3a442529911c914c57442a1043c25529.mesh", "res://.godot/imported/strong.obj-3a442529911c914c57442a1043c25529.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

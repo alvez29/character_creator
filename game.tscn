@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://dcmukevcuwclc"]
+
+[ext_resource type="PackedScene" uid="uid://cmexxxxgj5p8o" path="res://character_creator/scenes/character/character.tscn" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://dgrcrrq17q506" path="res://character_creator/components/character_creation/base/character_creator_ui.gd" id="1_feb5d"]
+[ext_resource type="Script" uid="uid://lfoqe0td23xk" path="res://character_creator/components/character_creation/base/character_creator_manager.gd" id="3_feb5d"]
+[ext_resource type="Resource" uid="uid://r8ai1m3r4k85" path="res://character_creator/data/creation_settings.tres" id="4_7jktm"]
+
+[node name="Game" type="Node" unique_id=859925755]
+
+[node name="UI" type="Control" parent="." unique_id=1347744063 node_paths=PackedStringArray("eyes_size_slider", "eyes_separation_slider", "eyes_rotation_slider", "eyes_height_slider", "skin_color_picker")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_feb5d")
+eyes_size_slider = NodePath("HBoxContainer/VBoxContainer/EyesSize/HSlider")
+eyes_separation_slider = NodePath("HBoxContainer/VBoxContainer/EyesSeparation/HSlider")
+eyes_rotation_slider = NodePath("HBoxContainer/VBoxContainer/EyesRotation/HSlider")
+eyes_height_slider = NodePath("HBoxContainer/VBoxContainer/EyesHeight/HSlider")
+skin_color_picker = NodePath("HBoxContainer/VBoxContainer/SkinColorPicker/ColorPicker")
+
+[node name="ColorRect" type="ColorRect" parent="UI" unique_id=1684468005]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24819139, 0.47937858, 0.54852754, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI" unique_id=1265028379]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterViewer" type="SubViewportContainer" parent="UI/HBoxContainer" unique_id=544462894]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SubViewport" type="SubViewport" parent="UI/HBoxContainer/CharacterViewer" unique_id=1350267822]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(360, 1280)
+render_target_update_mode = 4
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="UI/HBoxContainer/CharacterViewer/SubViewport" unique_id=40783245]
+transform = Transform3D(-0.99999994, 0, -8.742278e-08, 0, 1, 0, 8.742277e-08, 0, -1, 0, 0, 0)
+shadow_enabled = true
+
+[node name="3DScene" type="Node3D" parent="UI/HBoxContainer/CharacterViewer/SubViewport" unique_id=185188054]
+
+[node name="MeshInstance3D" parent="UI/HBoxContainer/CharacterViewer/SubViewport/3DScene" unique_id=57907366 instance=ExtResource("1_80nbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00086677074, 0.0025631785, 0.0010330677)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HBoxContainer" unique_id=887850296]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="EyesSize" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=457639453]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesSize" unique_id=228347831]
+layout_mode = 2
+text = "Eyes Size"
+
+[node name="HSlider" type="HSlider" parent="UI/HBoxContainer/VBoxContainer/EyesSize" unique_id=1477747715]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="EyesSeparation" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=1907757565]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesSeparation" unique_id=945224396]
+layout_mode = 2
+text = "Eyes Separation"
+
+[node name="HSlider" type="HSlider" parent="UI/HBoxContainer/VBoxContainer/EyesSeparation" unique_id=233094433]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="EyesRotation" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=1823755985]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesRotation" unique_id=1050355633]
+layout_mode = 2
+text = "Eyes Rotation"
+
+[node name="HSlider" type="HSlider" parent="UI/HBoxContainer/VBoxContainer/EyesRotation" unique_id=131317323]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="EyesHeight" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=1481058833]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesHeight" unique_id=1772337054]
+layout_mode = 2
+text = "Eyes Heigh"
+
+[node name="HSlider" type="HSlider" parent="UI/HBoxContainer/VBoxContainer/EyesHeight" unique_id=1570701874]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="SkinColorPicker" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=45765532]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/SkinColorPicker" unique_id=1359837383]
+layout_mode = 2
+text = "Skin Color"
+
+[node name="ColorPicker" type="ColorPicker" parent="UI/HBoxContainer/VBoxContainer/SkinColorPicker" unique_id=1391673080]
+layout_mode = 2
+size_flags_vertical = 6
+color = Color(1, 0.6627451, 0.47058824, 1)
+
+[node name="EyesPicker" type="VBoxContainer" parent="UI/HBoxContainer/VBoxContainer" unique_id=911831572]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Label" type="Label" parent="UI/HBoxContainer/VBoxContainer/EyesPicker" unique_id=891431450]
+layout_mode = 2
+text = "Eye Type"
+
+[node name="ItemList" type="ItemList" parent="UI/HBoxContainer/VBoxContainer/EyesPicker" unique_id=53562414]
+layout_mode = 2
+
+[node name="Components" type="Node" parent="." unique_id=1091825315]
+
+[node name="CharacterCreatorManager" type="Node" parent="Components" unique_id=211825677 node_paths=PackedStringArray("character_updater", "character_ui")]
+script = ExtResource("3_feb5d")
+character_updater = NodePath("../../UI/HBoxContainer/CharacterViewer/SubViewport/3DScene/MeshInstance3D/Components/CharacterUpdater")
+character_ui = NodePath("../../UI")
+creation_settings = ExtResource("4_7jktm")
+
+[editable path="UI/HBoxContainer/CharacterViewer/SubViewport/3DScene/MeshInstance3D"]

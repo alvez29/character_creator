@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cmexxxxgj5p8o"]
+
+[ext_resource type="Texture2D" uid="uid://bgg5hcxshu0vn" path="res://character_creator/assets/eye.png" id="1_atjwc"]
+[ext_resource type="Material" uid="uid://d2lfuay7u3vxg" path="res://character_creator/assets/material/skin.tres" id="1_n7nqo"]
+[ext_resource type="Texture2D" uid="uid://b7idg43c21ssi" path="res://character_creator/assets/lips.png" id="2_3r710"]
+[ext_resource type="Script" uid="uid://u3nydvnii3r5" path="res://character_creator/components/character_creation/character_visual_updater.gd" id="4_n7nqo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mwb40"]
+material = ExtResource("1_n7nqo")
+
+[node name="Character" type="Node3D" unique_id=147835605]
+
+[node name="CharacterMesh" type="MeshInstance3D" parent="." unique_id=57907366]
+mesh = SubResource("CapsuleMesh_mwb40")
+
+[node name="RightEyeDecal" type="Decal" parent="CharacterMesh" unique_id=171481035]
+transform = Transform3D(1, 1.7451288e-07, -7.619402e-09, 7.619402e-09, -0.087155804, -0.9961947, -1.7451288e-07, 0.9961947, -0.087155804, 0.22539228, 0.4263755, -0.47660288)
+size = Vector3(0.2, 0.2, 0.2)
+texture_albedo = ExtResource("1_atjwc")
+upper_fade = 0.0
+lower_fade = 0.0
+
+[node name="LeftEyeDecal" type="Decal" parent="CharacterMesh" unique_id=387693673]
+transform = Transform3D(-1, -8.742278e-08, 3.821371e-15, 0, -4.371139e-08, -1, 8.742278e-08, -1, 4.371139e-08, -0.2245535, 0.4263755, -0.47660285)
+size = Vector3(0.2, 0.2, 0.2)
+texture_albedo = ExtResource("1_atjwc")
+upper_fade = 0.0
+lower_fade = 0.0
+
+[node name="MouthDecal" type="Decal" parent="CharacterMesh" unique_id=2091246291]
+transform = Transform3D(-1, -8.742278e-08, 3.821371e-15, 0, -4.371139e-08, -1, 8.742278e-08, -1, 4.371139e-08, -8.599302e-08, 0.23341772, -0.5082234)
+size = Vector3(0.2, 0.2, 0.2)
+texture_albedo = ExtResource("2_3r710")
+upper_fade = 0.0
+lower_fade = 0.0
+
+[node name="Camera3D" type="Camera3D" parent="CharacterMesh" unique_id=1448011680]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.64, -3)
+current = true
+
+[node name="Components" type="Node" parent="." unique_id=1568319069]
+
+[node name="CharacterVisualUpdater" type="Node" parent="Components" unique_id=2035698406]
+script = ExtResource("4_n7nqo")

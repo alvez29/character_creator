@@ -11,7 +11,7 @@ func load() -> void:
 
 
 func get_default_id() -> String:
-	return options[0].id if not options.is_empty() else ""
+	return options[0].id if not options.is_empty() else &""
 
 
 func get_options() -> Array:

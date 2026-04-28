@@ -4,10 +4,19 @@
 [ext_resource type="Script" uid="uid://bjbnet2jv8n2y" path="res://character_creator/data/options/texture_option.gd" id="2_4xx38"]
 [ext_resource type="Texture2D" uid="uid://bgg5hcxshu0vn" path="res://character_creator/assets/placeholder/eye.png" id="3_spj1k"]
 [ext_resource type="Texture2D" uid="uid://cac7o1kv0m3cg" path="res://character_creator/assets/placeholder/real_eye.png" id="4_7s6hp"]
+[ext_resource type="Texture2D" uid="uid://k5u7p8bf2pnk" path="res://character_creator/assets/placeholder/miojo.png" id="5_4ccww"]
 [ext_resource type="Script" uid="uid://dblt4gg6kqqnu" path="res://character_creator/data/settings/texture_select_setting.gd" id="5_f3er6"]
+[ext_resource type="Script" uid="uid://cld5n2pqklmby" path="res://character_creator/data/options/mesh_option.gd" id="6_4nc3l"]
+[ext_resource type="Texture2D" uid="uid://b7idg43c21ssi" path="res://character_creator/assets/placeholder/lips.png" id="6_4xx38"]
 [ext_resource type="Script" uid="uid://d2xbvaxcykjei" path="res://character_creator/data/character_creation_profile.gd" id="6_7owgk"]
+[ext_resource type="ArrayMesh" uid="uid://ci8yvokxwq0l5" path="res://character_creator/assets/placeholder/fatty.obj" id="7_0a4s4"]
 [ext_resource type="Script" uid="uid://ibnbp5s3vs0r" path="res://character_creator/data/options/color_option.gd" id="7_4nc3l"]
+[ext_resource type="Texture2D" uid="uid://5f0s8qxlhig5" path="res://character_creator/assets/placeholder/real_mouth.png" id="7_spj1k"]
 [ext_resource type="Script" uid="uid://c8knlmmjdtb0v" path="res://character_creator/data/settings/color_select_setting.gd" id="8_0a4s4"]
+[ext_resource type="Script" uid="uid://dli4nkbou78vv" path="res://character_creator/data/settings/mesh_select_setting.gd" id="8_1f8lu"]
+[ext_resource type="ArrayMesh" uid="uid://b0scj1hfpk658" path="res://character_creator/assets/placeholder/normal.obj" id="8_4ccww"]
+[ext_resource type="Texture2D" uid="uid://bng3ln6sctgeb" path="res://character_creator/assets/placeholder/miboca.png" id="8_7s6hp"]
+[ext_resource type="ArrayMesh" uid="uid://bityr12cgv3eo" path="res://character_creator/assets/placeholder/pointy.obj" id="9_1f8lu"]
 
 [sub_resource type="Resource" id="Resource_mjprx"]
 script = ExtResource("1_k7u38")
@@ -51,11 +60,54 @@ id = "real"
 display_name = "So Real Eye"
 metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
 
+[sub_resource type="Resource" id="Resource_w76g0"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("5_4ccww")
+id = &"my_eye"
+display_name = "My Eye"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
 [sub_resource type="Resource" id="Resource_4imdq"]
 script = ExtResource("5_f3er6")
-options = Array[ExtResource("2_4xx38")]([SubResource("Resource_mgpkg"), SubResource("Resource_r1jqd")])
+options = Array[ExtResource("2_4xx38")]([SubResource("Resource_mgpkg"), SubResource("Resource_r1jqd"), SubResource("Resource_w76g0")])
 display_name = "Eyes Type"
 metadata/_custom_type_script = "uid://dblt4gg6kqqnu"
+
+[sub_resource type="Resource" id="Resource_4ccww"]
+script = ExtResource("6_4nc3l")
+mesh = ExtResource("7_0a4s4")
+id = &"head_shape_fatty"
+display_name = "Fatty"
+metadata/_custom_type_script = "uid://cld5n2pqklmby"
+
+[sub_resource type="Resource" id="Resource_0lsu2"]
+script = ExtResource("6_4nc3l")
+mesh = ExtResource("8_4ccww")
+id = &"head_shape_normal"
+display_name = "Normal"
+metadata/_custom_type_script = "uid://cld5n2pqklmby"
+
+[sub_resource type="Resource" id="Resource_qxb37"]
+script = ExtResource("6_4nc3l")
+mesh = ExtResource("9_1f8lu")
+id = &"head_shape_pointy"
+display_name = "Pointy"
+metadata/_custom_type_script = "uid://cld5n2pqklmby"
+
+[sub_resource type="Resource" id="Resource_4mtso"]
+script = ExtResource("8_1f8lu")
+options = Array[ExtResource("6_4nc3l")]([SubResource("Resource_4ccww"), SubResource("Resource_0lsu2"), SubResource("Resource_qxb37")])
+category = 2
+display_name = "Head Shape"
+metadata/_custom_type_script = "uid://dli4nkbou78vv"
+
+[sub_resource type="Resource" id="Resource_k7u38"]
+script = ExtResource("1_k7u38")
+min_value = -0.1
+max_value = 0.2
+category = 1
+display_name = "Mouth Height"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_h1mdt"]
 script = ExtResource("1_k7u38")
@@ -64,6 +116,34 @@ max_value = 0.3
 category = 1
 display_name = "Mouth Size"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_spj1k"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("6_4xx38")
+id = &"emoji_mouth"
+display_name = "Emoji"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
+[sub_resource type="Resource" id="Resource_7s6hp"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("7_spj1k")
+id = &"real_mouth"
+display_name = "So Real Mouth"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
+[sub_resource type="Resource" id="Resource_7owgk"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("8_7s6hp")
+id = &"my_mouth"
+display_name = "My Mouth"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
+[sub_resource type="Resource" id="Resource_f3er6"]
+script = ExtResource("5_f3er6")
+options = Array[ExtResource("2_4xx38")]([SubResource("Resource_spj1k"), SubResource("Resource_7s6hp"), SubResource("Resource_7owgk")])
+category = 1
+display_name = "Mouth Type"
+metadata/_custom_type_script = "uid://dblt4gg6kqqnu"
 
 [sub_resource type="Resource" id="Resource_12pi4"]
 script = ExtResource("7_4nc3l")
@@ -82,7 +162,7 @@ metadata/_custom_type_script = "uid://ibnbp5s3vs0r"
 [sub_resource type="Resource" id="Resource_oqtcf"]
 script = ExtResource("8_0a4s4")
 options = Array[ExtResource("7_4nc3l")]([SubResource("Resource_12pi4"), SubResource("Resource_mohts")])
-category = 2
+category = 3
 display_name = "Skin Color"
 metadata/_custom_type_script = "uid://c8knlmmjdtb0v"
 
@@ -94,5 +174,8 @@ eyes_rotation = SubResource("Resource_ttet1")
 eyes_height = SubResource("Resource_mjprx")
 eyes_textures = SubResource("Resource_4imdq")
 mouth_size = SubResource("Resource_h1mdt")
+mouth_height = SubResource("Resource_k7u38")
+mouth_texture = SubResource("Resource_f3er6")
+head_shape = SubResource("Resource_4mtso")
 skin_colors = SubResource("Resource_oqtcf")
 metadata/_custom_type_script = "uid://d2xbvaxcykjei"

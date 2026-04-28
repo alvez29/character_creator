@@ -13,8 +13,12 @@ var _options_widget_scene = preload("uid://du65tq3c0hmov")
 @export_category("Mouth")
 @export var mouth_settings_container: Control
 
+@export_category("Head Shape")
+@export var head_shape_settings_container: Control
+
 @export_category("Skin")
 @export var skin_settings_container: Control
+
 
 
 func initialize(manager_ref: CharacterCreatorManager) -> void:
@@ -23,6 +27,7 @@ func initialize(manager_ref: CharacterCreatorManager) -> void:
 
 	initialize_eyes_settings()
 	initialize_mouth_settings()
+	initialize_head_shape_settings()
 	initialize_skin_settings()
 
 
@@ -36,7 +41,12 @@ func initialize_eyes_settings():
 
 func initialize_mouth_settings():
 	load_range_setting(profile.mouth_size, character_data.mouth_size)
+	load_range_setting(profile.mouth_height, character_data.mouth_height)
+	load_options_setting(profile.mouth_texture, character_data.mouth_texture)
 
+
+func initialize_head_shape_settings():
+	load_options_setting(profile.head_shape, character_data.head_mesh)
 
 
 func initialize_skin_settings():
@@ -49,6 +59,8 @@ func get_parent_container_by_type(type: CharacterSetting.Category):
 			return eyes_settings_container
 		CharacterSetting.Category.MOUTH:
 			return mouth_settings_container
+		CharacterSetting.Category.HEAD_SHAPE:
+			return head_shape_settings_container
 		CharacterSetting.Category.SKIN:
 			return skin_settings_container
 		_:  return eyes_settings_container

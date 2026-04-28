@@ -12,7 +12,14 @@ extends Resource
 
 #region Mouth
 @export_group("Mouth")
-@export var mouth_size     : RangeSetting
+@export var mouth_size    : RangeSetting
+@export var mouth_height  : RangeSetting
+@export var mouth_texture : TextureSelectSetting
+#endregion
+
+#region Head shape
+@export_group("Head Shape")
+@export var head_shape : MeshSelectSetting
 #endregion
 
 #region Skin

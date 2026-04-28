@@ -1,20 +1,29 @@
 class_name CharacterData
 extends Reactive
 
+@export var default_texture: Texture2D
+@export var default_mesh:    Mesh
+
 #region Eyes
 @export_category("Eyes")
-
 @export var eyes_size       := ReactiveFloat.new(0, self)
 @export var eyes_separation := ReactiveFloat.new(0, self)
 @export var eyes_rotation   := ReactiveFloat.new(0, self)
 @export var eyes_height     := ReactiveFloat.new(0, self)
-@export var eye_texture     := ReactiveTexture.new(null, self)
+@export var eye_texture     := ReactiveTexture.new(default_texture, self)
 #endregion
 
 #region Mouth
 @export_category("Mouth")
 @export var mouth_size      := ReactiveFloat.new(0, self)
 @export var mouth_height    := ReactiveFloat.new(0, self)
+@export var mouth_texture   := ReactiveTexture.new(default_texture, self)
+#endregion
+
+#region Head shape
+@export_category("Head Shape")
+@export var head_mesh       := ReactiveMesh.new(default_mesh, self)
+#endregion
 
 #region Skin
 @export_category("Skin")

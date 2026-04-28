@@ -43,24 +43,27 @@ character-creator/
 
 The backbone of all data flow in this project. Variables are wrapped in `Reactive` subclasses that emit a `reactive_changed` signal whenever their value changes.
 
-```
-Reactive (Resource, base)
-├── ReactiveFloat
-├── ReactiveInt
-├── ReactiveString
-├── ReactiveColor
-├── ReactiveTexture
-├── ReactiveArray
-└── ReactiveObject
+```mermaid
+classDiagram
+    class Reactive {
+        <<Resource, base>>
+    }
+    Reactive <|-- ReactiveFloat
+    Reactive <|-- ReactiveInt
+    Reactive <|-- ReactiveString
+    Reactive <|-- ReactiveColor
+    Reactive <|-- ReactiveTexture
+    Reactive <|-- ReactiveArray
+    Reactive <|-- ReactiveObject
 ```
 
 **Propagation chain:** A `Reactive` can have an `owner` (another `Reactive`). When a nested reactive changes, the signal bubbles up through `_propagate()` — e.g., changing `CharacterData.eyes_size.value` also fires `CharacterData.reactive_changed`.
 
-```
-eyes_size.value = 0.5
-  → eyes_size.reactive_changed.emit(eyes_size)
-    → CharacterData._propagate()        (owner chain)
-      → CharacterData.reactive_changed.emit(CharacterData)
+```mermaid
+flowchart TD
+    A["eyes_size.value = 0.5"] --> B["eyes_size.reactive_changed.emit(eyes_size)"]
+    B --> C["CharacterData._propagate()"]
+    C --> D["CharacterData.reactive_changed.emit(CharacterData)"]
 ```
 
 ### 2.2 State Machine
@@ -75,44 +78,63 @@ Node-based FSM with `StateMachine`, `State`, and `Transition` nodes. Each `State
 
 The character creator is built around a **single source of truth** principle: `CharacterData` is the only authoritative representation of a character's state. Everything else either reads from it or writes to it.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   CharacterCreatorManager                   │
-│  ┌─────────────────┐    ┌──────────────────────────────┐   │
-│  │ CharacterData   │◄───│  CharacterCreationSettings   │   │
-│  │ (source of      │    │  (ranges, palettes, options) │   │
-│  │  truth)         │    └──────────────────────────────┘   │
-│  └────────┬────────┘                                        │
-│           │                                                 │
-│    ┌──────▼───────┐    ┌──────────────────────────┐        │
-│    │CharacterUI   │    │ CharacterUpdater          │        │
-│    │(writes to    │    │  ├ EyesVisualUpdater      │        │
-│    │ CharacterData│    │  ├ SkinVisualUpdater       │        │
-│    │ via ID/value)│    │  └ MouthVisualUpdater      │        │
-│    └──────────────┘    └──────────────────────────┘        │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Manager [CharacterCreatorManager]
+        Settings["CharacterCreationSettings<br>(ranges, palettes, options)"]
+        Data[("CharacterData<br>(source of truth)")]
+        UI["CharacterUI<br>(writes to CharacterData)"]
+        
+        subgraph Updater [CharacterUpdater]
+            Eyes["EyesVisualUpdater"]
+            Skin["SkinVisualUpdater"]
+            Mouth["MouthVisualUpdater"]
+        end
+        
+        Settings -.->|Configures| Data
+        UI -->|Writes ID/value| Data
+        Data -->|Reactive Updates| Updater
+    end
 ```
 
 ### 3.2 Node Hierarchy
 
-```
-CharacterCreatorManager (Node)
-├── CharacterUpdater (Node)
-│   ├── EyesVisualUpdater  (VisualUpdater)
-│   ├── SkinVisualUpdater  (VisualUpdater)
-│   └── MouthVisualUpdater (VisualUpdater)
-└── CharacterCreatorUI (Control)
+```mermaid
+graph TD
+    Manager["CharacterCreatorManager (Node)"]
+    Updater["CharacterUpdater (Node)"]
+    UI["CharacterCreatorUI (Control)"]
+    Eyes["EyesVisualUpdater (VisualUpdater)"]
+    Skin["SkinVisualUpdater (VisualUpdater)"]
+    Mouth["MouthVisualUpdater (VisualUpdater)"]
+
+    Manager --> Updater
+    Manager --> UI
+    Updater --> Eyes
+    Updater --> Skin
+    Updater --> Mouth
 ```
 
 ### 3.3 Initialization Sequence
 
-```
-CharacterCreatorManager._ready()
-  1. CharacterData.new()  (if not assigned)
-  2. creation_settings.load_equivalences()   ← builds all runtime maps
-  3. _setup_reactive_bindings()              ← bridges id → resolved value
-  4. character_updater.initialize(self)      ← visual updaters subscribe to signals
-  5. character_ui.initialize(self)           ← UI binds sliders + populates palettes
+```mermaid
+sequenceDiagram
+    participant Manager as CharacterCreatorManager
+    participant Data as CharacterData
+    participant Settings as CharacterCreationSettings
+    participant Updater as CharacterUpdater
+    participant UI as CharacterCreatorUI
+
+    Manager->>Manager: _ready()
+    Manager->>Data: new() (if not assigned)
+    Manager->>Settings: load_equivalences()
+    Note right of Settings: builds all runtime maps
+    Manager->>Manager: _setup_reactive_bindings()
+    Note right of Manager: bridges id to resolved value
+    Manager->>Updater: initialize(self)
+    Note right of Updater: visual updaters subscribe to signals
+    Manager->>UI: initialize(self)
+    Note right of UI: UI binds sliders & populates palettes
 ```
 
 ---
@@ -147,14 +169,15 @@ character_updater.load_character_data(saved_data)
 
 `CharacterCreatorManager` is the **only** class that knows both `CharacterData` and `CharacterCreationSettings`. It bridges select IDs to resolved values:
 
-```
-character_data.eye_texture_id  ──► manager._resolve_eye_texture(id)
-                                       └► settings.eye_texture.find_texture(id)
-                                              └► character_data.eye_texture.value = texture
+```mermaid
+flowchart LR
+    A1["character_data.eye_texture_id"] --> B1["manager._resolve_eye_texture(id)"]
+    B1 --> C1["settings.eye_texture.find_texture(id)"]
+    C1 --> D1["character_data.eye_texture.value = texture"]
 
-character_data.skin_color_id   ──► manager._resolve_skin_color(id)
-                                       └► settings.skin_color.find_color(id)
-                                              └► character_data.skin_color.value = color
+    A2["character_data.skin_color_id"] --> B2["manager._resolve_skin_color(id)"]
+    B2 --> C2["settings.skin_color.find_color(id)"]
+    C2 --> D2["character_data.skin_color.value = color"]
 ```
 
 ---
@@ -165,45 +188,66 @@ character_data.skin_color_id   ──► manager._resolve_skin_color(id)
 
 All settings are `Resource` subclasses, editable in the Godot inspector, and saved as `.tres` files.
 
-```
-CharacterSetting  (Resource, abstract)
-│  └── load() → void   [abstract]
-│
-├── RangeSetting
-│   ├── @export steps: int
-│   ├── @export min_value: float
-│   ├── @export max_value: float
-│   ├── @export use_degrees: bool
-│   ├── var equivalence: Dictionary[int, float]   ← built by load()
-│   └── get_value(step: int) → float
-│
-└── SelectSetting  (abstract)
-    ├── var _map: Dictionary[String, SelectOption]  ← built by load()
-    ├── find(id) → SelectOption
-    ├── get_default_id() → String  [abstract]
-    ├── _build_map_from(options: Array)   ← shared validation logic
-    │
-    ├── TextureSelectSetting
-    │   ├── @export options: Array[TextureOption]
-    │   └── find_texture(id) → TextureOption
-    │
-    └── ColorSelectSetting
-        ├── @export options: Array[ColorOption]
-        └── find_color(id) → ColorOption
+```mermaid
+classDiagram
+    class CharacterSetting {
+        <<Resource, abstract>>
+        +load() void
+    }
+    
+    class RangeSetting {
+        +int steps
+        +float min_value
+        +float max_value
+        +bool use_degrees
+        +Dictionary equivalence
+        +get_value(step: int) float
+    }
+    
+    class SelectSetting {
+        <<abstract>>
+        #Dictionary _map
+        +find(id) SelectOption
+        +get_default_id() String
+        #_build_map_from(options: Array)
+    }
+    
+    class TextureSelectSetting {
+        +Array~TextureOption~ options
+        +find_texture(id) TextureOption
+    }
+    
+    class ColorSelectSetting {
+        +Array~ColorOption~ options
+        +find_color(id) ColorOption
+    }
+    
+    CharacterSetting <|-- RangeSetting
+    CharacterSetting <|-- SelectSetting
+    SelectSetting <|-- TextureSelectSetting
+    SelectSetting <|-- ColorSelectSetting
 ```
 
 ### 5.2 Option Types
 
-```
-SelectOption  (Resource, abstract)
-│  ├── @export id: String           ← stable persistence key
-│  └── @export display_name: String
-│
-├── TextureOption
-│   └── @export texture: Texture2D
-│
-└── ColorOption
-    └── @export color: Color
+```mermaid
+classDiagram
+    class SelectOption {
+        <<Resource, abstract>>
+        +String id
+        +String display_name
+    }
+    
+    class TextureOption {
+        +Texture2D texture
+    }
+    
+    class ColorOption {
+        +Color color
+    }
+    
+    SelectOption <|-- TextureOption
+    SelectOption <|-- ColorOption
 ```
 
 > **ID convention:** `snake_case` strings, e.g. `"eye_almond"`, `"skin_pale"`. **Never change an ID** after `.tres` files are created — it is the key used to restore a character's saved data.
@@ -255,18 +299,19 @@ VisualUpdater  (Node, abstract)
 
 ### 6.2 Updater Lifecycle
 
-```
-On session start:
-  initialize(manager)
-    ├── connect signals → future reactive changes
-    └── (signals will fire as user interacts)
+```mermaid
+flowchart TD
+    subgraph Session Start
+        A["initialize(manager)"] --> B["connect signals (future reactive changes)"]
+    end
 
-On loading a saved character:
-  load_character_data(saved_data)
-    └── reads current values and applies all setters immediately
+    subgraph Load Saved Character
+        C["load_character_data(saved_data)"] --> D["reads current values & applies setters"]
+    end
 
-On value change (reactive signal):
-  _on_X_changed(reactive) → set_X(reactive.value)
+    subgraph Value Change
+        E["_on_X_changed(reactive)"] --> F["set_X(reactive.value)"]
+    end
 ```
 
 ### 6.3 EyesVisualUpdater Responsibility Map
@@ -287,43 +332,43 @@ On value change (reactive signal):
 
 `CharacterCreatorUI` is a passive view: it only **writes** to `CharacterData`. It never reads from it for display (that is the visual updater's job).
 
-```
-bind_settings()
-  ├── _initialize_slider(slider, RangeSetting)  ← sets max_value and initial step
-  ├── _populate_eye_textures()                  ← generates TextureButtons from options
-  └── _populate_skin_colors()                   ← generates styled Buttons from ColorOptions
+```mermaid
+flowchart TD
+    subgraph bind_settings
+        A["bind_settings()"] --> B["_initialize_slider(slider, RangeSetting)"]
+        A --> C["_populate_eye_textures()"]
+        A --> D["_populate_skin_colors()"]
+    end
 
-bind_signals()
-  ├── slider.value_changed → character_data.eyes_X.value = setting.eyes_X.get_value(step)
-  ├── texture_btn.pressed  → character_data.eye_texture_id.value = option.id
-  └── color_btn.pressed    → character_data.skin_color_id.value = option.id
+    subgraph bind_signals
+        E["bind_signals()"] --> F["slider.value_changed -> character_data.eyes_X.value"]
+        E --> G["texture_btn.pressed -> character_data.eye_texture_id.value"]
+        E --> H["color_btn.pressed -> character_data.skin_color_id.value"]
+    end
 ```
 
 ---
 
 ## 8. Full Data Flow — User Selects an Eye Texture
 
-```
-[User clicks TextureButton in UI]
-        │
-        ▼
-character_data.eye_texture_id.value = "eye_almond"
-        │
-        ▼  (ReactiveString.reactive_changed signal)
-CharacterCreatorManager._on_eye_texture_id_changed()
-        │
-        ▼
-creation_settings.eye_texture.find_texture("eye_almond")  → TextureOption
-        │
-        ▼
-character_data.eye_texture.value = option.texture
-        │
-        ▼  (ReactiveTexture.reactive_changed signal)
-EyesVisualUpdater._on_eye_texture_changed()
-        │
-        ▼
-l_eye_decal.texture_albedo = texture
-r_eye_decal.texture_albedo = texture
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as CharacterCreatorUI
+    participant Data as CharacterData
+    participant Manager as CharacterCreatorManager
+    participant Settings as CharacterCreationSettings
+    participant Updater as EyesVisualUpdater
+    participant Decals as Decal Nodes
+
+    User->>UI: Clicks TextureButton
+    UI->>Data: Sets eye_texture_id.value = "eye_almond"
+    Data-->>Manager: emits reactive_changed
+    Manager->>Settings: find_texture("eye_almond")
+    Settings-->>Manager: returns TextureOption
+    Manager->>Data: Sets eye_texture.value = option.texture
+    Data-->>Updater: emits reactive_changed
+    Updater->>Decals: Updates texture_albedo
 ```
 
 ---
@@ -350,4 +395,32 @@ When setting up the project in the Godot editor:
 
 ---
 
-*Generated by Antigravity AI — Last updated 2026-04-27*
+## 10. Workflow: Adding a New Property
+
+Use the following decision tree to understand the steps required when adding a new character property to the system.
+
+```mermaid
+flowchart TD
+    Start([Want to add a new property?]) --> Type{Is it a continuous Range<br>or a discrete Selection?}
+
+    %% Range Branch
+    Type -->|Range<br>(e.g., Size, Position)| R1["1. CharacterData<br>Add 'ReactiveFloat' variable"]
+    R1 --> R2["2. CharacterCreationSettings<br>Add '@export var prop: RangeSetting'<br>Call 'prop.load()' in load_equivalences()"]
+    R2 --> R3["3. CharacterCreatorUI<br>Bind a new UI slider to the data"]
+    R3 --> R4["4. VisualUpdater<br>Listen to 'reactive_changed' and<br>apply visual changes"]
+
+    %% Select Branch
+    Type -->|Selection<br>(e.g., Texture, Color)| S1["1. CharacterData<br>Add 'ReactiveString' for ID<br>Add 'Reactive[Type]' for resolved value"]
+    S1 --> S2["2. CharacterCreationSettings<br>Add '@export var prop: SelectSetting'"]
+    S2 --> S3["3. CharacterCreatorManager<br>Connect ID change signal to resolve<br>and update the resolved value"]
+    S3 --> S4["4. CharacterCreatorUI<br>Populate UI buttons from Setting options<br>Write selected ID to CharacterData"]
+    S4 --> S5["5. VisualUpdater<br>Listen to resolved value 'reactive_changed'<br>and apply visual changes"]
+    
+    %% Editor Setup
+    R4 --> E1([Done! Now create and assign<br>.tres resources in the Editor])
+    S5 --> E1
+```
+
+---
+
+*Generated by Antigravity AI — Last updated 2026-04-28*

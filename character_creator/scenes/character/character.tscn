@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://pkknoef8k8nc" path="res://character_creator/components/character_creation/visual_updaters/eyes_visual_updater.gd" id="6_qe1sv"]
 [ext_resource type="Script" uid="uid://dixyt5cpoynl7" path="res://character_creator/components/character_creation/visual_updaters/skin_visual_updater.gd" id="7_tcefa"]
 [ext_resource type="Script" uid="uid://bwx02wb4bgr18" path="res://character_creator/components/character_creation/visual_updaters/mouth_visual_updater.gd" id="7_w2rwa"]
+[ext_resource type="Script" uid="uid://qlcbnm1c8vvn" path="res://character_creator/components/character_creation/visual_updaters/head_shape_visual_updater.gd" id="9_w54jv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tjep3"]
 render_priority = 0
@@ -38,7 +39,7 @@ mesh = ExtResource("1_n7nqo")
 surface_material_override/0 = ExtResource("2_qe1sv")
 
 [node name="EyesPivot" type="Node3D" parent="." unique_id=469001260]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.580724e-10, 0.39573503, -0.25452745)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.396, -0.256)
 
 [node name="LeftEyePivot" type="Node3D" parent="EyesPivot" unique_id=595349808]
 
@@ -53,7 +54,7 @@ transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0)
 mesh = SubResource("PlaneMesh_tjep3")
 
 [node name="MouthPivot" type="Node3D" parent="." unique_id=1766453082]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 6.580724e-10, 0.39573503, -0.25452745)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.396, -0.255)
 
 [node name="MouthMesh" type="MeshInstance3D" parent="MouthPivot" unique_id=487643063]
 transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, -0.14, 0)
@@ -80,6 +81,10 @@ r_eye_pivot = NodePath("../../../EyesPivot/RightEyePivot")
 script = ExtResource("7_w2rwa")
 mouth_pivot = NodePath("../../../MouthPivot")
 mouth_mesh = NodePath("../../../MouthPivot/MouthMesh")
+
+[node name="HeadShapeUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=2017747164 node_paths=PackedStringArray("head_mesh_instance")]
+script = ExtResource("9_w54jv")
+head_mesh_instance = NodePath("../../../Head")
 
 [node name="SkinVisualUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=1651526632 node_paths=PackedStringArray("face_mesh")]
 script = ExtResource("7_tcefa")

@@ -17,22 +17,22 @@ character-creator/
 │   └── globals/
 │
 └── character_creator/           ← Domain-specific character creator
-    ├── assets/
-    │   ├── material/
-    │   ├── textures/
-    │   └── placeholder/
-    ├── components/
-    │   └── character_creation/
-    │       ├── base/            ← Manager, UI, updater orchestration
-    │       └── visual_updaters/ ← Per-feature visual logic
-    ├── data/
-    │   ├── settings/            ← CharacterSetting subclasses
-    │   ├── options/             ← SelectOption subclasses
-    │   ├── character_data.gd
-    │   └── character_creation_settings.gd
-    └── scenes/
-        ├── camera/
-        └── character/
+	├── assets/
+	│   ├── material/
+	│   ├── textures/
+	│   └── placeholder/
+	├── components/
+	│   └── character_creation/
+	│       ├── base/            ← Manager, UI, updater orchestration
+	│       └── visual_updaters/ ← Per-feature visual logic
+	├── data/
+	│   ├── settings/            ← CharacterSetting subclasses
+	│   ├── options/             ← SelectOption subclasses
+	│   ├── character_data.gd
+	│   └── character_creation_settings.gd
+	└── scenes/
+		├── camera/
+		└── character/
 ```
 
 ---
@@ -45,25 +45,25 @@ The backbone of all data flow in this project. Variables are wrapped in `Reactiv
 
 ```mermaid
 classDiagram
-    class Reactive {
-        <<Resource, base>>
-    }
-    Reactive <|-- ReactiveFloat
-    Reactive <|-- ReactiveInt
-    Reactive <|-- ReactiveString
-    Reactive <|-- ReactiveColor
-    Reactive <|-- ReactiveTexture
-    Reactive <|-- ReactiveArray
-    Reactive <|-- ReactiveObject
+	class Reactive {
+		<<Resource, base>>
+	}
+	Reactive <|-- ReactiveFloat
+	Reactive <|-- ReactiveInt
+	Reactive <|-- ReactiveString
+	Reactive <|-- ReactiveColor
+	Reactive <|-- ReactiveTexture
+	Reactive <|-- ReactiveArray
+	Reactive <|-- ReactiveObject
 ```
 
 **Propagation chain:** A `Reactive` can have an `owner` (another `Reactive`). When a nested reactive changes, the signal bubbles up through `_propagate()` — e.g., changing `CharacterData.eyes_size.value` also fires `CharacterData.reactive_changed`.
 
 ```mermaid
 flowchart TD
-    A["eyes_size.value = 0.5"] --> B["eyes_size.reactive_changed.emit(eyes_size)"]
-    B --> C["CharacterData._propagate()"]
-    C --> D["CharacterData.reactive_changed.emit(CharacterData)"]
+	A["eyes_size.value = 0.5"] --> B["eyes_size.reactive_changed.emit(eyes_size)"]
+	B --> C["CharacterData._propagate()"]
+	C --> D["CharacterData.reactive_changed.emit(CharacterData)"]
 ```
 
 ### 2.2 State Machine
@@ -268,7 +268,7 @@ extends Resource
 @export var skin_color      : ColorSelectSetting
 
 func load_equivalences() -> void:
-    eyes_separation.load(); eyes_size.load(); ...
+	eyes_separation.load(); eyes_size.load(); ...
 ```
 
 **Adding a new range parameter** takes exactly 2 lines (1 export + 1 `load()` call). **Adding a new palette option** requires only creating a new `.tres` file and adding it to the setting's array in the inspector.
@@ -334,17 +334,17 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    subgraph bind_settings
-        A["bind_settings()"] --> B["_initialize_slider(slider, RangeSetting)"]
-        A --> C["_populate_eye_textures()"]
-        A --> D["_populate_skin_colors()"]
-    end
+	subgraph bind_settings
+		A["bind_settings()"] --> B["_initialize_slider(slider, RangeSetting)"]
+		A --> C["_populate_eye_textures()"]
+		A --> D["_populate_skin_colors()"]
+	end
 
-    subgraph bind_signals
-        E["bind_signals()"] --> F["slider.value_changed -> character_data.eyes_X.value"]
-        E --> G["texture_btn.pressed -> character_data.eye_texture_id.value"]
-        E --> H["color_btn.pressed -> character_data.skin_color_id.value"]
-    end
+	subgraph bind_signals
+		E["bind_signals()"] --> F["slider.value_changed -> character_data.eyes_X.value"]
+		E --> G["texture_btn.pressed -> character_data.eye_texture_id.value"]
+		E --> H["color_btn.pressed -> character_data.skin_color_id.value"]
+	end
 ```
 
 ---
@@ -353,22 +353,22 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-    actor User
-    participant UI as CharacterCreatorUI
-    participant Data as CharacterData
-    participant Manager as CharacterCreatorManager
-    participant Settings as CharacterCreationSettings
-    participant Updater as EyesVisualUpdater
-    participant Decals as Decal Nodes
+	actor User
+	participant UI as CharacterCreatorUI
+	participant Data as CharacterData
+	participant Manager as CharacterCreatorManager
+	participant Settings as CharacterCreationSettings
+	participant Updater as EyesVisualUpdater
+	participant Decals as Decal Nodes
 
-    User->>UI: Clicks TextureButton
-    UI->>Data: Sets eye_texture_id.value = "eye_almond"
-    Data-->>Manager: emits reactive_changed
-    Manager->>Settings: find_texture("eye_almond")
-    Settings-->>Manager: returns TextureOption
-    Manager->>Data: Sets eye_texture.value = option.texture
-    Data-->>Updater: emits reactive_changed
-    Updater->>Decals: Updates texture_albedo
+	User->>UI: Clicks TextureButton
+	UI->>Data: Sets eye_texture_id.value = "eye_almond"
+	Data-->>Manager: emits reactive_changed
+	Manager->>Settings: find_texture("eye_almond")
+	Settings-->>Manager: returns TextureOption
+	Manager->>Data: Sets eye_texture.value = option.texture
+	Data-->>Updater: emits reactive_changed
+	Updater->>Decals: Updates texture_albedo
 ```
 
 ---
@@ -404,17 +404,17 @@ flowchart TD
     Start([Want to add a new property?]) --> Type{Is it a continuous Range<br>or a discrete Selection?}
 
     %% Range Branch
-    Type -->|Range<br>(e.g., Size, Position)| R1["1. CharacterData<br>Add 'ReactiveFloat' variable"]
-    R1 --> R2["2. CharacterCreationSettings<br>Add '@export var prop: RangeSetting'<br>Call 'prop.load()' in load_equivalences()"]
+	Type -->|Range<br>(e.g., Size, Position)| R1["1. CharacterData<br>Add 'ReactiveFloat' variable"]
+	R1 --> R2["2. CharacterCreationSettings<br>Add '@export var prop: RangeSetting'<br>Call 'prop.load()' in load_equivalences()"]
     R2 --> R3["3. CharacterCreatorUI<br>Bind a new UI slider to the data"]
-    R3 --> R4["4. VisualUpdater<br>Listen to 'reactive_changed' and<br>apply visual changes"]
+	R3 --> R4["4. VisualUpdater<br>Listen to 'reactive_changed' and<br>apply visual changes"]
 
     %% Select Branch
-    Type -->|Selection<br>(e.g., Texture, Color)| S1["1. CharacterData<br>Add 'ReactiveString' for ID<br>Add 'Reactive[Type]' for resolved value"]
-    S1 --> S2["2. CharacterCreationSettings<br>Add '@export var prop: SelectSetting'"]
+	Type -->|Selection<br>(e.g., Texture, Color)| S1["1. CharacterData<br>Add 'ReactiveString' for ID<br>Add 'Reactive[Type]' for resolved value"]
+	S1 --> S2["2. CharacterCreationSettings<br>Add '@export var prop: SelectSetting'"]
     S2 --> S3["3. CharacterCreatorManager<br>Connect ID change signal to resolve<br>and update the resolved value"]
     S3 --> S4["4. CharacterCreatorUI<br>Populate UI buttons from Setting options<br>Write selected ID to CharacterData"]
-    S4 --> S5["5. VisualUpdater<br>Listen to resolved value 'reactive_changed'<br>and apply visual changes"]
+	S4 --> S5["5. VisualUpdater<br>Listen to resolved value 'reactive_changed'<br>and apply visual changes"]
     
     %% Editor Setup
     R4 --> E1([Done! Now create and assign<br>.tres resources in the Editor])

@@ -1,7 +1,10 @@
 [gd_resource type="Resource" script_class="CharacterCreationProfile" format=3 uid="uid://r8ai1m3r4k85"]
 
 [ext_resource type="Script" uid="uid://245lgjk0pnea" path="res://character_creator/data/settings/range_setting.gd" id="1_k7u38"]
+[ext_resource type="Resource" uid="uid://c1851y8hujkmg" path="res://character_creator/data/resources/option/color_black.tres" id="2_0lsu2"]
 [ext_resource type="Script" uid="uid://bjbnet2jv8n2y" path="res://character_creator/data/options/texture_option.gd" id="2_4xx38"]
+[ext_resource type="Texture2D" uid="uid://7mluivjewwux" path="res://character_creator/assets/placeholder/emoji_eyebrow.png" id="3_4mtso"]
+[ext_resource type="Resource" uid="uid://dvkygcymjwuqm" path="res://character_creator/data/resources/option/color_blonde.tres" id="3_qxb37"]
 [ext_resource type="Texture2D" uid="uid://bgg5hcxshu0vn" path="res://character_creator/assets/placeholder/eye.png" id="3_spj1k"]
 [ext_resource type="Texture2D" uid="uid://cac7o1kv0m3cg" path="res://character_creator/assets/placeholder/real_eye.png" id="4_7s6hp"]
 [ext_resource type="Texture2D" uid="uid://k5u7p8bf2pnk" path="res://character_creator/assets/placeholder/miojo.png" id="5_4ccww"]
@@ -18,12 +21,78 @@
 [ext_resource type="Texture2D" uid="uid://bng3ln6sctgeb" path="res://character_creator/assets/placeholder/miboca.png" id="8_7s6hp"]
 [ext_resource type="ArrayMesh" uid="uid://bityr12cgv3eo" path="res://character_creator/assets/placeholder/pointy.obj" id="9_1f8lu"]
 
+[sub_resource type="Resource" id="Resource_y81qq"]
+script = ExtResource("8_0a4s4")
+options = Array[ExtResource("7_4nc3l")]([ExtResource("2_0lsu2"), ExtResource("3_qxb37")])
+category = 2
+display_name = "Color"
+metadata/_custom_type_script = "uid://c8knlmmjdtb0v"
+
+[sub_resource type="Resource" id="Resource_5gclo"]
+script = ExtResource("1_k7u38")
+steps = 11
+min_value = 0.7
+max_value = 1.4
+category = 2
+display_name = "Flattening"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_bjspd"]
+script = ExtResource("1_k7u38")
+steps = 11
+min_value = -0.2
+max_value = 0.2
+category = 2
+display_name = "Height"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_poc8f"]
+script = ExtResource("1_k7u38")
+steps = 11
+min_value = -45.0
+max_value = 45.0
+use_degrees = true
+category = 2
+display_name = "Rotation"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_p4skp"]
+script = ExtResource("1_k7u38")
+steps = 11
+max_value = 0.4
+category = 2
+display_name = "Separation"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_roohi"]
+script = ExtResource("1_k7u38")
+steps = 11
+min_value = 0.03
+max_value = 0.2
+category = 2
+display_name = "Size"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_xdk52"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("3_4mtso")
+id = &"eyebrow_texture_emoji"
+display_name = "Emoji"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
+[sub_resource type="Resource" id="Resource_kmnmx"]
+script = ExtResource("5_f3er6")
+options = Array[ExtResource("2_4xx38")]([SubResource("Resource_xdk52")])
+category = 2
+display_name = "Type"
+metadata/_custom_type_script = "uid://dblt4gg6kqqnu"
+
 [sub_resource type="Resource" id="Resource_4qfbu"]
 script = ExtResource("1_k7u38")
 steps = 11
 min_value = 0.7
 max_value = 1.4
-display_name = "Eyes Flattening"
+display_name = "Flattening"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_mjprx"]
@@ -31,7 +100,7 @@ script = ExtResource("1_k7u38")
 steps = 11
 min_value = -0.2
 max_value = 0.2
-display_name = "Eyes Height"
+display_name = "Height"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_ttet1"]
@@ -40,14 +109,14 @@ steps = 11
 min_value = -45.0
 max_value = 45.0
 use_degrees = true
-display_name = "Eyes Rotation"
+display_name = "Rotation"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_f0o03"]
 script = ExtResource("1_k7u38")
 steps = 11
 max_value = 0.5
-display_name = "Eyes Separation"
+display_name = "Separation"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_wujbw"]
@@ -55,7 +124,7 @@ script = ExtResource("1_k7u38")
 steps = 11
 min_value = 0.03
 max_value = 0.2
-display_name = "Eyes Size"
+display_name = "Size"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_mgpkg"]
@@ -82,7 +151,7 @@ metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
 [sub_resource type="Resource" id="Resource_4imdq"]
 script = ExtResource("5_f3er6")
 options = Array[ExtResource("2_4xx38")]([SubResource("Resource_mgpkg"), SubResource("Resource_r1jqd"), SubResource("Resource_w76g0")])
-display_name = "Eyes Type"
+display_name = "Type"
 metadata/_custom_type_script = "uid://dblt4gg6kqqnu"
 
 [sub_resource type="Resource" id="Resource_4ccww"]
@@ -109,8 +178,8 @@ metadata/_custom_type_script = "uid://cld5n2pqklmby"
 [sub_resource type="Resource" id="Resource_4mtso"]
 script = ExtResource("8_1f8lu")
 options = Array[ExtResource("6_4nc3l")]([SubResource("Resource_4ccww"), SubResource("Resource_0lsu2"), SubResource("Resource_qxb37")])
-category = 2
-display_name = "Head Shape"
+category = 3
+display_name = "Shape"
 metadata/_custom_type_script = "uid://dli4nkbou78vv"
 
 [sub_resource type="Resource" id="Resource_jb1cm"]
@@ -119,7 +188,7 @@ steps = 11
 min_value = 0.7
 max_value = 1.4
 category = 1
-display_name = "Mouth Flattening"
+display_name = "Flattening"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_k7u38"]
@@ -127,7 +196,7 @@ script = ExtResource("1_k7u38")
 min_value = -0.1
 max_value = 0.2
 category = 1
-display_name = "Mouth Height"
+display_name = "Height"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_h1mdt"]
@@ -135,7 +204,7 @@ script = ExtResource("1_k7u38")
 min_value = 0.03
 max_value = 0.3
 category = 1
-display_name = "Mouth Size"
+display_name = "Size"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_spj1k"]
@@ -183,12 +252,19 @@ metadata/_custom_type_script = "uid://ibnbp5s3vs0r"
 [sub_resource type="Resource" id="Resource_oqtcf"]
 script = ExtResource("8_0a4s4")
 options = Array[ExtResource("7_4nc3l")]([SubResource("Resource_12pi4"), SubResource("Resource_mohts")])
-category = 3
-display_name = "Skin Color"
+category = 4
+display_name = "Color"
 metadata/_custom_type_script = "uid://c8knlmmjdtb0v"
 
 [resource]
 script = ExtResource("6_7owgk")
+eyebrows_size = SubResource("Resource_roohi")
+eyebrows_separation = SubResource("Resource_p4skp")
+eyebrows_rotation = SubResource("Resource_poc8f")
+eyebrows_height = SubResource("Resource_bjspd")
+eyebrows_flattening = SubResource("Resource_5gclo")
+eyebrows_textures = SubResource("Resource_kmnmx")
+eyebrows_colors = SubResource("Resource_y81qq")
 eyes_separation = SubResource("Resource_f0o03")
 eyes_size = SubResource("Resource_wujbw")
 eyes_rotation = SubResource("Resource_ttet1")

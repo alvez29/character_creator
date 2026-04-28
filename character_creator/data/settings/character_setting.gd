@@ -6,7 +6,7 @@
 class_name CharacterSetting
 extends Resource
 
-enum Category { EYES, MOUTH, HEAD_SHAPE, SKIN }
+enum Category { EYES, MOUTH, EYEBROWS, HEAD_SHAPE, SKIN }
 
 @export
 var category: Category

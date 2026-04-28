@@ -17,6 +17,7 @@ func load_setting(setting: CharacterSetting, data: Reactive):
 				item_list.add_item(option.display_name, option.preview_texture)
 		
 		item_list.item_selected.connect(_on_item_list_on_item_selected.bind(setting, data))
+		item_list.select(0)
 		_on_item_list_on_item_selected(0, setting, data)
 	
 	if label:

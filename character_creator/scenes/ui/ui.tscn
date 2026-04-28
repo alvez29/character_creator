@@ -51,16 +51,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00086677074, 0.0025631785, 
 layout_mode = 2
 size_flags_horizontal = 3
 current_tab = 0
-tab_0/title = "Eyes"
-tab_1/title = "Mouth"
-tab_2/title = "Head"
-tab_3/title = "Skin"
+tab_0/title = "Eyebrows"
+tab_1/title = "Eyes"
+tab_2/title = "Mouth"
+tab_3/title = "Head"
+tab_4/title = "Skin"
 
-[node name="EyesContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=1850564438]
+[node name="EyebrowsContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=552723307]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_index = 0
+metadata/_tab_name = "Eyebrows"
+
+[node name="EyesContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=1850564438]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 1
 metadata/_tab_name = "Eyes"
 
 [node name="MouthContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=164111189]
@@ -68,7 +77,7 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 metadata/_tab_name = "Mouth"
 
 [node name="HeadShapeContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=2122542433]
@@ -76,7 +85,7 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 metadata/_tab_name = "Head"
 
 [node name="SkinContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=1396033969]
@@ -84,13 +93,14 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 metadata/_tab_name = "Skin"
 
-[node name="CharacterCreatorUIComponent" type="Node" parent="." unique_id=253215631 node_paths=PackedStringArray("eyes_settings_container", "mouth_settings_container", "head_shape_settings_container", "skin_settings_container")]
+[node name="CharacterCreatorUIComponent" type="Node" parent="." unique_id=253215631 node_paths=PackedStringArray("eyes_settings_container", "mouth_settings_container", "eyebrows_settings_container", "head_shape_settings_container", "skin_settings_container")]
 script = ExtResource("1_m6e0p")
 eyes_settings_container = NodePath("../HBoxContainer/TabContainer/EyesContainer")
 mouth_settings_container = NodePath("../HBoxContainer/TabContainer/MouthContainer")
+eyebrows_settings_container = NodePath("../HBoxContainer/TabContainer/EyebrowsContainer")
 head_shape_settings_container = NodePath("../HBoxContainer/TabContainer/HeadShapeContainer")
 skin_settings_container = NodePath("../HBoxContainer/TabContainer/SkinContainer")
 

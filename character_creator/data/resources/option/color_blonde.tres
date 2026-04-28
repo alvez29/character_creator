@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ColorOption" format=3 uid="uid://dvkygcymjwuqm"]
+
+[ext_resource type="Script" uid="uid://ibnbp5s3vs0r" path="res://character_creator/data/options/color_option.gd" id="1_1k3uw"]
+
+[resource]
+script = ExtResource("1_1k3uw")
+color = Color(0.38563478, 0.30076855, 0, 1)
+id = &"color_blonde"
+display_name = "Blonde"
+metadata/_custom_type_script = "uid://ibnbp5s3vs0r"

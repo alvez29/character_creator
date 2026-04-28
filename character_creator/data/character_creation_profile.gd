@@ -1,6 +1,17 @@
 class_name CharacterCreationProfile
 extends Resource
 
+#region Eyebrows
+@export_group("Eyebrows")
+@export var eyebrows_size       : RangeSetting
+@export var eyebrows_separation : RangeSetting
+@export var eyebrows_rotation   : RangeSetting
+@export var eyebrows_height     : RangeSetting
+@export var eyebrows_flattening : RangeSetting
+@export var eyebrows_textures   : TextureSelectSetting
+@export var eyebrows_colors     : ColorSelectSetting
+#endregion
+
 #region Eyes
 @export_group("Eyes")
 @export var eyes_separation : RangeSetting
@@ -18,6 +29,7 @@ extends Resource
 @export var mouth_flattening: RangeSetting
 @export var mouth_texture   : TextureSelectSetting
 #endregion
+
 
 #region Head shape
 @export_group("Head Shape")

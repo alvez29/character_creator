@@ -4,6 +4,19 @@ extends Reactive
 @export var default_texture: Texture2D
 @export var default_mesh:    Mesh
 
+
+#region Eyebrows
+@export_category("Eyebrows")
+@export var eyebrows_size       := ReactiveFloat.new(0, self)
+@export var eyebrows_separation := ReactiveFloat.new(0, self)
+@export var eyebrows_rotation   := ReactiveFloat.new(0, self)
+@export var eyebrows_height     := ReactiveFloat.new(0, self)
+@export var eyebrows_flattening := ReactiveFloat.new(0, self)
+@export var eyebrows_texture    := ReactiveTexture.new(default_texture, self)
+@export var eyebrows_color      := ReactiveColor.new(Color(1, 1, 1), self)
+#endregion
+
+
 #region Eyes
 @export_category("Eyes")
 @export var eyes_size       := ReactiveFloat.new(0, self)

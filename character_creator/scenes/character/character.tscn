@@ -3,13 +3,35 @@
 [ext_resource type="ArrayMesh" uid="uid://b0scj1hfpk658" path="res://character_creator/assets/placeholder/normal.obj" id="1_n7nqo"]
 [ext_resource type="Material" uid="uid://d2lfuay7u3vxg" path="res://character_creator/assets/material/skin.tres" id="2_qe1sv"]
 [ext_resource type="Shader" uid="uid://uqh62vwesnkq" path="res://character_creator/assets/material/face_shape.gdshader" id="2_tjep3"]
+[ext_resource type="Texture2D" uid="uid://7mluivjewwux" path="res://character_creator/assets/placeholder/emoji_eyebrow.png" id="4_5abf6"]
 [ext_resource type="Texture2D" uid="uid://cac7o1kv0m3cg" path="res://character_creator/assets/placeholder/real_eye.png" id="4_tcefa"]
 [ext_resource type="Texture2D" uid="uid://b7idg43c21ssi" path="res://character_creator/assets/placeholder/lips.png" id="5_rlnjv"]
 [ext_resource type="Script" uid="uid://u3nydvnii3r5" path="res://character_creator/components/character_creation/base/character_updater.gd" id="5_tjep3"]
 [ext_resource type="Script" uid="uid://pkknoef8k8nc" path="res://character_creator/components/character_creation/visual_updaters/eyes_visual_updater.gd" id="6_qe1sv"]
 [ext_resource type="Script" uid="uid://dixyt5cpoynl7" path="res://character_creator/components/character_creation/visual_updaters/skin_visual_updater.gd" id="7_tcefa"]
 [ext_resource type="Script" uid="uid://bwx02wb4bgr18" path="res://character_creator/components/character_creation/visual_updaters/mouth_visual_updater.gd" id="7_w2rwa"]
+[ext_resource type="Script" uid="uid://ox7xsaixfqvh" path="res://character_creator/components/character_creation/visual_updaters/eyebrows_visual_updater.gd" id="8_62jb0"]
 [ext_resource type="Script" uid="uid://qlcbnm1c8vvn" path="res://character_creator/components/character_creation/visual_updaters/head_shape_visual_updater.gd" id="9_w54jv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5abf6"]
+render_priority = 0
+shader = ExtResource("2_tjep3")
+shader_parameter/texture_albedo = ExtResource("4_5abf6")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_w54jv"]
+material = SubResource("ShaderMaterial_5abf6")
+size = Vector2(0.1, 0.1)
+orientation = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_62jb0"]
+render_priority = 0
+shader = ExtResource("2_tjep3")
+shader_parameter/texture_albedo = ExtResource("4_5abf6")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5abf6"]
+material = SubResource("ShaderMaterial_62jb0")
+size = Vector2(0.1, 0.1)
+orientation = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tjep3"]
 render_priority = 0
@@ -37,6 +59,21 @@ orientation = 2
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 mesh = ExtResource("1_n7nqo")
 surface_material_override/0 = ExtResource("2_qe1sv")
+
+[node name="EyebrowsPivot" type="Node3D" parent="." unique_id=1868639998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3903532e-08, 0.44661972, -0.2585408)
+
+[node name="LeftEyebrowPivot" type="Node3D" parent="EyebrowsPivot" unique_id=1118808727]
+
+[node name="LeftEyebrowMesh" type="MeshInstance3D" parent="EyebrowsPivot/LeftEyebrowPivot" unique_id=1308732814]
+transform = Transform3D(-1, 0, -8.742277e-08, 0, 0.9999999, 0, 8.742278e-08, 0, -0.9999999, 0, 0, 0)
+mesh = SubResource("PlaneMesh_w54jv")
+
+[node name="RightEyebrowPivot" type="Node3D" parent="EyebrowsPivot" unique_id=1652565584]
+
+[node name="RightEyebrowMesh" type="MeshInstance3D" parent="EyebrowsPivot/RightEyebrowPivot" unique_id=1879120899]
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, 0, 0, 0)
+mesh = SubResource("PlaneMesh_5abf6")
 
 [node name="EyesPivot" type="Node3D" parent="." unique_id=469001260]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.396, -0.256)
@@ -68,6 +105,14 @@ current = true
 
 [node name="CharacterUpdater" type="Node" parent="Components" unique_id=2035698406]
 script = ExtResource("5_tjep3")
+
+[node name="EyebrowsVisualUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=1627072062 node_paths=PackedStringArray("l_eyebrow_mesh", "r_eyebrow_mesh", "eyebrows_pivot", "l_eyebrow_pivot", "r_eyebrow_pivot")]
+script = ExtResource("8_62jb0")
+l_eyebrow_mesh = NodePath("../../../EyebrowsPivot/LeftEyebrowPivot/LeftEyebrowMesh")
+r_eyebrow_mesh = NodePath("../../../EyebrowsPivot/RightEyebrowPivot/RightEyebrowMesh")
+eyebrows_pivot = NodePath("../../../EyebrowsPivot")
+l_eyebrow_pivot = NodePath("../../../EyebrowsPivot/LeftEyebrowPivot")
+r_eyebrow_pivot = NodePath("../../../EyebrowsPivot/RightEyebrowPivot")
 
 [node name="EyesVisualUpdater" type="Node" parent="Components/CharacterUpdater" unique_id=1733569221 node_paths=PackedStringArray("l_eye_mesh", "r_eye_mesh", "eyes_pivot", "l_eye_pivot", "r_eye_pivot")]
 script = ExtResource("6_qe1sv")

@@ -7,14 +7,16 @@ extends Resource
 @export var eyes_size       : RangeSetting
 @export var eyes_rotation   : RangeSetting
 @export var eyes_height     : RangeSetting
+@export var eyes_flattening : RangeSetting
 @export var eyes_textures   : TextureSelectSetting
 #endregion
 
 #region Mouth
 @export_group("Mouth")
-@export var mouth_size    : RangeSetting
-@export var mouth_height  : RangeSetting
-@export var mouth_texture : TextureSelectSetting
+@export var mouth_size      : RangeSetting
+@export var mouth_height    : RangeSetting
+@export var mouth_flattening: RangeSetting
+@export var mouth_texture   : TextureSelectSetting
 #endregion
 
 #region Head shape

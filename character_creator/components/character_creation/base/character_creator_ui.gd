@@ -36,12 +36,14 @@ func initialize_eyes_settings():
 	load_range_setting(profile.eyes_separation, character_data.eyes_separation)
 	load_range_setting(profile.eyes_rotation, character_data.eyes_rotation)
 	load_range_setting(profile.eyes_height, character_data.eyes_height)
+	load_range_setting(profile.eyes_flattening, character_data.eyes_flattening)
 	load_options_setting(profile.eyes_textures, character_data.eye_texture)
 
 
 func initialize_mouth_settings():
 	load_range_setting(profile.mouth_size, character_data.mouth_size)
 	load_range_setting(profile.mouth_height, character_data.mouth_height)
+	load_range_setting(profile.mouth_flattening, character_data.mouth_flattening)
 	load_options_setting(profile.mouth_texture, character_data.mouth_texture)
 
 

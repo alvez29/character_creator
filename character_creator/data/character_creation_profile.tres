@@ -18,8 +18,17 @@
 [ext_resource type="Texture2D" uid="uid://bng3ln6sctgeb" path="res://character_creator/assets/placeholder/miboca.png" id="8_7s6hp"]
 [ext_resource type="ArrayMesh" uid="uid://bityr12cgv3eo" path="res://character_creator/assets/placeholder/pointy.obj" id="9_1f8lu"]
 
+[sub_resource type="Resource" id="Resource_4qfbu"]
+script = ExtResource("1_k7u38")
+steps = 11
+min_value = 0.7
+max_value = 1.4
+display_name = "Eyes Flattening"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
 [sub_resource type="Resource" id="Resource_mjprx"]
 script = ExtResource("1_k7u38")
+steps = 11
 min_value = -0.2
 max_value = 0.2
 display_name = "Eyes Height"
@@ -27,6 +36,7 @@ metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_ttet1"]
 script = ExtResource("1_k7u38")
+steps = 11
 min_value = -45.0
 max_value = 45.0
 use_degrees = true
@@ -35,12 +45,14 @@ metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_f0o03"]
 script = ExtResource("1_k7u38")
+steps = 11
 max_value = 0.5
 display_name = "Eyes Separation"
 metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_wujbw"]
 script = ExtResource("1_k7u38")
+steps = 11
 min_value = 0.03
 max_value = 0.2
 display_name = "Eyes Size"
@@ -100,6 +112,15 @@ options = Array[ExtResource("6_4nc3l")]([SubResource("Resource_4ccww"), SubResou
 category = 2
 display_name = "Head Shape"
 metadata/_custom_type_script = "uid://dli4nkbou78vv"
+
+[sub_resource type="Resource" id="Resource_jb1cm"]
+script = ExtResource("1_k7u38")
+steps = 11
+min_value = 0.7
+max_value = 1.4
+category = 1
+display_name = "Mouth Flattening"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
 
 [sub_resource type="Resource" id="Resource_k7u38"]
 script = ExtResource("1_k7u38")
@@ -172,9 +193,11 @@ eyes_separation = SubResource("Resource_f0o03")
 eyes_size = SubResource("Resource_wujbw")
 eyes_rotation = SubResource("Resource_ttet1")
 eyes_height = SubResource("Resource_mjprx")
+eyes_flattening = SubResource("Resource_4qfbu")
 eyes_textures = SubResource("Resource_4imdq")
 mouth_size = SubResource("Resource_h1mdt")
 mouth_height = SubResource("Resource_k7u38")
+mouth_flattening = SubResource("Resource_jb1cm")
 mouth_texture = SubResource("Resource_f3er6")
 head_shape = SubResource("Resource_4mtso")
 skin_colors = SubResource("Resource_oqtcf")

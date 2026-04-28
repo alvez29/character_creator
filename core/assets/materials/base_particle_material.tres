@@ -1,7 +1,0 @@
-[gd_resource type="ORMMaterial3D" format=3 uid="uid://ik05u7esr0o4"]
-
-[resource]
-blend_mode = 1
-cull_mode = 2
-shading_mode = 0
-billboard_mode = 1

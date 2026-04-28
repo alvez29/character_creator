@@ -19,11 +19,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 Utils="*uid://byiqxg54ujptn"
-SceneLoader="*uid://bg1nof8q4arpr"
-SettingsManager="*uid://cu3byu20p6ldj"
-UIState="*uid://ccxh03gu8isie"
-HitStopManager="*uid://d0fxmrgk71cdh"
-DebugGameManager="*uid://djjay7plrrh6j"
 
 [display]
 

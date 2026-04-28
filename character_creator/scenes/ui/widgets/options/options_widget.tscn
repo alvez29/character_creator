@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://du65tq3c0hmov"]
+
+[ext_resource type="Script" uid="uid://j1hluxcudfvc" path="res://character_creator/scenes/ui/widgets/options/options_widget.gd" id="1_ybbgx"]
+
+[node name="OptionsWidget" type="VBoxContainer" unique_id=235845988]
+size_flags_vertical = 3
+script = ExtResource("1_ybbgx")
+
+[node name="Label" type="Label" parent="." unique_id=1527225330]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skin Color"
+
+[node name="ItemList" type="ItemList" parent="." unique_id=1438970532]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+max_columns = 3
+same_column_width = true
+fixed_column_width = 100
+fixed_icon_size = Vector2i(26, 26)

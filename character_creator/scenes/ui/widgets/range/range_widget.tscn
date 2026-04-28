@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b21hvrtt462hr"]
+
+[ext_resource type="Script" uid="uid://d2gi6kduo7kp8" path="res://character_creator/scenes/ui/widgets/range/range_widget.gd" id="1_oitvh"]
+
+[node name="RangeSetting" type="VBoxContainer" unique_id=1534466542]
+script = ExtResource("1_oitvh")
+
+[node name="Label" type="Label" parent="." unique_id=1328363857]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Mouth Size"
+
+[node name="Slider" type="HSlider" parent="." unique_id=938381685]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 6

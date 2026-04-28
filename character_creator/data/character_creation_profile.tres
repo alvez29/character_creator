@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="CharacterCreationProfile" format=3 uid="uid://r8ai1m3r4k85"]
+
+[ext_resource type="Script" uid="uid://245lgjk0pnea" path="res://character_creator/data/settings/range_setting.gd" id="1_k7u38"]
+[ext_resource type="Script" uid="uid://bjbnet2jv8n2y" path="res://character_creator/data/options/texture_option.gd" id="2_4xx38"]
+[ext_resource type="Texture2D" uid="uid://bgg5hcxshu0vn" path="res://character_creator/assets/placeholder/eye.png" id="3_spj1k"]
+[ext_resource type="Texture2D" uid="uid://cac7o1kv0m3cg" path="res://character_creator/assets/placeholder/real_eye.png" id="4_7s6hp"]
+[ext_resource type="Script" uid="uid://dblt4gg6kqqnu" path="res://character_creator/data/settings/texture_select_setting.gd" id="5_f3er6"]
+[ext_resource type="Script" uid="uid://d2xbvaxcykjei" path="res://character_creator/data/character_creation_profile.gd" id="6_7owgk"]
+[ext_resource type="Script" uid="uid://ibnbp5s3vs0r" path="res://character_creator/data/options/color_option.gd" id="7_4nc3l"]
+[ext_resource type="Script" uid="uid://c8knlmmjdtb0v" path="res://character_creator/data/settings/color_select_setting.gd" id="8_0a4s4"]
+
+[sub_resource type="Resource" id="Resource_mjprx"]
+script = ExtResource("1_k7u38")
+min_value = -0.2
+max_value = 0.2
+display_name = "Eyes Height"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_ttet1"]
+script = ExtResource("1_k7u38")
+min_value = -45.0
+max_value = 45.0
+use_degrees = true
+display_name = "Eyes Rotation"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_f0o03"]
+script = ExtResource("1_k7u38")
+max_value = 0.5
+display_name = "Eyes Separation"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_wujbw"]
+script = ExtResource("1_k7u38")
+min_value = 0.03
+max_value = 0.2
+display_name = "Eyes Size"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_mgpkg"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("3_spj1k")
+id = "emoji"
+display_name = "Emoji"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
+[sub_resource type="Resource" id="Resource_r1jqd"]
+script = ExtResource("2_4xx38")
+texture = ExtResource("4_7s6hp")
+id = "real"
+display_name = "So Real Eye"
+metadata/_custom_type_script = "uid://bjbnet2jv8n2y"
+
+[sub_resource type="Resource" id="Resource_4imdq"]
+script = ExtResource("5_f3er6")
+options = Array[ExtResource("2_4xx38")]([SubResource("Resource_mgpkg"), SubResource("Resource_r1jqd")])
+display_name = "Eyes Type"
+metadata/_custom_type_script = "uid://dblt4gg6kqqnu"
+
+[sub_resource type="Resource" id="Resource_h1mdt"]
+script = ExtResource("1_k7u38")
+min_value = 0.03
+max_value = 0.3
+category = 1
+display_name = "Mouth Size"
+metadata/_custom_type_script = "uid://245lgjk0pnea"
+
+[sub_resource type="Resource" id="Resource_12pi4"]
+script = ExtResource("7_4nc3l")
+color = Color(1, 0.71083593, 0.55700755, 1)
+id = &"light_skin"
+display_name = "Light"
+metadata/_custom_type_script = "uid://ibnbp5s3vs0r"
+
+[sub_resource type="Resource" id="Resource_mohts"]
+script = ExtResource("7_4nc3l")
+color = Color(0.37038437, 0.18163249, 0, 1)
+id = &"dark_skin"
+display_name = "Dark"
+metadata/_custom_type_script = "uid://ibnbp5s3vs0r"
+
+[sub_resource type="Resource" id="Resource_oqtcf"]
+script = ExtResource("8_0a4s4")
+options = Array[ExtResource("7_4nc3l")]([SubResource("Resource_12pi4"), SubResource("Resource_mohts")])
+category = 2
+display_name = "Skin Color"
+metadata/_custom_type_script = "uid://c8knlmmjdtb0v"
+
+[resource]
+script = ExtResource("6_7owgk")
+eyes_separation = SubResource("Resource_f0o03")
+eyes_size = SubResource("Resource_wujbw")
+eyes_rotation = SubResource("Resource_ttet1")
+eyes_height = SubResource("Resource_mjprx")
+eyes_textures = SubResource("Resource_4imdq")
+mouth_size = SubResource("Resource_h1mdt")
+skin_colors = SubResource("Resource_oqtcf")
+metadata/_custom_type_script = "uid://d2xbvaxcykjei"

@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://0ys4bg0wol3u"]
+
+[ext_resource type="Script" uid="uid://dgrcrrq17q506" path="res://character_creator/components/character_creation/base/character_creator_ui.gd" id="1_m6e0p"]
+[ext_resource type="PackedScene" uid="uid://cmexxxxgj5p8o" path="res://character_creator/scenes/character/character.tscn" id="2_27fn8"]
+
+[node name="UI" type="Control" unique_id=1199681375]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=607529901]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24819139, 0.47937858, 0.54852754, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1074313028]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CharacterViewer" type="SubViewportContainer" parent="HBoxContainer" unique_id=2021991487]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/CharacterViewer" unique_id=1097342477]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(360, 1280)
+render_target_update_mode = 4
+
+[node name="3DScene" type="Node3D" parent="HBoxContainer/CharacterViewer/SubViewport" unique_id=1830635238]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="HBoxContainer/CharacterViewer/SubViewport/3DScene" unique_id=2094090502]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" parent="HBoxContainer/CharacterViewer/SubViewport/3DScene" unique_id=147835605 instance=ExtResource("2_27fn8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00086677074, 0.0025631785, 0.0010330677)
+
+[node name="TabContainer" type="TabContainer" parent="HBoxContainer" unique_id=1607099330]
+layout_mode = 2
+size_flags_horizontal = 3
+current_tab = 0
+tab_0/title = "Eyes"
+tab_1/title = "Mouth"
+tab_2/title = "Skin"
+
+[node name="EyesContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=1850564438]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 0
+metadata/_tab_name = "Eyes"
+
+[node name="MouthContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=164111189]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 1
+metadata/_tab_name = "Mouth"
+
+[node name="SkinContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=1396033969]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 2
+metadata/_tab_name = "Skin"
+
+[node name="CharacterCreatorUIComponent" type="Node" parent="." unique_id=253215631 node_paths=PackedStringArray("eyes_settings_container", "mouth_settings_container", "skin_settings_container")]
+script = ExtResource("1_m6e0p")
+eyes_settings_container = NodePath("../HBoxContainer/TabContainer/EyesContainer")
+mouth_settings_container = NodePath("../HBoxContainer/TabContainer/MouthContainer")
+skin_settings_container = NodePath("../HBoxContainer/TabContainer/SkinContainer")
+
+[editable path="HBoxContainer/CharacterViewer/SubViewport/3DScene/MeshInstance3D"]

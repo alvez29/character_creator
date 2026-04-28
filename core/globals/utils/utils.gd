@@ -363,3 +363,14 @@ func damp_vector(source: Vector2, target: Vector2, lambda: float, delta: float) 
 func get_max_jump_height(jump_velocity: float, gravity: float) -> float:
 	return jump_velocity * jump_velocity / (2.0 * gravity)
  
+func get_texture_from_color(color: Color) -> ImageTexture:
+	var image := Image.create(1, 1, false, Image.FORMAT_RGBA8)
+	image.fill(color)
+	
+	return ImageTexture.create_from_image(image)
+
+func get_first_pixel_color_from_texture(texture: ImageTexture) -> Color:
+	var image := texture.get_image()
+	var first_pixel := image.get_pixel(0, 0)
+
+	return first_pixel

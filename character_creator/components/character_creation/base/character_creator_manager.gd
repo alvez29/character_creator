@@ -4,25 +4,35 @@ extends Node
 @export var character_updater: CharacterUpdater
 @export var character_ui: CharacterCreatorUI
 
-@export var creation_settings: CharacterCreationSettings
+@export var creation_profile: CharacterCreationProfile
 @export var character_data: CharacterData
 
-# here code order matters!!!
+
 func _ready() -> void:
 	if not character_data:
 		character_data = CharacterData.new()
 	
-	if not creation_settings:
-		push_error("You need to set up the creation settins")
+	if not creation_profile:
+		push_error("You need to set up the creation settings")
+		return
 	
-	creation_settings.load_equivalences()
+	creation_profile.load_equivalences()
 
 	if character_updater:
 		character_updater.initialize(self)
 	else:
-		push_warning("CharacterCreatorManager: No character_viewer assigned.")
+		push_warning("CharacterCreatorManager: No character_updater assigned.")
 		
 	if character_ui:
 		character_ui.initialize(self)
 	else:
 		push_warning("CharacterCreatorManager: No character_ui assigned.")
+
+func load_character_data(data: CharacterData) -> void:
+	character_data.eyes_size.value      = data.eyes_size.value
+	character_data.eyes_separation.value = data.eyes_separation.value
+	character_data.eyes_rotation.value  = data.eyes_rotation.value
+	character_data.eyes_height.value    = data.eyes_height.value
+	character_data.eye_texture.value    = data.eye_texture.value
+	character_data.skin_color.value     = data.skin_color.value
+	character_data.mouth_size.value     = data.mouth_size.value
